@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key attr.name="value" attr.type="string" for="edge" id="d1"/>
+<key attr.name="value" attr.type="string" for="node" id="d0"/>
+<graph edgedefault="directed"><node id="Item0">
+  <data key="d0">A</data>
+</node>
+<node id="ItemName0">
+  <data key="d0">Psychomotor-Vigilance</data>
+</node>
+<node id="ItemAffordance0">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription0">
+  <data key="d0">task</data>
+</node>
+<node id="Item1">
+  <data key="d0">C</data>
+</node>
+<node id="ItemName1">
+  <data key="d0">Acknowledge</data>
+</node>
+<node id="ItemAffordance1">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription1">
+  <data key="d0">button</data>
+</node>
+<node id="Item2">
+  <data key="d0">E</data>
+</node>
+<node id="ItemName2">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance2">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription2">
+  <data key="d0">box</data>
+</node>
+<node id="Item3">
+  <data key="d0">H</data>
+</node>
+<node id="ItemName3">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance3">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription3">
+  <data key="d0">GROUP</data>
+</node>
+<node id="Item4">
+  <data key="d0">G</data>
+</node>
+<node id="ItemName4">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance4">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription4">
+  <data key="d0">target</data>
+</node>
+<edge id="0" source="Item0" target="ItemName0">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item0" target="ItemAffordance0">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item0" target="ItemDescription0">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item1" target="ItemName1">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item1" target="ItemAffordance1">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item1" target="ItemDescription1">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item2" target="ItemName2">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item2" target="ItemAffordance2">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item2" target="ItemDescription2">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item2" target="Item3">
+  <data key="d1">IsMemberOf</data>
+</edge>
+<edge id="0" source="Item3" target="ItemName3">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item3" target="ItemAffordance3">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item3" target="ItemDescription3">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item3" target="Item2">
+  <data key="d1">HasMember</data>
+</edge>
+<edge id="0" source="Item3" target="Item4">
+  <data key="d1">HasMember</data>
+</edge>
+<edge id="0" source="Item4" target="ItemName4">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item4" target="ItemAffordance4">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item4" target="ItemDescription4">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item4" target="Item3">
+  <data key="d1">IsMemberOf</data>
+</edge>
+</graph></graphml>
