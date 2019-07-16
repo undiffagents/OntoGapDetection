@@ -91,6 +91,21 @@
 <node id="ItemRole5">
   <data key="d0">letter</data>
 </node>
+<node id="Item6">
+  <data key="d0">L</data>
+</node>
+<node id="ItemName6">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance6">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription6">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole6">
+  <data key="d0">subject</data>
+</node>
 <edge id="0" source="Item0" target="ItemName0">
   <data key="d1">ItemHasName</data>
 </edge>
@@ -186,5 +201,17 @@
 </edge>
 <edge id="0" source="Item5" target="Item4">
   <data key="d1">IsEquivalentTo</data>
+</edge>
+<edge id="0" source="Item6" target="ItemName6">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item6" target="ItemAffordance6">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item6" target="ItemDescription6">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item6" target="ItemRole6">
+  <data key="d1">ItemHasRole</data>
 </edge>
 </graph></graphml>
