@@ -28,5 +28,5 @@ predicate(J,be,G,I)-4/2
    modifier_pp(Q,in,E)-6/8
    QUESTION
    [R,S]
-   property(R,active,pos)-7/3
+   property(R,alive,pos)-7/3
    predicate(S,be,named(Psychomotor-Vigilance),R)-7/1
