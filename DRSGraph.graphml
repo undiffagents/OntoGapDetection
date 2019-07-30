@@ -134,7 +134,7 @@
   <data key="d0">O</data>
 </node>
 <node id="PropertyAdjective11">
-  <data key="d0">active</data>
+  <data key="d0">active|ongoing</data>
 </node>
 <node id="PropertySecondaryObject11">
   <data key="d0"></data>
