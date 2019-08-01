@@ -91,6 +91,24 @@
 <node id="ItemRole5">
   <data key="d0">letter</data>
 </node>
+<node id="Property6">
+  <data key="d0">K</data>
+</node>
+<node id="PropertyAdjective6">
+  <data key="d0">active|alive</data>
+</node>
+<node id="PropertySecondaryObject6">
+  <data key="d0"></data>
+</node>
+<node id="PropertyTertiaryObject6">
+  <data key="d0"></data>
+</node>
+<node id="PropertyDegree6">
+  <data key="d0">pos</data>
+</node>
+<node id="PropertyCompTarget6">
+  <data key="d0"></data>
+</node>
 <edge id="0" source="Item0" target="ItemName0">
   <data key="d1">ItemHasName</data>
 </edge>
@@ -105,6 +123,9 @@
 </edge>
 <edge id="0" source="Item0" target="Item3">
   <data key="d1">HasA</data>
+</edge>
+<edge id="0" source="Item0" target="Property6">
+  <data key="d1">Is</data>
 </edge>
 <edge id="0" source="Item1" target="ItemName1">
   <data key="d1">ItemHasName</data>
@@ -186,5 +207,20 @@
 </edge>
 <edge id="0" source="Item5" target="Item4">
   <data key="d1">IsEquivalentTo</data>
+</edge>
+<edge id="0" source="Property6" target="PropertyAdjective6">
+  <data key="d1">PropertyHasAdjective</data>
+</edge>
+<edge id="0" source="Property6" target="PropertySecondaryObject6">
+  <data key="d1">PropertyHasSecondaryObject</data>
+</edge>
+<edge id="0" source="Property6" target="PropertyTertiaryObject6">
+  <data key="d1">PropertyHasTertiaryObject</data>
+</edge>
+<edge id="0" source="Property6" target="PropertyDegree6">
+  <data key="d1">PropertyHasDegree</data>
+</edge>
+<edge id="0" source="Property6" target="PropertyCompTarget6">
+  <data key="d1">PropertyHasCompTarget</data>
 </edge>
 </graph></graphml>

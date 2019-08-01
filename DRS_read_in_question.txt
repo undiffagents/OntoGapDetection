@@ -30,5 +30,5 @@ property(K,active,pos)-7/5
 predicate(L,be,A,K)-7/4
    QUESTION
    [T,U]
-   property(T,active,pos)-8/5
-   predicate(U,be,A,T)-8/1
+   property(T,alive,pos)-8/5
+   predicate(U,be,named(Psychomotor-Vigilance),T)-8/1
