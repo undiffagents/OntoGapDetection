@@ -268,6 +268,18 @@
 <edge id="0" source="Action6" target="ModPP7">
   <data key="d1">isModifiedBy</data>
 </edge>
+<edge id="0" source="Action6" target="Item8">
+  <data key="d1">triggers</data>
+</edge>
+<edge id="0" source="Action6" target="Action9">
+  <data key="d1">triggers</data>
+</edge>
+<edge id="0" source="Action6" target="Action10">
+  <data key="d1">triggers</data>
+</edge>
+<edge id="0" source="Action6" target="Property11">
+  <data key="d1">isTriggeredBy</data>
+</edge>
 <edge id="0" source="ModPP7" target="ModPPPrep7">
   <data key="d1">ModPPHasPrep</data>
 </edge>
@@ -295,6 +307,9 @@
 <edge id="0" source="Item8" target="Action10">
   <data key="d1">Performs</data>
 </edge>
+<edge id="0" source="Item8" target="Action6">
+  <data key="d1">isTriggeredBy</data>
+</edge>
 <edge id="0" source="Action9" target="ActionVerb9">
   <data key="d1">ActionHasVerb</data>
 </edge>
@@ -304,6 +319,9 @@
 <edge id="0" source="Action9" target="Item1">
   <data key="d1">HasTarget</data>
 </edge>
+<edge id="0" source="Action9" target="Action6">
+  <data key="d1">isTriggeredBy</data>
+</edge>
 <edge id="0" source="Action10" target="ActionVerb10">
   <data key="d1">ActionHasVerb</data>
 </edge>
@@ -312,6 +330,9 @@
 </edge>
 <edge id="0" source="Action10" target="Item5">
   <data key="d1">HasTarget</data>
+</edge>
+<edge id="0" source="Action10" target="Action6">
+  <data key="d1">isTriggeredBy</data>
 </edge>
 <edge id="0" source="Property11" target="PropertyAdjective11">
   <data key="d1">PropertyHasAdjective</data>
@@ -327,5 +348,8 @@
 </edge>
 <edge id="0" source="Property11" target="PropertyCompTarget11">
   <data key="d1">PropertyHasCompTarget</data>
+</edge>
+<edge id="0" source="Property11" target="Action6">
+  <data key="d1">triggers</data>
 </edge>
 </graph></graphml>
