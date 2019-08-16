@@ -68,7 +68,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemAffordance4">
-  <data key="d0">appear|appear</data>
+  <data key="d0">appear</data>
 </node>
 <node id="ItemDescription4">
   <data key="d0"></data>
@@ -147,12 +147,6 @@
 </node>
 <node id="PropertyCompTarget11">
   <data key="d0"></data>
-</node>
-<node id="Action12">
-  <data key="d0">S</data>
-</node>
-<node id="ActionVerb12">
-  <data key="d0">appear</data>
 </node>
 <edge id="0" source="Item0" target="ItemName0">
   <data key="d1">ItemHasName</data>
@@ -247,9 +241,6 @@
 <edge id="0" source="Item4" target="Action6">
   <data key="d1">Performs</data>
 </edge>
-<edge id="0" source="Item4" target="Action12">
-  <data key="d1">Performs</data>
-</edge>
 <edge id="0" source="Item5" target="ItemName5">
   <data key="d1">ItemHasName</data>
 </edge>
@@ -336,11 +327,5 @@
 </edge>
 <edge id="0" source="Property11" target="PropertyCompTarget11">
   <data key="d1">PropertyHasCompTarget</data>
-</edge>
-<edge id="0" source="Action12" target="ActionVerb12">
-  <data key="d1">ActionHasVerb</data>
-</edge>
-<edge id="0" source="Action12" target="Item4">
-  <data key="d1">IsPerformedBy</data>
 </edge>
 </graph></graphml>

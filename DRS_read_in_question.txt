@@ -26,8 +26,6 @@ predicate(J,be,G,I)-4/2
    [S]
    predicate(S,appear,G)-6/7
    modifier_pp(S,in,E)-6/8
-property(K,active,pos)-7/5
-predicate(L,be,A,K)-7/4
    QUESTION
    [T,U]
    property(T,ongoing,pos)-8/5
