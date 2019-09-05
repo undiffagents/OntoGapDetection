@@ -1,0 +1,8 @@
+Psychomotor-Vigilance is a task.
+Acknowledge is a button.
+There is a box that v:isPartOf the task.
+There is a target that v:isPartOf the task.
+There is a letter.
+Every target is a letter.
+If the target v:appearsIn the box then a subject clicks the button and the subject remembers the letter.
+If the task is active then the target v:appearsIn the box.
