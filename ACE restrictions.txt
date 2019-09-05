@@ -1,0 +1,35 @@
+Want to avoid:                                        Solution:
+    
+    Noun Phrase Conjunction, Ditransitive verbs                v:(verb phrase)
+    
+    comparable properties? (more, most, less)                  maybe possible? probably hard?
+    
+    mass nouns                                                 dissallow "some", "no" quantifiers
+    
+    possesive pronouns                                         dissalow 's, ownership phrasing
+
+    is_a linguistic ambiguity				       Treat all "A is_a B" as "A -> B" or "B(A)" depending on context
+
+
+
+
+
+
+Translation rules:
+
+	object(X,A,countable,na,eq,1)           =>      A(B)
+	predicate(Y,be,named(B),X)
+	
+	object(X,A,countable,na,eq,1)		=>	A(NEW_CONSTANT)
+
+	predicate(Z,a,X,Y)              	=>      a(X(predicateName),Y(predicateName))
+
+	property(Y,a,pos)               	=>      hasProperty(X(predicateName),a)
+	predicate(Z,be,X,Y)
+
+	object(A,target,countable,na,eq,1)	=>	A(predicateName) subClassOf B(predicateName)
+	   =>
+	object(B,letter,countable,na,eq,1)
+	predicate(C,be,A,B)
+	
+	
