@@ -1,9 +1,11 @@
 #!/bin/bash
 
-./APE/ape.exe -file ACE_in.txt -cdrspp > tmp_DRS.txt
-
-input="tmp_DRS.txt"
+input=ACE_in.txt
+tmp=tmp_DRS.txt
 output=DRS.txt
+
+./APE/ape.exe -file $input -cdrspp > $tmp
+
 rm -f $output
 started=false
 while IFS= read -r line
@@ -22,4 +24,6 @@ do
   if $started; then 
 	echo "$line" >> $output
   fi
-done < "$input"
+done < "$tmp"
+
+rm -f $tmp
