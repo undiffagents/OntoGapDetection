@@ -1,7 +1,6 @@
-"Psychomotor-Vigilance" is a n:task.
-"Acknowledge" is a n:button.
-There is a n:box that v:isPartOf the n:task.
-There is a n:target that v:isPartOf the n:task.
-Every n:target is a n:letter.
-If the n:target v:appearsIn the n:box then a n:subject v:clicks the n:button and the n:subject v:remembers the n:target.
-If the n:task is a:active then the n:target v:appearsIn the n:box.
+"Psychomotor-Vigilance" is a task.
+"Acknowledge" is a button that v:isPartOf the task.
+There is a target that v:isPartOf the task.
+Every target is a letter.
+If the target v:appearsIn the box then a subject clicks the button and the subject remembers the target.
+If the task is active then the target v:appearsIn the box.

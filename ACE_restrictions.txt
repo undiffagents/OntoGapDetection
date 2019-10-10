@@ -20,17 +20,17 @@ Translation rules:
 	object(X,a,countable,na,eq,1)           =>       a(b)
 	predicate(Y,be,named(b),X)
 
-	#   object(X,a,countable,na,eq,1)       =>       a(NEW_CONSTANT)
-	#   relation(X,of,Y)                    	 relatedTo(NEW_CONSTANT,Y(predicateName))
+	    or if no predicate
+
+	object(X,a,countable,na,eq,1)		=>	 a(A) 
+							 where A is new (probably just capitalized a)
 
 	predicate(Z,a,X,Y)              	=>       a(X(predicateName),Y(predicateName))
 
 	property(Y,a,pos)               	=>       hasProperty(X(predicateName),a)
 	predicate(Z,be,X,Y)
 
-	object(A,target,countable,na,eq,1)	=>	A(predicateName) subClassOf B(predicateName)
+	object(A,target,countable,na,eq,1)	=>	 A(predicateName) subClassOf B(predicateName)
 	   =>
 	object(B,letter,countable,na,eq,1)
 	predicate(C,be,A,B)
-	
-	
