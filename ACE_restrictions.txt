@@ -10,6 +10,7 @@ Want to avoid:                                        Solution:
 
     is_a linguistic ambiguity				       Treat all "A is_a B" as "A -> B" or "B(A)" depending on context
 
+    unnamed predicates crete just one object		       Say "There is at least one" instead of "There is a"
 
 
 
@@ -20,9 +21,7 @@ Translation rules:
 	object(X,a,countable,na,eq,1)           =>       a(b)
 	predicate(Y,be,named(b),X)
 
-	    or if no predicate
-
-	object(X,a,countable,na,eq,1)		=>	 a(A) 
+	object(X,a,countable,na,geq,1)		=>	 a(A) 
 							 where A is new (probably just capitalized a)
 
 	predicate(Z,a,X,Y)              	=>       a(X(predicateName),Y(predicateName))
