@@ -10,7 +10,8 @@ Want to avoid:                                        Solution:
 
     is_a linguistic ambiguity				       Treat all "A is_a B" as "A -> B" or "B(A)" depending on context
 
-    unnamed predicates crete just one object		       Say "There is at least one" instead of "There is a"
+    unnamed predicates crete just one object		       Say "There is at least one" instead of "There is a" when not 
+								providing a class instance
 
 
 
