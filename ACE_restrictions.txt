@@ -25,12 +25,12 @@ Translation rules:
 	object(X,a,countable,na,geq,1)		=>	 a(A) 
 							 where A is new (probably just capitalized a)
 
-	predicate(Z,a,X,Y)              	=>       a(X(predicateName),Y(predicateName))
+	predicate(Z,a,X,Y)              	=>       a(predicateName(X),predicateName(Y))
 
-	property(Y,a,pos)               	=>       hasProperty(X(predicateName),a)
+	property(Y,a,pos)               	=>       hasProperty(predicateName(X),a)
 	predicate(Z,be,X,Y)
 
-	object(A,target,countable,na,eq,1)	=>	 A(predicateName) subClassOf B(predicateName)
+	object(A,target,countable,na,eq,1)	=>	 predicateName(A) subClassOf predicateName(B)
 	   =>
 	object(B,letter,countable,na,eq,1)
 	predicate(C,be,A,B)
