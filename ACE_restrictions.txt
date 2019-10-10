@@ -4,30 +4,34 @@ Want to avoid:                                        Solution:
     
     comparable properties? (more, most, less)                  maybe possible? probably hard?
     
-    mass nouns                                                 dissallow "some", "no" quantifiers
+    mass nouns                                                 dissallow "some" quantifiers
     
     possesive pronouns                                         dissalow 's, ownership phrasing
 
     is_a linguistic ambiguity				       Treat all "A is_a B" as "A -> B" or "B(A)" depending on context
 
-    unnamed predicates crete just one object		       Say "There is at least one" instead of "There is a" when not 
-								providing a class instance
-
+    cardinality restrictions				       Can only talk about specific, named, or singular things, or 
+    								else rules about all of them (\forall, \exists)
 
 
 
 
 Translation rules:
 
-	object(X,a,countable,na,eq,1)           =>       a(b)
-	predicate(Y,be,named(b),X)
+	object(X,a,countable,na,eq,1)           =>       a(B)		atomic unary predicate
+	predicate(Y,be,named(B),X)
 
-	object(X,a,countable,na,geq,1)		=>	 a(A) 
-							 where A is new (probably just capitalized a)
+	object(X,a,countable,na,geq,1)		=>	 a(A)		where A is new (probably just capitalized a)
+		or							no naming predicate, basically the previous one but 
+	object(X,a,countable,na,eq,1)	 				constant unknown so we have to make one
 
-	predicate(Z,a,X,Y)              	=>       a(predicateName(X),predicateName(Y))
+	predicate(Z,a,X,Y)              	=>       a(constantName(X),constantName(Y))	atomic binary predicate
+												by necessity Attempto will 
+												declare X,Y before making 
+												pred a. So they should 
+												already have names.
 
-	property(Y,a,pos)               	=>       hasProperty(predicateName(X),a)
+	property(Y,a,pos)               	=>       hasProperty(constantName(X),a)
 	predicate(Z,be,X,Y)
 
 	object(A,target,countable,na,eq,1)	=>	 predicateName(A) subClassOf predicateName(B)
