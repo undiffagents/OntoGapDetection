@@ -20,21 +20,35 @@ Translation rules:
 
 	object(X,a,countable,na,eq,1)           =>       a(B)		atomic unary predicate
 	predicate(Y,be,named(B),X)
+		or
+	predicate(Y,be,string(B),X)
+
 
 	object(X,a,countable,na,geq,1)		=>	 a(A)		where A is new (probably just capitalized a)
 		or							no naming predicate, basically the previous one but 
 	object(X,a,countable,na,eq,1)	 				constant unknown so we have to make one
 
+
 	predicate(Z,a,X,Y)              	=>       a(constantName(X),constantName(Y))	atomic binary predicate
+
 												by necessity Attempto will 
 												declare X,Y before making 
 												pred a. So they should 
 												already have names.
 
-	property(Y,a,pos)               	=>       hasProperty(constantName(X),a)
-	predicate(Z,be,X,Y)
+
+	property(Y,a,pos)               	=>       hasProperty(constantName(X),a)		necessary to distinguish
+	predicate(Z,be,X,Y)									properties from constants
+
+												we assume a is a property 
+												ONLY in this predicate. 
+
 
 	object(A,target,countable,na,eq,1)	=>	 predicateName(A) subClassOf predicateName(B)
 	   =>
 	object(B,letter,countable,na,eq,1)
 	predicate(C,be,A,B)
+
+
+	ToDo
+	NOT
