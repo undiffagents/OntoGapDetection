@@ -134,7 +134,7 @@
   <data key="d0">Q</data>
 </node>
 <node id="PropertyAdjective11">
-  <data key="d0">inactive</data>
+  <data key="d0">active|inactive</data>
 </node>
 <node id="PropertySecondaryObject11">
   <data key="d0"></data>
