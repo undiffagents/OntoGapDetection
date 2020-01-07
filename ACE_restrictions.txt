@@ -21,6 +21,7 @@ Translation rules:
 	object(X,a,countable,na,eq,1)           =>       a(B)		atomic unary predicate
 	predicate(Y,be,named(B),X)
 		or
+	object(X,a,countable,na,eq,1)
 	predicate(Y,be,string(B),X)
 
 
