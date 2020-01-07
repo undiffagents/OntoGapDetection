@@ -45,10 +45,10 @@ Translation rules:
 												ONLY in this predicate. 
 
 
-	object(A,target,countable,na,eq,1)	=>	 predicateName(A) subClassOf predicateName(B)
+	object(A,target,countable,na,eq,1)	=>	 predicateName(A) subClassOf predicateName(B)?
 	   =>
-	object(B,letter,countable,na,eq,1)		 predicateName(A) => predicateName(B)
-	predicate(C,be,A,B)			 	 not sure what symbol to use for implication
+	object(B,letter,countable,na,eq,1)		 predicateName(A) => predicateName(B)?
+	predicate(C,be,A,B)			 	 (not sure what symbol to use for implication)
 
 
 	ToDo
