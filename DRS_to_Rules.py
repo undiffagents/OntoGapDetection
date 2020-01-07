@@ -78,4 +78,5 @@ print(preds)
 print(facts)
 print(rules)
 
+
 drsfile.close()
