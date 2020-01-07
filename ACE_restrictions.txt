@@ -12,8 +12,8 @@ Want to avoid:                                        Solution:
 
     cardinality restrictions				       Can only talk about specific, named, or singular things, or 
     								else rules about all of them (\forall, \exists)
-
-
+								
+    nested conditionals					       not allowed (weird to speak that way anyways)
 
 
 Translation rules:
