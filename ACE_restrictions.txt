@@ -47,7 +47,7 @@ Translation rules:
 	object(A,target,countable,na,eq,1)	=>	 predicateName(A) subClassOf predicateName(B)
 	   =>
 	object(B,letter,countable,na,eq,1)		 predicateName(A) => predicateName(B)
-	predicate(C,be,A,B)			 not sure what symbol to use for implication
+	predicate(C,be,A,B)			 	 not sure what symbol to use for implication
 
 
 	ToDo
