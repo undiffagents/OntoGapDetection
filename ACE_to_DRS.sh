@@ -47,3 +47,5 @@ do
 done < "$tmp"
 
 rm -f $tmp
+
+python3 DRS_to_Rules.py

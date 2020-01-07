@@ -1,4 +1,4 @@
-p:Psychomotor-Vigilance is a task.
+p:Psychomotor-vigilance is a task.
 p:Acknowledge is a button that v:isPartOf the task.
 There is at least one target that v:isPartOf the task.
 Every target is a letter.

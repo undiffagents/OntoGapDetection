@@ -1,6 +1,6 @@
 [A,B,C,D,E,F,G]
 object(A,task,countable,na,eq,1)-1/6
-predicate(B,be,named(Psychomotor-Vigilance),A)-1/4
+predicate(B,be,named(Psychomotor-vigilance),A)-1/4
 object(C,button,countable,na,eq,1)-2/6
 predicate(D,isPartOf,C,A)-2/10
 predicate(E,be,named(Acknowledge),C)-2/4
