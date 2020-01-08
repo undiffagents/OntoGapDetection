@@ -17,7 +17,7 @@ def lookupObject(letter):
 
 def subObject(letter,string):
     for pair in objs:
-        if pair[0] == letter: pair[1] = string ; return True
+        if pair[0] == letter: unnamedFacts.remove(pair[1]) ; pair[1] = string ; return True
     return False
 
 def lookupProperty(letter):
@@ -74,15 +74,20 @@ if __name__ == "__main__":
     drsfile = open("DRS.txt","r")
     antecedent = False
     consequent = False
+    unnamedFacts = []
     
     for line in drsfile:
         if not ' ' in line:
             if 'object'in line:
                 objs.append(parseObjectLine(line))
+                unnamedFacts.append(objs[-1][1])
             elif 'named' in line or 'string' in line:
                 preds.append(parsePredicateLine(line))
     
     drsfile.seek(0)
+    
+    for fact in unnamedFacts:
+        preds.append('{}({})'.format(fact,fact.capitalize()))
     
     for line in drsfile:
         if '[' in line:

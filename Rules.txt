@@ -1,7 +1,10 @@
 Facts:
 task(Psychomotor-vigilance)
 button(Acknowledge)
+box(Box)
+target(Target)
 isPartOf(Acknowledge,Psychomotor-vigilance)
+isPartOf(Box,Psychomotor-vigilance)
 isPartOf(Target,Psychomotor-vigilance)
 
 Rules:
