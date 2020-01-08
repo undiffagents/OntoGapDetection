@@ -36,7 +36,6 @@ def parsePredicateLine(line):
     if len(line[1]) > 1 and line[0] == 'be':
         a = lookupObject(line[2])
         subObject(line[2],lowercase(line[1]))
-        print(line)
         return '{}({})'.format(a,line[1])
     elif line[0] == 'be': 
         b = lookupObject(line[2])
@@ -44,39 +43,78 @@ def parsePredicateLine(line):
         if not b: 
             return 'hasProperty({},{})'.format(a.capitalize(),lookupProperty(line[2]).capitalize())
         else:
-            print('{}(X) => {}(X)'.format(a,b))    
+            rules.append('{}(X) => {}(X)'.format(a,b)) ; head = [] ; body = []
     else:
-        return '{}({},{})'.format(line[0],lookupObject(line[1]).capitalize(),lookupObject(line[2]).capitalize())  
+        return '{}({},{})'.format(line[0],lookupObject(line[1]).capitalize(),lookupObject(line[2]).capitalize())
 
-varlist = []
-objs = []
-preds = []
-props = []
+def flipSide(antecedent,consequent):
+    if not antecedent and not consequent: addAllFacts() ; antecedent = True
+    elif antecedent: consequent = True ; antecedent = False
+    else: antecedent = True ; consequent = False
+    return antecedent,consequent
 
-facts = []
-rules = []
+def addAllFacts():
+    for pred in preds:
+        facts.append(pred)
 
-drsfile = open("DRS.txt","r")
-antecedent = False
-consequent = False
+def addRule():
+    pass
 
-for line in drsfile:
-    if '[' in line:
-        varlist.extend(parseVarLine(line))
-        if ' ' in line: antecedent = True ; consequent = False
-    elif '=>' in line:
-        antecedent = False ; consequent = True
-    elif 'object' in line:
-        objs.append(parseObjectLine(line))
-    elif 'property' in line:
-        props.append(parsePropertyLine(line))
-    elif 'predicate' in line:
-        preds.append(parsePredicateLine(line))
-
-print(objs)
-print(preds)
-print(facts)
-print(rules)
-
-
-drsfile.close()
+if __name__ == "__main__":
+    varlist = []
+    objs = []
+    preds = []
+    props = []
+    
+    facts = []
+    rules = []
+    head = []
+    body = []
+    
+    drsfile = open("DRS.txt","r")
+    antecedent = False
+    consequent = False
+    
+    for line in drsfile:
+        if not ' ' in line:
+            if 'object'in line:
+                objs.append(parseObjectLine(line))
+            elif 'named' in line or 'string' in line:
+                preds.append(parsePredicateLine(line))
+    
+    drsfile.seek(0)
+    
+    for line in drsfile:
+        if '[' in line:
+            varlist.extend(parseVarLine(line))
+            if ' ' in line: 
+                antecedent,consequent = flipSide(antecedent,consequent)
+                if antecedent: 
+                    if len(head) > 0 and len(body) > 0: rules.append('{} => {}'.format(','.join(head),','.join(body))) 
+                    head = [] ; body = []
+        if 'object' in line and ' ' in line:
+            objs.append(parseObjectLine(line)) 
+        elif 'property' in line:
+            props.append(parsePropertyLine(line))
+        elif 'predicate' in line and not ('named' in line or 'string' in line):
+            if not antecedent and not consequent: preds.append(parsePredicateLine(line))
+            elif antecedent: head.append(parsePredicateLine(line))
+            else: body.append(parsePredicateLine(line))
+    
+    if len(head) > 0 and len(body) > 0: rules.append('{} => {}'.format(','.join(head),','.join(body)))
+    
+    drsfile.close()
+    
+    rulesfile = open("Rules.txt","w")
+    
+    rulesfile.write("Facts:\n")
+    
+    for fact in facts:
+        rulesfile.write('{}\n'.format(fact))
+    
+    rulesfile.write('\nRules:\n')
+    
+    for rule in rules:
+        rulesfile.write('{}\n'.format(rule))
+    
+    rulesfile.close()

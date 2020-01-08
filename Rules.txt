@@ -1,0 +1,10 @@
+Facts:
+task(Psychomotor-vigilance)
+button(Acknowledge)
+isPartOf(Acknowledge,Psychomotor-vigilance)
+isPartOf(Target,Psychomotor-vigilance)
+
+Rules:
+target(X) => letter(X)
+appearsIn(Target,Box) => click(Subject,Acknowledge),remember(Subject,Target)
+hasProperty(Psychomotor-vigilance,Active) => appearsIn(Target,Box)
