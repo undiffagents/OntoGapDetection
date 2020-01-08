@@ -29,7 +29,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole1">
-  <data key="d0">button|blue</data>
+  <data key="d0">button</data>
 </node>
 <node id="Item2">
   <data key="d0">E</data>
@@ -134,7 +134,7 @@
   <data key="d0">O</data>
 </node>
 <node id="PropertyAdjective11">
-  <data key="d0">active|inactive</data>
+  <data key="d0">active</data>
 </node>
 <node id="PropertySecondaryObject11">
   <data key="d0"></data>
