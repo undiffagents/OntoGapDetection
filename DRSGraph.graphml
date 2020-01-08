@@ -29,7 +29,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole1">
-  <data key="d0">button</data>
+  <data key="d0">button|blue</data>
 </node>
 <node id="Item2">
   <data key="d0">E</data>
@@ -134,7 +134,7 @@
   <data key="d0">O</data>
 </node>
 <node id="PropertyAdjective11">
-  <data key="d0">active</data>
+  <data key="d0">active|inactive</data>
 </node>
 <node id="PropertySecondaryObject11">
   <data key="d0"></data>
@@ -268,10 +268,10 @@
 <edge id="0" source="Action6" target="ModPP7">
   <data key="d1">isModifiedBy</data>
 </edge>
-<edge id="0" source="Action6" target="Action9">
+<edge id="0" source="Action6" target="Action10">
   <data key="d1">triggers</data>
 </edge>
-<edge id="0" source="Action6" target="Action10">
+<edge id="0" source="Action6" target="Action9">
   <data key="d1">triggers</data>
 </edge>
 <edge id="0" source="Action6" target="Property11">
