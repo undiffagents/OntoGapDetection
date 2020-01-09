@@ -29,10 +29,3 @@ predicate(K,isPartOf,J,A)-5/10
    =>
    [U]
    predicate(U,appearsIn,J,H)-8/11
-   [V,W]
-   object(V,box,countable,na,eq,1)-9/5
-   predicate(W,isPartOf,V,A)-9/11
-   =>
-   [X,Y]
-   object(X,turtle,countable,na,eq,1)-9/18
-   predicate(Y,isNextTo,V,X)-9/24
