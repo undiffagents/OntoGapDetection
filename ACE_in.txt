@@ -1,7 +1,9 @@
 p:Psychomotor-vigilance is a task.
+p:Psychomotor-vigilance is active.
 p:Acknowledge is a button that v:isPartOf the task.
 There is a box that v:isPartOf the task.
 There is at least one target that v:isPartOf the task.
 Every target is a letter.
 If the target v:appearsIn the box then a subject clicks the button and the subject remembers the target.
 If the task is active then the target v:appearsIn the box.
+If there is a box and the box v:isPartOf the task then there is a turtle and the box v:isNextTo the turtle.

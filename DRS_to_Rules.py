@@ -15,9 +15,35 @@ def lookupObject(letter):
         if pair[0] == letter: return pair[1].lower()
     return False
 
+def falseNegCheck(name):
+    for pair in objs:
+        if pair[1] == name: return pair[1].lower()
+    return False    
+
+def isFact(term):
+    for fact in facts:
+        fact = fact.split('(')[0]
+        if fact == term: return True
+    return False
+
+def lookupTerm(letter):    
+    term = lookupObject(letter)
+    if not term: return term
+    for obj in objs:
+        if obj[1] == term: 
+            a = obj[1]
+            break
+    if a in namedFacts:
+        a = namedFacts[term]
+    newatom = '{}({})'.format(a,obj[0])
+    if antecedent: head.append(newatom)
+    else: body.append(newatom)
+    unGround.append(newatom)
+    return obj[0]
+
 def subObject(letter,string):
     for pair in objs:
-        if pair[0] == letter: unnamedFacts.remove(pair[1]) ; pair[1] = string ; return True
+        if pair[0] == letter: unnamedFacts.remove(pair[1]) ; namedFacts[string] = pair[1] ; pair[1] = string ; return True
     return False
 
 def lookupProperty(letter):
@@ -34,18 +60,30 @@ def parsePredicateLine(line):
     line[2]=line[2].split(')')[0]
     if len(line[1]) > 1: line[-2]=(line[-2].split('(')[1]).split(')')[0]
     if len(line[1]) > 1 and line[0] == 'be':
+        b = line[1]
         a = lookupObject(line[2])
-        subObject(line[2],lowercase(line[1]))
-        return '{}({})'.format(a,line[1])
+        if not a:
+            a = falseNegCheck(line[1].lower()).capitalize()
+            b = lookupProperty(line[2]).capitalize()
+            return 'hasProperty({},{})'.format(a,b)
+        else:
+            subObject(line[2],lowercase(b))
+            return '{}({})'.format(a,b)
     elif line[0] == 'be': 
         b = lookupObject(line[2])
-        a = lookupObject(line[1])
+        a = lookupObject(line[1])   
         if not b: 
             return 'hasProperty({},{})'.format(a.capitalize(),lookupProperty(line[2]).capitalize())
         else:
-            rules.append('{}(X) => {}(X)'.format(a,b)) ; head = [] ; body = []
+            rules.append('{}({}) => {}({})'.format(a,line[1],b,line[1])) ; head = [] ; body = []
+    elif not antecedent and not consequent:
+        a = lookupObject(line[1]).capitalize()
+        b = lookupObject(line[2]).capitalize()
+        return '{}({},{})'.format(line[0],a,b)
     else:
-        return '{}({},{})'.format(line[0],lookupObject(line[1]).capitalize(),lookupObject(line[2]).capitalize())
+        a = lookupTerm(line[1])
+        b = lookupTerm(line[2])     
+        return '{}({},{})'.format(line[0],a,b)
 
 def flipSide(antecedent,consequent):
     if not antecedent and not consequent: addAllFacts() ; antecedent = True
@@ -62,6 +100,7 @@ def addRule():
 
 if __name__ == "__main__":
     varlist = []
+    unGround = []
     objs = []
     preds = []
     props = []
@@ -75,6 +114,7 @@ if __name__ == "__main__":
     antecedent = False
     consequent = False
     unnamedFacts = []
+    namedFacts = {}
     
     for line in drsfile:
         if not ' ' in line:
@@ -83,6 +123,8 @@ if __name__ == "__main__":
                 unnamedFacts.append(objs[-1][1])
             elif 'named' in line or 'string' in line:
                 preds.append(parsePredicateLine(line))
+            elif 'property' in line:
+                props.append(parsePropertyLine(line))
     
     drsfile.seek(0)
     
@@ -95,11 +137,13 @@ if __name__ == "__main__":
             if ' ' in line: 
                 antecedent,consequent = flipSide(antecedent,consequent)
                 if antecedent: 
-                    if len(head) > 0 and len(body) > 0: rules.append('{} => {}'.format(','.join(head),','.join(body))) 
+                    if len(head) > 0 and len(body) > 0: 
+                        head = list(set(head)) ; body = list(set(body))
+                        rules.append('{} => {}'.format(','.join(head),','.join(body))) 
                     head = [] ; body = []
-        if 'object' in line and ' ' in line:
+        if ' object' in line:
             objs.append(parseObjectLine(line)) 
-        elif 'property' in line:
+        elif ' property' in line:
             props.append(parsePropertyLine(line))
         elif 'predicate' in line and not ('named' in line or 'string' in line):
             if not antecedent and not consequent: preds.append(parsePredicateLine(line))
