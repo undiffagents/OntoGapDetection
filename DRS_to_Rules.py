@@ -27,6 +27,7 @@ def isFact(term):
     return False
 
 def lookupTerm(letter):    
+    a = ''
     term = lookupObject(letter)
     if not term: return term
     for obj in objs:
@@ -36,6 +37,7 @@ def lookupTerm(letter):
     if a in namedFacts:
         a = namedFacts[term]
     newatom = '{}({})'.format(a,obj[0])
+    if a == '': newatom = '{}({})'.format(obj[1],obj[0])        
     if antecedent: head.append(newatom)
     else: body.append(newatom)
     unGround.append(newatom)
@@ -73,9 +75,10 @@ def parsePredicateLine(line):
         b = lookupObject(line[2])
         a = lookupObject(line[1])   
         if not b: 
-            return 'hasProperty({},{})'.format(a.capitalize(),lookupProperty(line[2]).capitalize())
+            return 'hasProperty({},{})'.format(lookupTerm(line[1]).capitalize(),lookupProperty(line[2]).capitalize())
         else:
             rules.append('{}({}) => {}({})'.format(a,line[1],b,line[1])) ; head = [] ; body = []
+            return
     elif not antecedent and not consequent:
         a = lookupObject(line[1]).capitalize()
         b = lookupObject(line[2]).capitalize()
@@ -139,6 +142,8 @@ if __name__ == "__main__":
                 if antecedent: 
                     if len(head) > 0 and len(body) > 0: 
                         head = list(set(head)) ; body = list(set(body))
+                        for a in head:
+                            if a in body: body.remove(a)
                         rules.append('{} => {}'.format(','.join(head),','.join(body))) 
                     head = [] ; body = []
         if ' object' in line:

@@ -1,14 +1,15 @@
 Facts:
 task(Psychomotor-vigilance)
+task(Otherthing)
 hasProperty(Psychomotor-vigilance,Active)
 button(Acknowledge)
 box(Box)
 target(Target)
-isPartOf(Acknowledge,Psychomotor-vigilance)
-isPartOf(Box,Psychomotor-vigilance)
-isPartOf(Target,Psychomotor-vigilance)
+isPartOf(Acknowledge,Otherthing)
+isPartOf(Box,Otherthing)
+isPartOf(Target,Otherthing)
 
 Rules:
-target(L) => letter(L)
-appearsIn(J,H),box(H),target(J) => click(P,E),subject(P),button(E),remember(P,J),target(J)
-hasProperty(Psychomotor-vigilance,Active) => target(J),box(H),appearsIn(J,H)
+target(N) => letter(N)
+target(L),appearsIn(L,J),box(J) => click(R,G),remember(R,L),subject(R),button(G)
+task(C),hasProperty(C,Active) => target(L),box(J),appearsIn(L,J)
