@@ -38,8 +38,8 @@ def lookupTerm(letter):
         a = namedFacts[term]
     newatom = '{}({})'.format(a,obj[0])
     if a == '': newatom = '{}({})'.format(obj[1],obj[0])        
-    if antecedent: head.append(newatom)
-    else: body.append(newatom)
+    if antecedent: body.append(newatom)
+    else: head.append(newatom)
     unGround.append(newatom)
     return obj[0]
 
@@ -77,7 +77,7 @@ def parsePredicateLine(line):
         if not b: 
             return 'hasProperty({},{})'.format(lookupTerm(line[1]).capitalize(),lookupProperty(line[2]).capitalize())
         else:
-            rules.append('{}({}) => {}({})'.format(a,line[1],b,line[1])) ; head = [] ; body = []
+            rules.append('{}({}) => {}({})'.format(a,line[1],b,line[1])) ; body = [] ; head= []
             return
     elif not antecedent and not consequent:
         a = lookupObject(line[1]).capitalize()
@@ -98,8 +98,31 @@ def addAllFacts():
     for pred in preds:
         facts.append(pred)
 
-def addRule():
-    pass
+def extractVars(atom):
+    return ((atom.split('(')[1]).split(')')[0]).split(',')
+
+def determineVars(lists):
+    vrs = []
+    for atom in lists:
+        vrs.extend(extractVars(atom))
+    return set(vrs)
+
+
+def checkVars(atom):
+    vrsBody = determineVars(body)
+    vrsHead = determineVars(head)
+    while not vrsHead.issubset(vrsBody):
+        
+        for atom in head:
+            b = set(extractVars(atom))
+            if b.issubset(vrsBody):
+                print()
+            else:
+                head.remove(atom)
+                body.append(atom)
+        
+        vrsBody = determineVars(body)
+        vrsHead = determineVars(head)        
 
 if __name__ == "__main__":
     varlist = []
@@ -110,8 +133,8 @@ if __name__ == "__main__":
     
     facts = []
     rules = []
-    head = []
     body = []
+    head= []
     
     drsfile = open("DRS.txt","r")
     antecedent = False
@@ -135,27 +158,33 @@ if __name__ == "__main__":
         preds.append('{}({})'.format(fact,fact.capitalize()))
     
     for line in drsfile:
+        #print(line)
         if '[' in line:
             varlist.extend(parseVarLine(line))
             if ' ' in line: 
                 antecedent,consequent = flipSide(antecedent,consequent)
                 if antecedent: 
-                    if len(head) > 0 and len(body) > 0: 
-                        head = list(set(head)) ; body = list(set(body))
-                        for a in head:
-                            if a in body: body.remove(a)
-                        rules.append('{} => {}'.format(','.join(head),','.join(body))) 
-                    head = [] ; body = []
+                    if len(body) > 0 and len(head) > 0: 
+                        body = list(set(body)) ; head= list(set(head))
+                        for a in body:
+                            if a in head: head.remove(a)
+                        rules.append('{} => {}'.format(','.join(body),','.join(head))) 
+                    body = [] ; head= []
         if ' object' in line:
             objs.append(parseObjectLine(line)) 
         elif ' property' in line:
             props.append(parsePropertyLine(line))
         elif 'predicate' in line and not ('named' in line or 'string' in line):
             if not antecedent and not consequent: preds.append(parsePredicateLine(line))
-            elif antecedent: head.append(parsePredicateLine(line))
-            else: body.append(parsePredicateLine(line))
+            elif antecedent: body.append(parsePredicateLine(line))
+            elif len(body) == 0 and len(head) == 0:  
+                a = parsePredicateLine(line)
+            elif len(body) > 0:
+                a = parsePredicateLine(line)
+                checkVars(a)
+                head.append(a)
     
-    if len(head) > 0 and len(body) > 0: rules.append('{} => {}'.format(','.join(head),','.join(body)))
+    if len(body) > 0 and len(head) > 0: rules.append('{} => {}'.format(','.join(body),','.join(head)))
     
     drsfile.close()
     
