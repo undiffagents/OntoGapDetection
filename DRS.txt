@@ -1,33 +1,31 @@
-[A,B,C,D,E,F,G,H,I,J,K,L,M]
+[A,B,C,D,E,F,G,H,I,J,K]
 object(A,task,countable,na,eq,1)-1/6
 predicate(B,be,named(Psychomotor-vigilance),A)-1/4
-object(C,task,countable,na,eq,1)-2/6
-predicate(D,be,named(Otherthing),C)-2/4
-property(E,active,pos)-3/5
-predicate(F,be,named(Psychomotor-vigilance),E)-3/4
-object(G,button,countable,na,eq,1)-4/6
-predicate(H,isPartOf,G,C)-4/10
-predicate(I,be,named(Acknowledge),G)-4/4
-object(J,box,countable,na,eq,1)-5/4
-predicate(K,isPartOf,J,C)-5/8
-object(L,target,countable,na,geq,1)-6/6
-predicate(M,isPartOf,L,C)-6/10
-   [N]
-   object(N,target,countable,na,eq,1)-7/2
+property(C,active,pos)-2/5
+predicate(D,be,named(Psychomotor-vigilance),C)-2/4
+object(E,button,countable,na,eq,1)-3/6
+predicate(F,isPartOf,E,A)-3/10
+predicate(G,be,named(Acknowledge),E)-3/4
+object(H,box,countable,na,eq,1)-4/4
+predicate(I,isPartOf,H,A)-4/8
+object(J,target,countable,na,geq,1)-5/6
+predicate(K,isPartOf,J,A)-5/10
+   [L]
+   object(L,target,countable,na,eq,1)-6/2
    =>
-   [O,P]
-   object(O,letter,countable,na,eq,1)-7/5
-   predicate(P,be,N,O)-7/3
-   [Q]
-   predicate(Q,appearsIn,L,J)-8/6
+   [M,N]
+   object(M,letter,countable,na,eq,1)-6/5
+   predicate(N,be,L,M)-6/3
+   [O]
+   predicate(O,appearsIn,J,H)-7/6
    =>
-   [R,S,T]
-   object(R,subject,countable,na,eq,1)-8/11
-   predicate(S,click,R,G)-8/12
-   predicate(T,remember,R,L)-8/18
-   [U,V]
-   property(U,active,pos)-9/5
-   predicate(V,be,C,U)-9/4
+   [P,Q,R]
+   object(P,subject,countable,na,eq,1)-7/11
+   predicate(Q,click,P,E)-7/12
+   predicate(R,remember,P,J)-7/18
+   [S,T]
+   property(S,active,pos)-8/5
+   predicate(T,be,A,S)-8/4
    =>
-   [W]
-   predicate(W,appearsIn,L,J)-9/11
+   [U]
+   predicate(U,appearsIn,J,H)-8/11
