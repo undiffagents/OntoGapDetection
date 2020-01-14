@@ -21,9 +21,3 @@ predicate(I,isPartOf,H,A)-4/10
    object(N,subject,countable,na,eq,1)-6/11
    predicate(O,click,N,C)-6/12
    predicate(P,remember,N,H)-6/18
-   [Q,R]
-   property(Q,active,pos)-7/5
-   predicate(R,be,A,Q)-7/4
-   =>
-   [S]
-   predicate(S,appearsIn,H,F)-7/11

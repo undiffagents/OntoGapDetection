@@ -123,3 +123,22 @@ if __name__ == "__main__":
         rulesfile.write('{}\n'.format(rule))
     
     rulesfile.close()
+    
+    owlout = open("OWL_Instructions.txt","w")
+    
+    for fact in facts:
+        owlout.write('{}\n'.format(fact))
+    
+    for rule in rules:
+        owlout.write('{}\n'.format(rule))
+    
+    #need to tell the THINK agent that the task instructions are done
+    #this currently assumes that the FIRST fact is the task definition
+    owlout.write( 'done({})'.format((facts[0].split('(')[1]).split(')')[0]) )
+    
+    owlout.close()
+    
+    
+    
+    
+    
