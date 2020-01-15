@@ -10,25 +10,22 @@ rm -f $output
 started=false
 while IFS= read -r line
 do
-  if [[ $line == *"  <drspp>"* ]]; then
-	echo "$(echo "$line" | cut -c10-99)" >> $output
+
+  if [[ $started == false ]] && [[ $line == *"  <drspp>"* ]]; then
+	line="$(echo "$line" | cut -c10-99)"
 	started=true
-	continue
-  fi
-  if [[ $line == *"["* ]]; then	
-	echo "$line" >> $output
-	continue
-  fi
-  if [[ $line == *"</drspp>"* ]]; then
+  elif [[ $started ]] && [[ $line == *"</drspp>"* ]]; then
 	break
-  fi
-  if [[ $line == *"   =&gt;"* ]]; then
+  elif [[ $started ]] && [[ $line == *"   =&gt;"* ]]; then
 	line="   =>"
   fi
+
   if $started; then 
 	echo "$line" >> $output
   fi
+
 done < "$tmp"
+
 
 rm -f $tmp
 
