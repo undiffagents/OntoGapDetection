@@ -65,7 +65,7 @@ def parsePredicateLine(line):
         b = line[1]
         a = lookupObject(line[2])
         if not a:
-            a = falseNegCheck(line[1].lower())
+            a = falseNegCheck(line[1])
             b = lookupProperty(line[2])
             return 'hasProperty({},{})'.format(a,b)
         else:

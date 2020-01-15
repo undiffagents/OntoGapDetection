@@ -11,11 +11,11 @@ started=false
 while IFS= read -r line
 do
 
-  if [[ $started == false ]] && [[ $line == *"  <drspp>"* ]]; then
+  if [[ $started ]] && [[ $line == *"</drspp>"* ]]; then
+	break
+  elif [[ $started == false ]] && [[ $line == *"  <drspp>"* ]]; then
 	line="$(echo "$line" | cut -c10-99)"
 	started=true
-  elif [[ $started ]] && [[ $line == *"</drspp>"* ]]; then
-	break
   elif [[ $started ]] && [[ $line == *"   =&gt;"* ]]; then
 	line="   =>"
   fi

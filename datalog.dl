@@ -12,13 +12,13 @@ isPartOf(target,psychomotorvigilance).
 %rules
 letter(L) :- target(L).
 hasProperty(A,active) :- subject(C),task(A),isPartOf(C,A).
-click(C,E) :- subject(C),appearsIn(J,H),_box(H),button(E),target(J).
-remember(C,J) :- subject(C),appearsIn(J,H),_box(H),button(E),target(J).
+remember(C,J) :- subject(C),target(J),appearsIn(J,H),button(E),_box(H).
+click(C,E) :- subject(C),target(J),appearsIn(J,H),button(E),_box(H).
 appearsIn(J,H) :- task(A),hasProperty(A,active),target(J),_box(H).
 
 %queries
 letter(L)?
 hasProperty(A,active)?
-click(C,E)?
 remember(C,J)?
+click(C,E)?
 appearsIn(J,H)?
