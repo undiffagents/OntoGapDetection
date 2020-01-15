@@ -65,8 +65,8 @@ def parsePredicateLine(line):
         b = line[1]
         a = lookupObject(line[2])
         if not a:
-            a = falseNegCheck(line[1].lower()).capitalize()
-            b = lookupProperty(line[2]).capitalize()
+            a = falseNegCheck(line[1].lower())
+            b = lookupProperty(line[2])
             return 'hasProperty({},{})'.format(a,b)
         else:
             subObject(line[2],lowercase(b))
@@ -75,13 +75,16 @@ def parsePredicateLine(line):
         b = lookupObject(line[2])
         a = lookupObject(line[1])   
         if not b: 
-            return 'hasProperty({},{})'.format(lookupTerm(line[1]).capitalize(),lookupProperty(line[2]).capitalize())
+            return 'hasProperty({},{})'.format(lookupTerm(line[1]),lookupProperty(line[2]))
         else:
-            rules.append('{}({}) => {}({})'.format(a,line[1],b,line[1])) ; body = [] ; head= []
+            rules.append('{}({}) => {}({})'.format(a,line[1],b,line[1]))
+            datalog.append('{}({}) :- {}({}).'.format(b,line[1],a,line[1]))
+            queries.append('{}({})?'.format(b,line[1]))
+            body = [] ; head= []
             return
     elif not antecedent and not consequent:
-        a = lookupObject(line[1]).capitalize()
-        b = lookupObject(line[2]).capitalize()
+        a = lookupObject(line[1])
+        b = lookupObject(line[2])
         return '{}({},{})'.format(line[0],a,b)
     else:
         a = lookupTerm(line[1])
@@ -133,6 +136,8 @@ if __name__ == "__main__":
     
     facts = []
     rules = []
+    datalog = []
+    queries = []
     body = []
     head= []
     
@@ -155,7 +160,7 @@ if __name__ == "__main__":
     drsfile.seek(0)
     
     for fact in unnamedFacts:
-        preds.append('{}({})'.format(fact,fact.capitalize()))
+        preds.append('{}({})'.format(fact,fact))
     
     for line in drsfile:
         #print(line)
@@ -169,8 +174,11 @@ if __name__ == "__main__":
                         for a in body:
                             if a in head: head.remove(a)
                         rules.append('{} => {}'.format(','.join(body),','.join(head))) 
+                        for atom in head:
+                            datalog.append('{} :- {}.'.format(atom,','.join(body)))
+                            queries.append('{}?'.format(atom))
                     body = [] ; head= []
-        if ' object' in line:
+        elif ' object' in line:
             objs.append(parseObjectLine(line)) 
         elif ' property' in line:
             props.append(parsePropertyLine(line))
@@ -184,20 +192,37 @@ if __name__ == "__main__":
                 checkVars(a)
                 head.append(a)
     
-    if len(body) > 0 and len(head) > 0: rules.append('{} => {}'.format(','.join(body),','.join(head)))
+    if len(body) > 0 and len(head) > 0: 
+        rules.append('{} => {}'.format(','.join(body),','.join(head)))
+        for atom in head:
+            datalog.append('{} :- {}.'.format(atom,','.join(body)))
+            queries.append('{}?'.format(atom))
     
     drsfile.close()
     
     rulesfile = open("Rules.txt","w")
+    datalogfile = open("datalog.dl","w")
     
     rulesfile.write("Facts:\n")
-    
+    datalogfile.write("%facts\n")
+
     for fact in facts:
         rulesfile.write('{}\n'.format(fact))
+        datalogfile.write('{}.\n'.format(fact))
     
     rulesfile.write('\nRules:\n')
+    datalogfile.write("\n%rules\n")
     
     for rule in rules:
         rulesfile.write('{}\n'.format(rule))
+    for rule in datalog:
+        datalogfile.write('{}\n'.format(rule))
     
     rulesfile.close()
+
+    datalogfile.write("\n%queries\n")
+    
+    for question in queries:
+        datalogfile.write('{}\n'.format(question))
+
+    datalogfile.close()
