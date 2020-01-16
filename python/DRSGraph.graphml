@@ -1,0 +1,349 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key attr.name="value" attr.type="string" for="edge" id="d1"/>
+<key attr.name="value" attr.type="string" for="node" id="d0"/>
+<graph edgedefault="directed"><node id="Item0">
+  <data key="d0">A</data>
+</node>
+<node id="ItemName0">
+  <data key="d0">Psychomotor-Vigilance</data>
+</node>
+<node id="ItemAffordance0">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription0">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole0">
+  <data key="d0">task</data>
+</node>
+<node id="Item1">
+  <data key="d0">C</data>
+</node>
+<node id="ItemName1">
+  <data key="d0">Acknowledge</data>
+</node>
+<node id="ItemAffordance1">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription1">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole1">
+  <data key="d0">button</data>
+</node>
+<node id="Item2">
+  <data key="d0">E</data>
+</node>
+<node id="ItemName2">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance2">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription2">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole2">
+  <data key="d0">box</data>
+</node>
+<node id="Item3">
+  <data key="d0">H</data>
+</node>
+<node id="ItemName3">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance3">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription3">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole3">
+  <data key="d0">GROUP</data>
+</node>
+<node id="Item4">
+  <data key="d0">G</data>
+</node>
+<node id="ItemName4">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance4">
+  <data key="d0">appear</data>
+</node>
+<node id="ItemDescription4">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole4">
+  <data key="d0">target</data>
+</node>
+<node id="Item5">
+  <data key="d0">I</data>
+</node>
+<node id="ItemName5">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance5">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription5">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole5">
+  <data key="d0">letter</data>
+</node>
+<node id="Action6">
+  <data key="d0">K</data>
+</node>
+<node id="ActionVerb6">
+  <data key="d0">appear</data>
+</node>
+<node id="ModPP7">
+  <data key="d0">Kmod</data>
+</node>
+<node id="ModPPPrep7">
+  <data key="d0">in</data>
+</node>
+<node id="Item8">
+  <data key="d0">L</data>
+</node>
+<node id="ItemName8">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance8">
+  <data key="d0">click|remember</data>
+</node>
+<node id="ItemDescription8">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole8">
+  <data key="d0">subject</data>
+</node>
+<node id="Action9">
+  <data key="d0">M</data>
+</node>
+<node id="ActionVerb9">
+  <data key="d0">click</data>
+</node>
+<node id="Action10">
+  <data key="d0">N</data>
+</node>
+<node id="ActionVerb10">
+  <data key="d0">remember</data>
+</node>
+<node id="Property11">
+  <data key="d0">O</data>
+</node>
+<node id="PropertyAdjective11">
+  <data key="d0">active</data>
+</node>
+<node id="PropertySecondaryObject11">
+  <data key="d0"></data>
+</node>
+<node id="PropertyTertiaryObject11">
+  <data key="d0"></data>
+</node>
+<node id="PropertyDegree11">
+  <data key="d0">pos</data>
+</node>
+<node id="PropertyCompTarget11">
+  <data key="d0"></data>
+</node>
+<edge id="0" source="Item0" target="ItemName0">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item0" target="ItemAffordance0">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item0" target="ItemDescription0">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item0" target="ItemRole0">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item0" target="Item3">
+  <data key="d1">HasA</data>
+</edge>
+<edge id="0" source="Item0" target="Property11">
+  <data key="d1">Is</data>
+</edge>
+<edge id="0" source="Item1" target="ItemName1">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item1" target="ItemAffordance1">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item1" target="ItemDescription1">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item1" target="ItemRole1">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item1" target="Action9">
+  <data key="d1">IsTargetOf</data>
+</edge>
+<edge id="0" source="Item2" target="ItemName2">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item2" target="ItemAffordance2">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item2" target="ItemDescription2">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item2" target="ItemRole2">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item2" target="Item3">
+  <data key="d1">IsMemberOf</data>
+</edge>
+<edge id="0" source="Item2" target="ModPP7">
+  <data key="d1">isModifiedBy</data>
+</edge>
+<edge id="0" source="Item3" target="ItemName3">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item3" target="ItemAffordance3">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item3" target="ItemDescription3">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item3" target="ItemRole3">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item3" target="Item2">
+  <data key="d1">HasMember</data>
+</edge>
+<edge id="0" source="Item3" target="Item0">
+  <data key="d1">IsPartOf</data>
+</edge>
+<edge id="0" source="Item3" target="Item4">
+  <data key="d1">HasMember</data>
+</edge>
+<edge id="0" source="Item4" target="ItemName4">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item4" target="ItemAffordance4">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item4" target="ItemDescription4">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item4" target="ItemRole4">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item4" target="Item3">
+  <data key="d1">IsMemberOf</data>
+</edge>
+<edge id="0" source="Item4" target="Item5">
+  <data key="d1">IsEquivalentTo</data>
+</edge>
+<edge id="0" source="Item4" target="Action6">
+  <data key="d1">Performs</data>
+</edge>
+<edge id="0" source="Item5" target="ItemName5">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item5" target="ItemAffordance5">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item5" target="ItemDescription5">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item5" target="ItemRole5">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item5" target="Item4">
+  <data key="d1">IsEquivalentTo</data>
+</edge>
+<edge id="0" source="Item5" target="Action10">
+  <data key="d1">IsTargetOf</data>
+</edge>
+<edge id="0" source="Action6" target="ActionVerb6">
+  <data key="d1">ActionHasVerb</data>
+</edge>
+<edge id="0" source="Action6" target="Item4">
+  <data key="d1">IsPerformedBy</data>
+</edge>
+<edge id="0" source="Action6" target="ModPP7">
+  <data key="d1">isModifiedBy</data>
+</edge>
+<edge id="0" source="Action6" target="Action10">
+  <data key="d1">triggers</data>
+</edge>
+<edge id="0" source="Action6" target="Action9">
+  <data key="d1">triggers</data>
+</edge>
+<edge id="0" source="Action6" target="Property11">
+  <data key="d1">isTriggeredBy</data>
+</edge>
+<edge id="0" source="ModPP7" target="ModPPPrep7">
+  <data key="d1">ModPPHasPrep</data>
+</edge>
+<edge id="0" source="ModPP7" target="Action6">
+  <data key="d1">ModifiesVerb</data>
+</edge>
+<edge id="0" source="ModPP7" target="Item2">
+  <data key="d1">modifiesObject</data>
+</edge>
+<edge id="0" source="Item8" target="ItemName8">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item8" target="ItemAffordance8">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item8" target="ItemDescription8">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item8" target="ItemRole8">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item8" target="Action9">
+  <data key="d1">Performs</data>
+</edge>
+<edge id="0" source="Item8" target="Action10">
+  <data key="d1">Performs</data>
+</edge>
+<edge id="0" source="Action9" target="ActionVerb9">
+  <data key="d1">ActionHasVerb</data>
+</edge>
+<edge id="0" source="Action9" target="Item8">
+  <data key="d1">IsPerformedBy</data>
+</edge>
+<edge id="0" source="Action9" target="Item1">
+  <data key="d1">HasTarget</data>
+</edge>
+<edge id="0" source="Action9" target="Action6">
+  <data key="d1">isTriggeredBy</data>
+</edge>
+<edge id="0" source="Action10" target="ActionVerb10">
+  <data key="d1">ActionHasVerb</data>
+</edge>
+<edge id="0" source="Action10" target="Item8">
+  <data key="d1">IsPerformedBy</data>
+</edge>
+<edge id="0" source="Action10" target="Item5">
+  <data key="d1">HasTarget</data>
+</edge>
+<edge id="0" source="Action10" target="Action6">
+  <data key="d1">isTriggeredBy</data>
+</edge>
+<edge id="0" source="Property11" target="PropertyAdjective11">
+  <data key="d1">PropertyHasAdjective</data>
+</edge>
+<edge id="0" source="Property11" target="PropertySecondaryObject11">
+  <data key="d1">PropertyHasSecondaryObject</data>
+</edge>
+<edge id="0" source="Property11" target="PropertyTertiaryObject11">
+  <data key="d1">PropertyHasTertiaryObject</data>
+</edge>
+<edge id="0" source="Property11" target="PropertyDegree11">
+  <data key="d1">PropertyHasDegree</data>
+</edge>
+<edge id="0" source="Property11" target="PropertyCompTarget11">
+  <data key="d1">PropertyHasCompTarget</data>
+</edge>
+<edge id="0" source="Property11" target="Action6">
+  <data key="d1">triggers</data>
+</edge>
+</graph></graphml>
