@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="92560cf3-bb85-4b4b-bc90-84e6d49a5286" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/DRSGraph.graphml" beforeDir="false" afterPath="$PROJECT_DIR$/python/DRSGraph.graphml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/DRSProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/DRSProcessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/jsonFile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/python/jsonFile.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -100,21 +98,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/python/DRSProcessing.py</url>
-          <line>581</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/python/DRSProcessing.py</url>
-          <line>906</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

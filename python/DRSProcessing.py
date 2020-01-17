@@ -50,7 +50,6 @@ class predicateSwitcher(object):
             self.graphNumber = self.graphNumber + 1
             # If a main graph already exists, then add the new graph in to it
             if self.DRSGraph.graph is not None:
-                # DRSGraph.graph = networkx.algorithms.operators.binary.union(DRSGraph.graph, objectGraph.graph)
                 self.DRSGraph.graph = networkx.algorithms.operators.binary.compose(self.DRSGraph.graph,
                                                                                    objectGraph.graph)
             # if no main graph exists, this is the main graph
@@ -328,9 +327,10 @@ class questionSwitcher(object):
         # objUnit = predicateComponents[3]
         # objOperator = predicateComponents[4]
         # objCount = predicateComponents[5].split(')')[0]
-        # Get the item node in the original instruction which this SHOULD correspond to
+        # Get the item node in the original instruction which this SHOULD correspond to (via role)
         DRSEquivalentNode = self.findItemNodeWithRole(objRole)
         print(DRSEquivalentNode)
+        # Replace the reference ID (from APE Webclient) to the equivalent node's reference ID (from the graph)
         if self.DRSGraph.graph.has_node(DRSEquivalentNode):
             DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode][CONST_NODE_VALUE_KEY]
             self.newToOldRefIDMapping.update({objRefId: DRSNodeRefID})
@@ -694,10 +694,7 @@ class questionSwitcher(object):
 
     def findItemNodeConnectedToNameNode(self, nameNode):
         # Edges seem to be a little weird, so getting
-        # outEdgesFromNode = self.DRSGraph.graph.out_edges(roleNode, data=True)
         inEdgesFromNode = self.DRSGraph.graph.in_edges(nameNode, data=True)
-        # edgesFromNode = inEdgesFromNode
-        # edgesFromNode = self.DRSGraph.graph.edges(nameNode, data=True)
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasName, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_NAME_EDGE:
@@ -705,9 +702,7 @@ class questionSwitcher(object):
                 return startNode
 
     def findItemNodeConnectedToRoleNode(self, roleNode):
-        # outEdgesFromNode = self.DRSGraph.graph.out_edges(roleNode, data=True)
         inEdgesFromNode = self.DRSGraph.graph.in_edges(roleNode, data=True)
-        # edgesFromNode = outEdgesFromNode + inEdgesFromNode
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
@@ -729,7 +724,6 @@ def APEWebserviceCall(phraseToDRS):
     # Get the DRS that is sent back
     r = requests.get(urlToRequest)
     returnedDRS = r.text.splitlines()
-    # enteredQuestion = False
     DRSLines = []
     error = False
     for line in returnedDRS:
@@ -739,7 +733,6 @@ def APEWebserviceCall(phraseToDRS):
         if line != '[]' and line.strip():
             if line == "importance=\"error\"":
                 error = True
-            # print("SPACE ONLY")
             print(line)
             DRSLines.append(line)
     # Technically it's a little silly to categorize the DRS for a question since it's obviously all
