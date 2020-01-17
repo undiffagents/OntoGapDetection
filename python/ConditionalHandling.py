@@ -1,4 +1,5 @@
 import re
+from Constants import *
 
 
 class Conditional:
@@ -95,15 +96,12 @@ def getConditionals(DRSLines, categorizedDRSLines):
         # Find out if the current line is part of a conditional or not
         # conditional = isLineConditional(index, symbolLines)
         # if the current line is part of an IF in a conditional
-        if categorizedDRSLines.get(currentLineNumber) == 'if':
-            conditionalLines.update({currentLineNumber: 'if'})
+        if categorizedDRSLines.get(currentLineNumber) == CONST_IF_TAG:
+            conditionalLines.update({currentLineNumber: CONST_IF_TAG})
 
         # if the current line is part of a THEN in a conditional
-        if categorizedDRSLines.get(currentLineNumber) == 'then':
-            conditionalLines.update({currentLineNumber: 'then'})
-
-    # print(conditionalLines)
-    # print(conditionalLines.values())
+        if categorizedDRSLines.get(currentLineNumber) == CONST_THEN_TAG:
+            conditionalLines.update({currentLineNumber: CONST_THEN_TAG})
 
     # iterate through and group each line in the same if/then, then match them up
     # TODO: Make the string split to remove the numbers at the end of the DRS instruction happen when it's first read in
@@ -114,28 +112,25 @@ def getConditionals(DRSLines, categorizedDRSLines):
     for conditionalIndex, conditionalLineNumber in enumerate(conditionalLineIndexes):
         # print(conditionalIndex, conditionalLineNumber)
         # If item is an if
-        if conditionalLines[conditionalLineNumber] == 'if':
+        if conditionalLines[conditionalLineNumber] == CONST_IF_TAG:
             # Get index for line
             ifLineIndex = conditionalLineNumber
             # If first conditional line overall, or first line since a then
-            if (conditionalIndex - 1) < 0 or conditionalLines[conditionalLineIndexes[conditionalIndex - 1]] == 'then':
+            if (conditionalIndex - 1) < 0 or \
+                    conditionalLines[conditionalLineIndexes[conditionalIndex - 1]] == CONST_THEN_TAG:
                 # Create new Conditional with the current line as the first line in the conditional
                 currentConditional = Conditional(DRSLines[ifLineIndex].split(')-')[0] + ')')
             # Otherwise, just an if line
             currentConditional.addIfLine(DRSLines[ifLineIndex].split(')-')[0] + ')')
         # If item is a then
-        elif conditionalLines[conditionalLineNumber] == 'then':
+        elif conditionalLines[conditionalLineNumber] == CONST_THEN_TAG:
             thenLineIndex = conditionalLineNumber
             currentConditional.addThenLine(DRSLines[thenLineIndex].split(')-')[0] + ')')
             # If last line overall or last then before an if
             if ((conditionalIndex + 1) >= (len(conditionalLineIndexes))) or\
-                    conditionalLines[conditionalLineIndexes[conditionalIndex + 1]] == 'if':
+                    conditionalLines[conditionalLineIndexes[conditionalIndex + 1]] == CONST_IF_TAG:
                 currentConditional = anonymizeIfs(currentConditional)
                 conditionalList.append(currentConditional)
-    # COMMENTED OUT - we don't want to pre-anonymize, rather anonymize on check
-    # conditionalList = anonymizeIfs(conditionalList)
-    # for conditional in conditionalList:
-    #            conditional.pprint()
     return conditionalList
 
 
@@ -145,21 +140,6 @@ def splitAndRun(currentInstruction, predSwitcher):
     predicateContents = predicateSplit[1]
     # Call appropriate handling function based on predicate type
     DRSGraph = predSwitcher.callFunction(predicateType, predicateContents)
-    return DRSGraph
-
-
-# Removed possibly unnecessary parameter - predSwitcher
-def runConditionalThen(conditional, conditionalSets):
-    newDRSLines = []
-    # Run each then line in the triggered conditional, and add it to a "new DRS lines" to check for chain reaction
-    for triggeredThenLine in conditional.thenLines:
-        # Run the current line - may have been completely unnecessary
-        # DRSGraph = splitAndRun(triggeredThenLine, predSwitcher)
-        # Adding -0/0 to end of line to mimic numbers at end of normal line and not mess up splits
-        newDRSLines.append(triggeredThenLine + '-0/0')
-    # Recursively run this checker on the newly triggered lines to see if they trigger anything
-    # , predSwitcher, DRSGraph - Removed potentially unnecessary arguments
-    DRSGraph = checkCurrentInstructionIf(newDRSLines, 0, newDRSLines[0], conditionalSets)
     return DRSGraph
 
 
@@ -185,7 +165,6 @@ def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets):
     for index, thenLine in enumerate(checkPreparedThenLines):
         # Run the current then line if it isn't in a matching if block
         if instructionCountInMatchingIfBlock == 0:
-            # , predSwitcher, DRSGraph - removed potentially unneeded parameters
             instructionCountInMatchingIfBlock, conditionalWithMatchingIfBlock = checkCurrentInstructionIf(
                 checkPreparedThenLines, index, thenLine, conditionalSets)
             if instructionCountInMatchingIfBlock == 0:
@@ -261,8 +240,6 @@ def checkCurrentInstructionIf(DRSLines, currentInstructionIndex, currentInstruct
                 # Return how many lines match and which conditional matches
                 instructionCountInMatchingIfBlock = conditionalIfLength
                 conditionalWithMatchingIfBlock = conditional
-                # predSwitcher - removed potentially unnecessary parameter
-                # DRSGraph = runConditionalThen(conditional, conditionalSets)
     # return DRSGraph
     return instructionCountInMatchingIfBlock, conditionalWithMatchingIfBlock
 

@@ -1,61 +1,69 @@
 import networkx
+from Constants import *
 
 
 # Create Graph
 def generateItemGraph(graphNumber):
     itemGraph = networkx.MultiDiGraph()
-    itemGraph.add_node('Item' + str(graphNumber), value='')
-    itemGraph.add_node('ItemName' + str(graphNumber), value='')
-    itemGraph.add_node('ItemAffordance' + str(graphNumber), value='')
-    itemGraph.add_node('ItemDescription' + str(graphNumber), value='')
-    itemGraph.add_node('ItemRole' + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_NODE + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_NAME_NODE + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_AFFORDANCE_NODE + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_DESCRIPTION_NODE + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_ROLE_NODE + str(graphNumber), value='')
 
-    itemGraph.add_edge('Item' + str(graphNumber), 'ItemName' + str(graphNumber), value='ItemHasName')
-    itemGraph.add_edge('Item' + str(graphNumber), 'ItemAffordance' + str(graphNumber), value='ItemHasAffordance')
-    itemGraph.add_edge('Item' + str(graphNumber), 'ItemDescription' + str(graphNumber), value='ItemHasDescription')
-    itemGraph.add_edge('Item' + str(graphNumber), 'ItemRole' + str(graphNumber), value='ItemHasRole')
+    itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_NAME_NODE + str(graphNumber),
+                       value=CONST_ITEM_HAS_NAME_EDGE)
+    itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_AFFORDANCE_NODE + str(graphNumber),
+                       value=CONST_ITEM_HAS_AFFORDANCE_EDGE)
+    itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_DESCRIPTION_NODE + str(graphNumber),
+                       value=CONST_ITEM_HAS_DESCRIPTION_EDGE)
+    itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_ROLE_NODE + str(graphNumber),
+                       value=CONST_ITEM_HAS_ROLE_EDGE)
 
     return itemGraph
 
 
 def generatePropGraph(graphNumber):
     propGraph = networkx.MultiDiGraph()
-    propGraph.add_node('Property' + str(graphNumber), value='')
-    propGraph.add_node('PropertyAdjective' + str(graphNumber), value='')
-    propGraph.add_node('PropertySecondaryObject' + str(graphNumber), value='')
-    propGraph.add_node('PropertyTertiaryObject' + str(graphNumber), value='')
-    propGraph.add_node('PropertyDegree' + str(graphNumber), value='')
-    propGraph.add_node('PropertyCompTarget' + str(graphNumber), value='')
+    propGraph.add_node(CONST_PROP_NODE + str(graphNumber), value='')
+    propGraph.add_node(CONST_PROP_ADJECTIVE_NODE + str(graphNumber), value='')
+    propGraph.add_node(CONST_PROP_SEC_OBJECT_NODE + str(graphNumber), value='')
+    propGraph.add_node(CONST_PROP_TERT_OBJECT_NODE + str(graphNumber), value='')
+    propGraph.add_node(CONST_PROP_DEG_NODE + str(graphNumber), value='')
+    propGraph.add_node(CONST_PROP_COMP_TARGET_NODE + str(graphNumber), value='')
 
-    propGraph.add_edge('Property' + str(graphNumber), 'PropertyAdjective' + str(graphNumber),
-                       value='PropertyHasAdjective')
-    propGraph.add_edge('Property' + str(graphNumber), 'PropertySecondaryObject' + str(graphNumber),
-                       value='PropertyHasSecondaryObject')
-    propGraph.add_edge('Property' + str(graphNumber), 'PropertyTertiaryObject' + str(graphNumber),
-                       value='PropertyHasTertiaryObject')
-    propGraph.add_edge('Property' + str(graphNumber), 'PropertyDegree' + str(graphNumber), value='PropertyHasDegree')
-    propGraph.add_edge('Property' + str(graphNumber), 'PropertyCompTarget' + str(graphNumber),
-                       value='PropertyHasCompTarget')
+    propGraph.add_edge(CONST_PROP_NODE + str(graphNumber), CONST_PROP_ADJECTIVE_NODE + str(graphNumber),
+                       value=CONST_PROP_HAS_ADJECTIVE_EDGE)
+    propGraph.add_edge(CONST_PROP_NODE + str(graphNumber), CONST_PROP_SEC_OBJECT_NODE + str(graphNumber),
+                       value=CONST_PROP_HAS_SEC_OBJECT_EDGE)
+    propGraph.add_edge(CONST_PROP_NODE + str(graphNumber), CONST_PROP_TERT_OBJECT_NODE + str(graphNumber),
+                       value=CONST_PROP_HAS_TERT_OBJECT_EDGE)
+    propGraph.add_edge(CONST_PROP_NODE + str(graphNumber), CONST_PROP_DEG_NODE + str(graphNumber),
+                       value=CONST_PROP_HAS_DEG_EDGE)
+    propGraph.add_edge(CONST_PROP_NODE + str(graphNumber), CONST_PROP_COMP_TARGET_NODE + str(graphNumber),
+                       value=CONST_PROP_HAS_COMP_TARGET_EDGE)
 
     return propGraph
 
 
 def generateActionGraph(graphNumber):
     actionGraph = networkx.MultiDiGraph()
-    actionGraph.add_node('Action' + str(graphNumber), value='')
-    actionGraph.add_node('ActionVerb' + str(graphNumber), value='')
+    actionGraph.add_node(CONST_ACTION_NODE + str(graphNumber), value='')
+    actionGraph.add_node(CONST_ACTION_VERB_NODE + str(graphNumber), value='')
 
-    actionGraph.add_edge('Action' + str(graphNumber), 'ActionVerb' + str(graphNumber), value='ActionHasVerb')
+    actionGraph.add_edge(CONST_ACTION_NODE + str(graphNumber), CONST_ACTION_VERB_NODE + str(graphNumber),
+                         value=CONST_ACTION_HAS_VERB_EDGE)
 
     return actionGraph
 
 
 def generateModPPGraph(graphNumber):
     modPPGraph = networkx.MultiDiGraph()
-    modPPGraph.add_node('ModPP' + str(graphNumber), value='')
-    modPPGraph.add_node('ModPPPrep' + str(graphNumber), value='')
+    modPPGraph.add_node(CONST_MODPP_NODE + str(graphNumber), value='')
+    modPPGraph.add_node(CONST_MODPP_PREP_NODE + str(graphNumber), value='')
 
-    modPPGraph.add_edge('ModPP' + str(graphNumber), 'ModPPPrep' + str(graphNumber), value='ModPPHasPrep')
+    modPPGraph.add_edge(CONST_MODPP_NODE + str(graphNumber), CONST_MODPP_PREP_NODE + str(graphNumber),
+                        value=CONST_MODPP_HAS_PREP_EDGE)
 
     return modPPGraph
 
@@ -71,53 +79,47 @@ class ItemGraph(object):
 
     # Generic append method based on whatever target is passed in
     def __append(self, target, newValue):
-        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)]['value']
+        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY]
         if currentValue == '':
             updatedValue = newValue
         else:
             updatedValue = currentValue + '|' + newValue
-        self.graph.nodes(data=True)[target + str(self.graphNumber)]['value'] = updatedValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
     def __replace(self, target, newValue):
-        self.graph.nodes(data=True)[target + str(self.graphNumber)]['value'] = newValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = newValue
 
     # Append/replace methods for each node value in Item Graph
     def appendItemValue(self, newValue):
-        self.__append('Item', newValue)
+        self.__append(CONST_ITEM_NODE, newValue)
 
     def replaceItemValue(self, newValue):
-        self.__replace('Item', newValue)
+        self.__replace(CONST_ITEM_NODE, newValue)
 
     def appendItemName(self, newName):
-        self.__append('ItemName', newName)
+        self.__append(CONST_ITEM_NAME_NODE, newName)
 
     def replaceItemName(self, newName):
-        self.__replace('ItemName', newName)
+        self.__replace(CONST_ITEM_NAME_NODE, newName)
 
     def appendItemAffordance(self, newAffordance):
-        self.__append('ItemAffordance', newAffordance)
+        self.__append(CONST_ITEM_AFFORDANCE_NODE, newAffordance)
 
     def replaceItemAffordance(self, newAffordance):
-        self.__replace('ItemAffordance', newAffordance)
+        self.__replace(CONST_ITEM_AFFORDANCE_NODE, newAffordance)
 
     def appendItemDescription(self, newDescription):
-        self.__append('ItemDescription', newDescription)
+        self.__append(CONST_ITEM_DESCRIPTION_NODE, newDescription)
 
     def replaceItemDescription(self, newDescription):
-        self.__replace('ItemDescription', newDescription)
+        self.__replace(CONST_ITEM_DESCRIPTION_NODE, newDescription)
 
     def appendItemRole(self, newRole):
-        self.__append('ItemRole', newRole)
+        self.__append(CONST_ITEM_ROLE_NODE, newRole)
 
     def replaceItemRole(self, newRole):
-        self.__replace('ItemRole', newRole)
-
-    # Method to get the type of graph
-    # def getTypeOfNode(self, node):
-    #    print(node)
-    #    print(self.graph.nodes[node])
-    #    return self.graph.nodes[node]['value']
+        self.__replace(CONST_ITEM_ROLE_NODE, newRole)
 
     # Method to find a node containing a given value
     def FindItemWithValue(self, valueToFind):
@@ -126,51 +128,51 @@ class ItemGraph(object):
             for node, values in self.graph.nodes.data():
                 # print(node, values)
                 # If the current Node's value = the value passed in
-                if values['value'] == valueToFind:
+                if values[CONST_NODE_VALUE_KEY] == valueToFind:
                     return node
         return None
 
     # Methods to add different types of edges between nodes
     def addGroupMembershipEdges(self, groupNode, memberNode):
-        self.graph.add_edge(memberNode, groupNode, value='IsMemberOf')
-        self.graph.add_edge(groupNode, memberNode, value='HasMember')
+        self.graph.add_edge(memberNode, groupNode, value=CONST_IS_MEMBER_EDGE)
+        self.graph.add_edge(groupNode, memberNode, value=CONST_HAS_MEMBER_EDGE)
 
     def addNodeEquivalencyEdges(self, firstNode, secondNode):
-        self.graph.add_edge(firstNode, secondNode, value='IsEquivalentTo')
-        self.graph.add_edge(secondNode, firstNode, value='IsEquivalentTo')
+        self.graph.add_edge(firstNode, secondNode, value=CONST_IS_EQUIVALENT_EDGE)
+        self.graph.add_edge(secondNode, firstNode, value=CONST_IS_EQUIVALENT_EDGE)
 
     def addCompositionEdges(self, composedNode, partOfNode):
-        self.graph.add_edge(composedNode, partOfNode, value='HasA')
-        self.graph.add_edge(partOfNode, composedNode, value='IsPartOf')
+        self.graph.add_edge(composedNode, partOfNode, value=CONST_HAS_A_EDGE)
+        self.graph.add_edge(partOfNode, composedNode, value=CONST_IS_PART_OF_EDGE)
 
     def addPropertyEdge(self, objectNode, propertyNode):
-        self.graph.add_edge(objectNode, propertyNode, value='Is')
+        self.graph.add_edge(objectNode, propertyNode, value=CONST_IS_EDGE)
 
     # Methods to add different types of edges between nodes
     def addActionPerformerEdges(self, performerNode, actionNode):
-        self.graph.add_edge(performerNode, actionNode, value='Performs')
-        self.graph.add_edge(actionNode, performerNode, value='IsPerformedBy')
+        self.graph.add_edge(performerNode, actionNode, value=CONST_PERFORMS_EDGE)
+        self.graph.add_edge(actionNode, performerNode, value=CONST_IS_PERFORMED_EDGE)
 
     def addActionTargetEdges(self, actionNode, targetNode):
-        self.graph.add_edge(actionNode, targetNode, value='HasTarget')
-        self.graph.add_edge(targetNode, actionNode, value='IsTargetOf')
+        self.graph.add_edge(actionNode, targetNode, value=CONST_HAS_TARGET_EDGE)
+        self.graph.add_edge(targetNode, actionNode, value=CONST_IS_TARGET_EDGE)
 
     def addModifierVerbEdges(self, modifierNode, verbNode):
-        self.graph.add_edge(modifierNode, verbNode, value='ModifiesVerb')
-        self.graph.add_edge(verbNode, modifierNode, value='isModifiedBy')
+        self.graph.add_edge(modifierNode, verbNode, value=CONST_MODIFIES_VERB_EDGE)
+        self.graph.add_edge(verbNode, modifierNode, value=CONST_IS_MODIFIED_EDGE)
 
     def addModifierObjectEdges(self, modifierNode, objectNode):
-        self.graph.add_edge(modifierNode, objectNode, value='modifiesObject')
-        self.graph.add_edge(objectNode, modifierNode, value='isModifiedBy')
+        self.graph.add_edge(modifierNode, objectNode, value=CONST_MODIFIES_OBJECT_EDGE)
+        self.graph.add_edge(objectNode, modifierNode, value=CONST_IS_MODIFIED_EDGE)
 
     def addConditionalTriggerEdges(self, ifNodeValue, thenNodeValue):
         ifNode = self.FindItemWithValue(ifNodeValue)
         thenNode = self.FindItemWithValue(thenNodeValue)
         # We only want to trigger actions, not statement
         if ifNode is not None and thenNode is not None:
-            if 'Action' in thenNode:
-                self.graph.add_edge(ifNode, thenNode, value='triggers')
-                self.graph.add_edge(thenNode, ifNode, value='isTriggeredBy')
+            if CONST_ACTION_NODE in thenNode:
+                self.graph.add_edge(ifNode, thenNode, value=CONST_TRIGGERS_EDGE)
+                self.graph.add_edge(thenNode, ifNode, value=CONST_TRIGGERED_BY_EDGE)
 
     # Methods to replace values of specific nodes
     def ReplaceItemAffordanceAtSpecificNode(self, nodeToAddAffordance, newAffordance):
@@ -179,9 +181,9 @@ class ItemGraph(object):
             edgesFromNode = self.graph.edges(node, data=True)
             for startNode, endNode, edgeValues in edgesFromNode:
                 # If an edge has the value ItemHasName, then we want to modify the end node
-                if edgeValues['value'] == 'ItemHasAffordance':
+                if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_AFFORDANCE_EDGE:
                     # Update graph with name
-                    self.graph.nodes(data=True)[endNode]['value'] = newAffordance
+                    self.graph.nodes(data=True)[endNode][CONST_NODE_VALUE_KEY] = newAffordance
                     return True
         else:
             print("No node with direct object reference as value found")
@@ -194,14 +196,14 @@ class ItemGraph(object):
             edgesFromNode = self.graph.edges(node, data=True)
             for startNode, endNode, edgeValues in edgesFromNode:
                 # If an edge has the value ItemHasName, then we want to modify the end node
-                if edgeValues['value'] == 'ItemHasAffordance':
+                if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_AFFORDANCE_EDGE:
                     # Update graph with name
-                    currentValue = self.graph.nodes(data=True)[endNode]['value']
+                    currentValue = self.graph.nodes(data=True)[endNode][CONST_NODE_VALUE_KEY]
                     if currentValue == '':
                         updatedValue = newAffordance
                     else:
                         updatedValue = currentValue + '|' + newAffordance
-                    self.graph.nodes(data=True)[endNode]['value'] = updatedValue
+                    self.graph.nodes(data=True)[endNode][CONST_NODE_VALUE_KEY] = updatedValue
                     return True
         else:
             print("No node with direct object reference as value found")
@@ -210,12 +212,12 @@ class ItemGraph(object):
     # Methods to replace values of specific nodes
     def AppendValueAtSpecificNode(self, nodeToAddValue, newValue):
         # Update graph with name
-        currentValue = self.graph.nodes(data=True)[nodeToAddValue]['value']
+        currentValue = self.graph.nodes(data=True)[nodeToAddValue][CONST_NODE_VALUE_KEY]
         if currentValue == '':
             updatedValue = newValue
         else:
             updatedValue = currentValue + '|' + newValue
-        self.graph.nodes(data=True)[nodeToAddValue]['value'] = updatedValue
+        self.graph.nodes(data=True)[nodeToAddValue][CONST_NODE_VALUE_KEY] = updatedValue
         return True
 
     def ReplaceItemNameAtSpecificNode(self, nodeToAddName, newName):
@@ -226,9 +228,9 @@ class ItemGraph(object):
             edgesFromNode = self.graph.edges(node, data=True)
             for startNode, endNode, edgeValues in edgesFromNode:
                 # If an edge has the value ItemHasName, then we want to modify the end node
-                if edgeValues['value'] == 'ItemHasName':
+                if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_NAME_EDGE:
                     # Update graph with name
-                    self.graph.nodes(data=True)[endNode]['value'] = newName
+                    self.graph.nodes(data=True)[endNode][CONST_NODE_VALUE_KEY] = newName
                     return True
         else:
             print("No node with direct object reference as value found")
@@ -246,57 +248,53 @@ class PropertyGraph(object):
 
     # Generic append method based on whatever target is passed in
     def __append(self, target, newValue):
-        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)]['value']
+        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY]
         if currentValue == '':
             updatedValue = newValue
         else:
             updatedValue = currentValue + '|' + newValue
-        self.graph.nodes(data=True)[target + str(self.graphNumber)]['value'] = updatedValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
     def __replace(self, target, newValue):
-        self.graph.nodes(data=True)[target + str(self.graphNumber)]['value'] = newValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = newValue
 
     # Append/replace methods for each node value in Property Graph
     def appendPropValue(self, newValue):
-        self.__append('Property', newValue)
+        self.__append(CONST_PROP_NODE, newValue)
 
     def replacePropValue(self, newValue):
-        self.__replace('Property', newValue)
+        self.__replace(CONST_PROP_NODE, newValue)
 
     def appendPropAdj(self, newAdjective):
-        self.__append('PropertyAdjective', newAdjective)
+        self.__append(CONST_PROP_ADJECTIVE_NODE, newAdjective)
 
-    def replacePropAdj(self, newValue):
-        self.__replace('PropertyAdjective', newValue)
+    def replacePropAdj(self, newAdjective):
+        self.__replace(CONST_PROP_ADJECTIVE_NODE, newAdjective)
 
     def appendPropSecObj(self, newSecondaryObject):
-        self.__append('PropertySecondaryObject', newSecondaryObject)
+        self.__append(CONST_PROP_SEC_OBJECT_NODE, newSecondaryObject)
 
     def replacePropSecObj(self, newSecondaryObject):
-        self.__replace('PropertySecondaryObject', newSecondaryObject)
+        self.__replace(CONST_PROP_SEC_OBJECT_NODE, newSecondaryObject)
 
     def appendPropTertObj(self, newTertiaryObject):
-        self.__append('PropertyTertiaryObject', newTertiaryObject)
+        self.__append(CONST_PROP_TERT_OBJECT_NODE, newTertiaryObject)
 
     def replacePropTertObj(self, newTertiaryObject):
-        self.__replace('PropertyTertiaryObject', newTertiaryObject)
+        self.__replace(CONST_PROP_TERT_OBJECT_NODE, newTertiaryObject)
 
     def appendPropDegree(self, newDegree):
-        self.__append('PropertyDegree', newDegree)
+        self.__append(CONST_PROP_DEG_NODE, newDegree)
 
     def replacePropDegree(self, newDegree):
-        self.__replace('PropertyDegree', newDegree)
+        self.__replace(CONST_PROP_DEG_NODE, newDegree)
 
     def appendPropCompTarget(self, newCompTarget):
-        self.__append('PropertyCompTarget', newCompTarget)
+        self.__append(CONST_PROP_COMP_TARGET_NODE, newCompTarget)
 
     def replacePropCompTarget(self, newCompTarget):
-        self.__replace('PropertyCompTarget', newCompTarget)
-
-    # Method to get the type of graph
-    # def getTypeOfNode(self, node):
-    #    return self.graph.nodes[node]['value']
+        self.__replace(CONST_PROP_COMP_TARGET_NODE, newCompTarget)
 
     # Method to find a node containing a given value
     def FindPropertyWithValue(self, valueToFind):
@@ -304,7 +302,7 @@ class PropertyGraph(object):
             # iterate through all graph nodes
             for node, values in self.graph.nodes.data():
                 # If the current Node's value = the value passed in
-                if values['value'] == valueToFind:
+                if values[CONST_NODE_VALUE_KEY] == valueToFind:
                     return node
         return None
 
@@ -320,33 +318,29 @@ class ActionGraph(object):
 
     # Generic append method based on whatever target is passed in
     def __append(self, target, newValue):
-        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)]['value']
+        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY]
         if currentValue == '':
             updatedValue = newValue
         else:
             updatedValue = currentValue + '|' + newValue
-        self.graph.nodes(data=True)[target + str(self.graphNumber)]['value'] = updatedValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
     def __replace(self, target, newValue):
-        self.graph.nodes(data=True)[target + str(self.graphNumber)]['value'] = newValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = newValue
 
     # Append/replace methods for each node value in Property Graph
     def appendActionValue(self, newValue):
-        self.__append('Action', newValue)
+        self.__append(CONST_ACTION_NODE, newValue)
 
     def replaceActionValue(self, newValue):
-        self.__replace('Action', newValue)
+        self.__replace(CONST_ACTION_NODE, newValue)
 
     def appendActionVerb(self, newVerb):
-        self.__append('ActionVerb', newVerb)
+        self.__append(CONST_ACTION_VERB_NODE, newVerb)
 
-    def replaceActionVerb(self, newValue):
-        self.__replace('ActionVerb', newValue)
-
-    # Method to get the type of graph
-    # def getTypeOfNode(self, node):
-    #    return self.graph.nodes[node]['value']
+    def replaceActionVerb(self, newVerb):
+        self.__replace(CONST_ACTION_VERB_NODE, newVerb)
 
     # Method to find a node containing a given value
     def FindActionWithValue(self, valueToFind):
@@ -354,7 +348,7 @@ class ActionGraph(object):
             # iterate through all graph nodes
             for node, values in self.graph.nodes.data():
                 # If the current Node's value = the value passed in
-                if values['value'] == valueToFind:
+                if values[CONST_NODE_VALUE_KEY] == valueToFind:
                     return node
         return None
 
@@ -371,33 +365,29 @@ class ModifierPPGraph(object):
 
     # Generic append method based on whatever target is passed in
     def __append(self, target, newValue):
-        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)]['value']
+        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY]
         if currentValue == '':
             updatedValue = newValue
         else:
             updatedValue = currentValue + '|' + newValue
-        self.graph.nodes(data=True)[target + str(self.graphNumber)]['value'] = updatedValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
     def __replace(self, target, newValue):
-        self.graph.nodes(data=True)[target + str(self.graphNumber)]['value'] = newValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = newValue
 
     # Append/replace methods for each node value in Property Graph
     def appendModPPValue(self, newValue):
-        self.__append('ModPP', newValue)
+        self.__append(CONST_MODPP_NODE, newValue)
 
     def replaceModPPValue(self, newValue):
-        self.__replace('ModPP', newValue)
+        self.__replace(CONST_MODPP_NODE, newValue)
 
     def appendModPPPrep(self, newPreposition):
-        self.__append('ModPPPrep', newPreposition)
+        self.__append(CONST_MODPP_PREP_NODE, newPreposition)
 
     def replaceModPPPrep(self, newPreposition):
-        self.__replace('ModPPPrep', newPreposition)
-
-    # Method to get the type of graph
-    # def getTypeOfNode(self, node):
-    #    return self.graph.nodes[node]['value']
+        self.__replace(CONST_MODPP_PREP_NODE, newPreposition)
 
     # Method to find a node containing a given value
     def FindModWithValue(self, valueToFind):
@@ -405,7 +395,7 @@ class ModifierPPGraph(object):
             # iterate through all graph nodes
             for node, values in self.graph.nodes.data():
                 # If the current Node's value = the value passed in
-                if values['value'] == valueToFind:
+                if values[CONST_NODE_VALUE_KEY] == valueToFind:
                     return node
         return None
 

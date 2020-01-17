@@ -7,6 +7,7 @@ import json
 from GraphGeneration import *
 from ConditionalHandling import *
 from LineCategorization import *
+from Constants import *
 
 
 class predicateSwitcher(object):
@@ -31,7 +32,6 @@ class predicateSwitcher(object):
     # For object() predicates SHOULD CHECK IF OBJECT WITH GIVEN NAME ALREADY EXISTS!!!  IF SO, FIGURE OUT WHAT ARE
     # THE CONDITIONS FOR THAT TO OCCUR
     def predicate_object(self, predicateContents):
-        # print(predicateContents)
         # Break up elements of object line into variables
         predicateComponents = predicateContents.split(',')
         objReferenceVariable = predicateComponents[0]
@@ -94,9 +94,9 @@ class predicateSwitcher(object):
             raise ValueError('Too many components ?')
         # Hardcode be case for specific scenarios
 
-        if predVerb == 'be':
+        if predVerb == CONST_PRED_VERB_BE:
             # Check if naming or setting an equivalency
-            if 'named' in predSubjRef:
+            if CONST_PRED_SUBJ_NAMED in predSubjRef:
                 # If so call naming method
                 self.DRSGraph = self.nameItem(predSubjRef, predDirObjRef, self.DRSGraph)
             # If not named(XYZ) but still has 4 components
@@ -105,15 +105,15 @@ class predicateSwitcher(object):
                 subjRefNode = self.DRSGraph.FindItemWithValue(predSubjRef)
                 dirObjRefNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
                 # If both are ITEM nodes in the graph, then the "Be" is setting an equivalency
-                if subjRefNode is not None and dirObjRefNode is not None and 'Item' in dirObjRefNode:
+                if subjRefNode is not None and dirObjRefNode is not None and CONST_ITEM_NODE in dirObjRefNode:
                     self.DRSGraph.addNodeEquivalencyEdges(subjRefNode, dirObjRefNode)
                 # If the target node is a PROPERTY node, then the 'BE' is setting an "is" property relationship
-                elif subjRefNode is not None and dirObjRefNode is not None and 'Property' in dirObjRefNode:
+                elif subjRefNode is not None and dirObjRefNode is not None and CONST_PROP_NODE in dirObjRefNode:
                     self.DRSGraph.addPropertyEdge(subjRefNode, dirObjRefNode)
             # HANDLE ANY OTHER CASES????
 
         # Hardcode "have" case for composition
-        elif predVerb == 'have':
+        elif predVerb == CONST_PRED_VERB_HAVE:
             if numberOfComponents == 4:
                 # Get nodes for both subject and direct object
                 subjRefNode = self.DRSGraph.FindItemWithValue(predSubjRef)
@@ -143,7 +143,6 @@ class predicateSwitcher(object):
 
             # If just one subject "The target appears"
             if numberOfComponents == 3:
-                # self.DRSGraph.AppendItemAffordanceAtSpecificNode(predSubjRef, predVerb)
                 self.DRSGraph.addActionPerformerEdges(subjRefNode, actionNode)
             # If subject and direct object (e.g. "The subject remembers the letter")
             # predSubjRef = "Subject", predDirObjRef = "letter"
@@ -163,7 +162,7 @@ class predicateSwitcher(object):
         predGroupRef = predicateComponents[0]
         predGroupMember = predicateComponents[1].split(')')[0]
         # Hardcode the new object as being a group
-        predGroupDescription = 'GROUP'
+        predGroupDescription = CONST_PRED_GROUP_DESC
         # if Group reference doesn't exist
         groupNode = self.DRSGraph.FindItemWithValue(predGroupRef)
         memberNode = self.DRSGraph.FindItemWithValue(predGroupMember)
@@ -189,7 +188,7 @@ class predicateSwitcher(object):
         # Find action node of predicate
         # Get predicate items
         predicateComponents = predicateContents.split(',')
-        modPPRefID = predicateComponents[0] + 'mod'
+        modPPRefID = predicateComponents[0] + CONST_PRED_MOD_TAG
         modPPPrep = predicateComponents[1]
         modPPModifiedVerb = predicateComponents[0]
         modPPTargetObj = predicateComponents[2].split(')')[0]
@@ -270,7 +269,7 @@ class predicateSwitcher(object):
             adjectiveNode = None
             for startNode, endNode, edgeValues in outEdgesFromNode:
                 # If an edge has the value ItemHasName, then we want to modify the end node
-                if edgeValues['value'] == 'PropertyHasAdjective':
+                if edgeValues[CONST_NODE_VALUE_KEY] == CONST_PROP_HAS_ADJECTIVE_EDGE:
                     # Update graph with name
                     adjectiveNode = endNode
             if adjectiveNode is not None:
@@ -280,7 +279,7 @@ class predicateSwitcher(object):
                     "Error - Encountered duplicate reference for property but did not find adjective node to append to")
             return True
 
-    # CAN PROBABLY MAKE THE NAME CHANGE A CLASS FUNCTION ????  MAKE APPEND/REPLACE BE ABLE TO TAKE IN SPECIFIC TARGETS?
+    # Method used to get the name out of a "named" predicate and associate said name with the appropriate object.
     def nameItem(self, predSubjRef, predDirObjRef, DRSGraph):
         # Get item name out of "named(XYZ)"
         itemName = predSubjRef[predSubjRef.find("(") + 1:predSubjRef.find(")")]
@@ -315,15 +314,6 @@ class questionSwitcher(object):
         # self.predicateTerm = ''
         self.newToOldRefIDMapping = {}
 
-    # Method to clear the variables that get set by each question asked
-    def clearVariables(self):
-        self.nodesWithGivenProperty = []
-        self.nodesWithGivenPropertyAntonym = []
-        self.subjectNode = None
-        self.objectNode = None
-        self.itemCount = 0
-        self.propertyCount = 0
-
     # Method to call the appropriate function based on the argument passed in
     def callFunction(self, predicateType, predicateContents, DRSGraph):
         # Get the name of the method
@@ -339,7 +329,6 @@ class questionSwitcher(object):
         return self.DRSGraph
 
     def question_object(self, predicateContents):
-        print("STILL NEED TO IMPLEMENT OBJECT IN QUESTION HANDLING")
         # Get object information
         predicateComponents = predicateContents.split(',')
         objRefId = predicateComponents[0]
@@ -352,7 +341,7 @@ class questionSwitcher(object):
         DRSEquivalentNode = self.findItemNodeWithRole(objRole)
         print(DRSEquivalentNode)
         if self.DRSGraph.graph.has_node(DRSEquivalentNode):
-            DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode]['value']
+            DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode][CONST_NODE_VALUE_KEY]
             self.newToOldRefIDMapping.update({objRefId: DRSNodeRefID})
             print("NEW TO OLD OBJECT REF ID MAPPING", objRefId, DRSNodeRefID)
         else:
@@ -429,14 +418,14 @@ class questionSwitcher(object):
             for node in adjectiveNodes:
                 print("AdjectiveNode", node)
                 # Add new term into adjective node in order to grow our vocabulary
-                if propAdjective not in self.DRSGraph.graph.node[node]['value']:
+                if propAdjective not in self.DRSGraph.graph.node[node][CONST_NODE_VALUE_KEY]:
                     self.DRSGraph.AppendValueAtSpecificNode(node, propAdjective)
                 propertyNode = self.getPropertyNodeFromAdjective(node)
                 # print("propertyNode", propertyNode)
                 self.nodesWithGivenProperty.append(propertyNode)
                 # MAP FOUND PROPERTY NODE'S REF ID TO THE INCOMING REF ID
                 if self.DRSGraph.graph.has_node(propertyNode):
-                    DRSNodeRefID = self.DRSGraph.graph.node[propertyNode]['value']
+                    DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                     self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
                     print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                 else:
@@ -454,7 +443,7 @@ class questionSwitcher(object):
                 self.nodesWithGivenPropertyAntonym.append(propertyNode)
                 # MAP FOUND ANTONYM NODE'S REF ID TO THE INCOMING REF ID
                 if self.DRSGraph.graph.has_node(propertyNode):
-                    DRSNodeRefID = self.DRSGraph.graph.node[propertyNode]['value']
+                    DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                     self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
                     print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                 else:
@@ -537,10 +526,10 @@ class questionSwitcher(object):
                 print("SOMETHING WENT WRONG - BETTER ERROR CASE TO COME; A MAPPING WAS NULL ")
                 return None
 
-        if predVerb == 'be':
+        if predVerb == CONST_PRED_VERB_BE:
             # If the SUBJECT reference is a proper name
             # Check if we find a node containing said name
-            if 'named' in predSubjRef:
+            if CONST_PRED_SUBJ_NAMED in predSubjRef:
                 # self.predicateTerm = 'named'
                 # Get item name out of "named(XYZ)"
                 # itemNodeList = []
@@ -549,8 +538,16 @@ class questionSwitcher(object):
                 # self.nodesWithGivenName = self.ListOfNodesWithValue(itemName)
                 nodesWithGivenName = self.ListOfNodesWithValue(itemName)
                 if len(nodesWithGivenName) > 0:
-                    print("NODES WITH GIVEN NAME", nodesWithGivenName)
-                    self.subjectNode = nodesWithGivenName[0]
+                    itemNodes = []
+                    for nameNode in nodesWithGivenName:
+                        # Need to get the actual item node, not the name node.
+                        itemNode = self.findItemNodeConnectedToNameNode(nameNode)
+                        itemNodes.append(itemNode)
+                        print("ITEM WITH NAME", itemName, ": ", itemNode)
+                    # If only one item with that name, then we've found our subject node
+                    if len(itemNodes) == 1:
+                        self.subjectNode = itemNodes[0]
+                    # Need to figure out a case if more than one item with the name
             # If the subject reference is another variable, not a proper name
             else:
                 # self.predicateTerm = 'be'
@@ -563,7 +560,7 @@ class questionSwitcher(object):
             # print("REFVARNODES", self.nodesWithGivenReferenceVariable, "********************")
 
             # Same as above for OBJECT reference
-            if 'named' in predDirObjRef:
+            if CONST_PRED_SUBJ_NAMED in predDirObjRef:
                 # self.predicateTerm = 'named'
                 # Get item name out of "named(XYZ)"
                 # itemNodeList = []
@@ -572,8 +569,16 @@ class questionSwitcher(object):
                 # self.nodesWithGivenName = self.ListOfNodesWithValue(itemName)
                 nodesWithGivenName = self.ListOfNodesWithValue(itemName)
                 if len(nodesWithGivenName) > 0:
-                    print("NODES WITH GIVEN NAME", nodesWithGivenName)
-                    self.objectNode = self.nodesWithGivenName[0]
+                    itemNodes = []
+                    for nameNode in nodesWithGivenName:
+                        # Need to get the actual item node, not the name node.
+                        itemNode = self.findItemNodeConnectedToNameNode(nameNode)
+                        itemNodes.append(itemNode)
+                        print("ITEM WITH NAME", itemName, ": ", itemNode)
+                    # If only one item with that name, then we've found our subject node
+                    if len(itemNodes) == 1:
+                        self.objectNode = itemNodes[0]
+                    # Need to figure out a case if more than one item with the name
             # If the subject reference is another variable, not a proper name
             else:
                 # self.predicateTerm = 'be'
@@ -591,14 +596,14 @@ class questionSwitcher(object):
             print("SELF.SUBJECTNODE", self.subjectNode)
             print("SELF.OBJECTNODE", self.objectNode)
             if self.subjectNode is not None:
-                if 'Item' in self.subjectNode:
+                if CONST_ITEM_NODE in self.subjectNode:
                     self.itemCount = self.itemCount + 1
-                elif 'Property' in self.subjectNode:
+                elif CONST_PROP_NODE in self.subjectNode:
                     self.propertyCount = self.propertyCount + 1
             if self.objectNode is not None:
-                if 'Item' in self.objectNode:
+                if CONST_ITEM_NODE in self.objectNode:
                     self.itemCount = self.itemCount + 1
-                elif 'Property' in self.objectNode:
+                elif CONST_PROP_NODE in self.objectNode:
                     self.propertyCount = self.propertyCount + 1
 
     def resolveQuestion(self):
@@ -669,7 +674,7 @@ class questionSwitcher(object):
                 print("OUT FROM CONNECT", self.DRSGraph.graph.out_edges(subjectNode))
                 outEdgesFromSubjectNode = self.DRSGraph.graph.out_edges(subjectNode, data=True)
                 for startNode, endNode, edgeValues in outEdgesFromSubjectNode:
-                    if edgeValues['value'] == 'Is':
+                    if edgeValues[CONST_NODE_VALUE_KEY] == CONST_IS_EDGE:
                         return True
                 # print("IN FROM CONNECT", self.DRSGraph.graph.in_edges(subjectNode))
                 # if(self.DRSGraph.graph.has_edge(node, subjectNode, key="Is")):
@@ -680,7 +685,7 @@ class questionSwitcher(object):
                 print("OUT FROM CONNECT", self.DRSGraph.graph.out_edges(subjectNode))
                 outEdgesFromSubjectNode = self.DRSGraph.graph.out_edges(subjectNode, data=True)
                 for startNode, endNode, edgeValues in outEdgesFromSubjectNode:
-                    if edgeValues['value'] == 'Is':
+                    if edgeValues[CONST_NODE_VALUE_KEY] == CONST_IS_EDGE:
                         return False
                 # if(self.DRSGraph.graph.has_edge(antonymNode, subjectNode, key="Is")):
                 #    #print("AHA IT IS THE SECOND THAT MUST COUNT")
@@ -697,7 +702,7 @@ class questionSwitcher(object):
             # it makes sense to look from the subject node for consistency's sake
             outEdgesFromSubjectNode = self.DRSGraph.graph.out_edges(subjectNode, data=True)
             for startNode, endNode, edgeValues in outEdgesFromSubjectNode:
-                if edgeValues['value'] == 'IsEquivalentTo':
+                if edgeValues[CONST_NODE_VALUE_KEY] == CONST_IS_EQUIVALENT_EDGE:
                     # If IsEquivalentTo edge is found connecting the subject node and the object node
                     return True
             # If IsEquivalentTo edge is not found connecting the subject node and the object node
@@ -712,7 +717,7 @@ class questionSwitcher(object):
             if self.DRSGraph is not None:
                 # iterate through all graph nodes
                 for node, values in self.DRSGraph.graph.nodes.data():
-                    listOfValuesToCheck = values['value'].split('|')
+                    listOfValuesToCheck = values[CONST_NODE_VALUE_KEY].split('|')
                     # print("VALUES CHECKING LIST ", listOfValuesToCheck)
 
                     if valueToFind in listOfValuesToCheck:
@@ -735,7 +740,7 @@ class questionSwitcher(object):
                 # If the current Node's value = the value passed in
                 # Changed from valueToFind in values to valueToFind == values as "active" was
                 # triggering found in "inactive" due to being substr
-                if valueToFind == values['value']:
+                if valueToFind == values[CONST_NODE_VALUE_KEY]:
                     nodeList.append(node)
         return nodeList
 
@@ -746,7 +751,7 @@ class questionSwitcher(object):
         edgesFromNode = list(inEdgesFromNode) + list(outEdgesFromNode)
         for startNode, endNode, edgeValues in edgesFromNode:
             # If an edge has the value ItemHasName, then we want to modify the end node
-            if edgeValues['value'] == 'PropertyHasAdjective':
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_PROP_HAS_ADJECTIVE_EDGE:
                 # Update graph with name
                 return startNode
 
@@ -794,7 +799,7 @@ class questionSwitcher(object):
         # edgesFromNode = self.DRSGraph.graph.edges(nameNode, data=True)
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasName, then we want to return the start node (the item node itself)
-            if edgeValues['value'] == 'ItemHasName':
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_NAME_EDGE:
                 # print(startNode, endNode, edgeValues)
                 print("FOUND NODE WITH NAME:", startNode)
                 return startNode
@@ -804,8 +809,8 @@ class questionSwitcher(object):
         inEdgesFromNode = self.DRSGraph.graph.in_edges(roleNode, data=True)
         # edgesFromNode = outEdgesFromNode + inEdgesFromNode
         for startNode, endNode, edgeValues in inEdgesFromNode:
-            # If an edge has the value ItemHasName, then we want to return the start node (the item node itself)
-            if edgeValues['value'] == 'ItemHasRole':
+            # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
                 # print(startNode, endNode, edgeValues)
                 print("FOUND NODE WITH ROLE:", startNode)
                 return startNode
@@ -853,7 +858,7 @@ def APEWebserviceCall(phraseToDRS):
         questionLines = []
         # Iterate through DRS lines and get only the actual question lines, none of the headers
         for index, line in enumerate(DRSLines):
-            if categorizedQuestionDRS.get(index) == 'question':
+            if categorizedQuestionDRS.get(index) == CONST_QUESTION_TAG:
                 questionLines.append(line)
         print(questionLines)
         # Return just the lines that are the actual DRS for the question, no headers
@@ -1007,7 +1012,7 @@ def DRSToItem():
             print(currentInstruction)
             # print(conditional)
             # If the current line is an instruction
-            if categorizedDRSLines.get(index) == 'instruction':
+            if categorizedDRSLines.get(index) == CONST_INSTRUCTION_TAG:
                 # print(currentInstruction)
                 # Get the predicate type and contents
                 # , predSwitcher, DRSGraph - potentially unused parameters removed
@@ -1076,7 +1081,6 @@ def DRSToItem():
         else:
             print("Question", str(questionCounter), "Answer: Unknown")
         questionCounter = questionCounter + 1
-        # qSwitcher.clearVariables()
         # I have my doubts about these lines below but they seem to work
         DRSGraph = qSwitcher.returnDRSGraph()
         predSwitcher.updateDRSGraph(DRSGraph.graph)
@@ -1087,7 +1091,7 @@ def DRSToItem():
     # Once "exit" has been entered
     # At end of program, if an ontology was built at all, print it out and export it in GraphML
     if DRSGraph is not None:
-        networkx.draw(DRSGraph.graph, labels=networkx.get_node_attributes(DRSGraph.graph, 'value'))
+        networkx.draw(DRSGraph.graph, labels=networkx.get_node_attributes(DRSGraph.graph, CONST_NODE_VALUE_KEY))
         plt.show()
         jsonFile = open("jsonFile.txt", "w")
         jsonSerializable = networkx.readwrite.json_graph.node_link_data(DRSGraph.graph)

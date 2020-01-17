@@ -134,7 +134,7 @@
   <data key="d0">O</data>
 </node>
 <node id="PropertyAdjective11">
-  <data key="d0">active</data>
+  <data key="d0">active|ongoing|alive</data>
 </node>
 <node id="PropertySecondaryObject11">
   <data key="d0"></data>
@@ -284,7 +284,7 @@
   <data key="d1">ModifiesVerb</data>
 </edge>
 <edge id="0" source="ModPP7" target="Item2">
-  <data key="d1">modifiesObject</data>
+  <data key="d1">ModifiesObject</data>
 </edge>
 <edge id="0" source="Item8" target="ItemName8">
   <data key="d1">ItemHasName</data>

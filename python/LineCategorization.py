@@ -1,4 +1,4 @@
-
+from Constants import *
 
 # Check if current line is a conditional or a header line
 def getSymbolLines(DRSLines):
@@ -7,14 +7,14 @@ def getSymbolLines(DRSLines):
     # Iterate through DRS commands
     for index, line in enumerate(DRSLines):
         # If line starts with bracket, it's a header
-        if line[0] == '[':
-            symbolLines.update({index: "header"})
+        if line[0] == CONST_HEADER_LINE_SYMBOL:
+            symbolLines.update({index: CONST_HEADER_LINE_TAG})
         # if line is arrow, it's a conditional
-        elif line == '=>':
-            symbolLines.update({index: "conditional"})
+        elif line == CONST_CONDITIONAL_LINE_SYMBOL:
+            symbolLines.update({index: CONST_CONDITIONAL_LINE_TAG})
         # if line is "QUESTION" then it's the start of a question segment
-        elif line == 'QUESTION':
-            symbolLines.update({index: "question-tag"})
+        elif line == CONST_QUESTION_LINE_SYMBOL:
+            symbolLines.update({index: CONST_QUESTION_LINE_TAG})
     print(symbolLines)
     return symbolLines
 
@@ -38,19 +38,19 @@ def categorizeSymbolLines(symbolLines):
             nextSymbolLineNumber = symbolLineIndexes[symbolIndex + 1]
             nextSymbol = symbolLines[nextSymbolLineNumber]
         # Categorize headers (ignore rest)
-        if currentSymbol == 'header':
+        if currentSymbol == CONST_HEADER_LINE_TAG:
             # First header always = instruction as far as I've been able to see
             if previousSymbol is None:
-                categorizedSymbolLines.update({symbolLineNumber: 'instruction-header'})
+                categorizedSymbolLines.update({symbolLineNumber: CONST_INSTRUCTION_HEADER_TAG})
             # If previous symbol is "QUESTION", then header is for a question
-            if previousSymbol == 'question-tag':
-                categorizedSymbolLines.update({symbolLineNumber: 'question-header'})
+            if previousSymbol == CONST_QUESTION_LINE_TAG:
+                categorizedSymbolLines.update({symbolLineNumber: CONST_QUESTION_HEADER_TAG})
             # if previous symbol is a conditional, then header is for a then part of the conditional
-            if previousSymbol == 'conditional':
-                categorizedSymbolLines.update({symbolLineNumber: 'then-header'})
+            if previousSymbol == CONST_CONDITIONAL_LINE_TAG:
+                categorizedSymbolLines.update({symbolLineNumber: CONST_THEN_HEADER_TAG})
             # if next symbol is a conditional, then header is for an if part of the conditional
-            if nextSymbol == 'conditional':
-                categorizedSymbolLines.update({symbolLineNumber: 'if-header'})
+            if nextSymbol == CONST_CONDITIONAL_LINE_TAG:
+                categorizedSymbolLines.update({symbolLineNumber: CONST_IF_HEADER_TAG})
         else:
             categorizedSymbolLines.update({symbolLineNumber: currentSymbol})
     return categorizedSymbolLines
@@ -62,7 +62,7 @@ def categorizeVariables(DRSLines, categorizedSymbolLines):
     # Iterate through Symbol Lines in order to extract each variable from the headers and its associated type
     for symbolLineNumber, symbolLineType in categorizedSymbolLines.items():
         # check if header type
-        if 'header' in symbolLineType:
+        if CONST_HEADER_LINE_TAG in symbolLineType:
             # get current line
             currentSymbolLine = DRSLines[symbolLineNumber]
             # strip brackets
