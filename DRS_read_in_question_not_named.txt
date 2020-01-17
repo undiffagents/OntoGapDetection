@@ -29,4 +29,4 @@ predicate(J,be,G,I)-4/2
    QUESTION
    [T,U]
    property(T,ongoing,pos)-8/5
-   predicate(U,be,named(Psychomotor-Vigilance),T)-8/1
+   predicate(U,be,A,T)-8/1

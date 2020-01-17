@@ -27,6 +27,12 @@ predicate(J,be,G,I)-4/2
    predicate(S,appear,G)-6/7
    modifier_pp(S,in,E)-6/8
    QUESTION
-   [T,U]
-   property(T,ongoing,pos)-8/5
-   predicate(U,be,named(Psychomotor-Vigilance),T)-8/1
+   [T]
+   predicate(T,be,G,I)-8/1
+   QUESTION
+   [U,V]
+   property(U,active,pos)-9/5
+   predicate(V,be,A,U)-9/1
+   QUESTION
+   [W]
+   predicate(T,be,A,I)-10/1
