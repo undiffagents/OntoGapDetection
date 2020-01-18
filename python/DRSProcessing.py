@@ -1,5 +1,3 @@
-import networkx
-
 from nltk.corpus import wordnet
 import requests
 import json
@@ -8,7 +6,7 @@ from GraphGeneration import *
 from ConditionalHandling import *
 from LineCategorization import *
 from Constants import *
-
+from ControlPanel import *
 
 class predicateSwitcher(object):
 
@@ -379,13 +377,15 @@ class questionSwitcher(object):
 
         print("ADJECTIVE NODES", adjectiveNodes)
         newNymCount = 0
-        while len(adjectiveNodes) < 1 and len(antonymNodes) < 1 and newNymCount < 3:
-            # No nodes "active"
-            newAdjective = requestNewTermToNymCheck(propAdjective)
-            newNymCount = newNymCount + 1
-            adjectiveNymList, newAntonymList = getNyms(newAdjective)
-            antonymNodes = self.ListOfNodesWithValueFromList(antonymList)
-            adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
+        if CONTROL_IDENTIFY_LEXICAL == True:
+            #TODO: Add notification that a lexical gap was encountered?
+            while len(adjectiveNodes) < 1 and len(antonymNodes) < 1 and newNymCount < 3:
+                # No nodes "active"
+                newAdjective = requestNewTermToNymCheck(propAdjective)
+                newNymCount = newNymCount + 1
+                adjectiveNymList, newAntonymList = getNyms(newAdjective)
+                antonymNodes = self.ListOfNodesWithValueFromList(newAntonymList)
+                adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
 
         if len(adjectiveNodes) > 0:
             for node in adjectiveNodes:
@@ -763,56 +763,58 @@ def getNyms(wordToCheck):
     hypernyms = []
     hyponyms = []
     deriv = []
+    uniqueNymList = []
     uniqueAntonymList = []
-    # for currentWord in checkWordList:
-    synonyms.clear()
-    hypernyms.clear()
-    hyponyms.clear()
-    deriv.clear()
-    print(wordToCheck)
-    # Get synsets of current word to check
-    testWord = wordnet.synsets(wordToCheck)
-    # for each synset (meaning)
-    for syn in testWord:
-        # Get Hypernyms
-        if len(syn.hypernyms()) > 0:
-            currentHypernyms = syn.hypernyms()
-            for hyperSyn in currentHypernyms:
-                for lemma in hyperSyn.lemmas():
-                    # if(lemma.name() != currentWord):
-                    hypernyms.append(lemma.name())
-        # Get Hyponyms
-        if len(syn.hyponyms()) > 0:
-            currentHyponyms = syn.hyponyms()
-            for hypoSyn in currentHyponyms:
-                for lemma in hypoSyn.lemmas():
-                    # if(lemma.name() != currentWord):
-                    hyponyms.append(lemma.name())
-        # Get direct synonyms
-        for lemma in syn.lemmas():
-            # if(lemma.name() != currentWord):
-            synonyms.append(lemma.name())
-            # Get derivationally related forms
-            for derivForm in lemma.derivationally_related_forms():
-                if derivForm.name() not in deriv:
-                    deriv.append(derivForm.name())
-            # Get antonyms
-            if lemma.antonyms():
-                if lemma.antonyms()[0].name() not in uniqueAntonymList:
-                    uniqueAntonymList.append(lemma.antonyms()[0].name())
-    # print("SYNONYMS: ")
-    # print(set(synonyms))
-    # print('\n HYPERNYMS:')
-    # print(set(hypernyms))
-    # print('\n HYPONYMS:')
-    # print(set(hyponyms))
-    # print('\n DERIVATIONALLY RELATED FORMS:')
-    # print(set(deriv))
-    nymLists = synonyms + hypernyms + hyponyms + deriv
-    uniqueNyms = set(nymLists)
-    uniqueNymList = list(uniqueNyms)
-    # print(uniqueNymList)
-    # print("ANTONYMS", uniqueAntonymList)
+    if CONTROL_IDENTIFY_LEXICAL == True:
+        # for currentWord in checkWordList:
+        #synonyms.clear()
+        #hypernyms.clear()
+        #hyponyms.clear()
+        #deriv.clear()
+        print(wordToCheck)
+        # Get synsets of current word to check
+        testWord = wordnet.synsets(wordToCheck)
+        # for each synset (meaning)
+        for syn in testWord:
+            # Get Hypernyms
+            if len(syn.hypernyms()) > 0:
+                currentHypernyms = syn.hypernyms()
+                for hyperSyn in currentHypernyms:
+                    for lemma in hyperSyn.lemmas():
+                        # if(lemma.name() != currentWord):
+                        hypernyms.append(lemma.name())
+            # Get Hyponyms
+            if len(syn.hyponyms()) > 0:
+                currentHyponyms = syn.hyponyms()
+                for hypoSyn in currentHyponyms:
+                    for lemma in hypoSyn.lemmas():
+                        # if(lemma.name() != currentWord):
+                        hyponyms.append(lemma.name())
+            # Get direct synonyms
+            for lemma in syn.lemmas():
+                # if(lemma.name() != currentWord):
+                synonyms.append(lemma.name())
+                # Get derivationally related forms
+                for derivForm in lemma.derivationally_related_forms():
+                    if derivForm.name() not in deriv:
+                        deriv.append(derivForm.name())
+                # Get antonyms
+                if lemma.antonyms():
+                    if lemma.antonyms()[0].name() not in uniqueAntonymList:
+                        uniqueAntonymList.append(lemma.antonyms()[0].name())
+        # print("SYNONYMS: ")
+        # print(set(synonyms))
+        # print('\n HYPERNYMS:')
+        # print(set(hypernyms))
+        # print('\n HYPONYMS:')
+        # print(set(hyponyms))
+        # print('\n DERIVATIONALLY RELATED FORMS:')
+        # print(set(deriv))
+        nymLists = synonyms + hypernyms + hyponyms + deriv
+        uniqueNyms = set(nymLists)
+        uniqueNymList = list(uniqueNyms)
+        # print(uniqueNymList)
+        # print("ANTONYMS", uniqueAntonymList)
     return uniqueNymList, uniqueAntonymList
 
 
