@@ -8,6 +8,7 @@ from LineCategorization import *
 from Constants import *
 from ControlPanel import *
 
+
 class predicateSwitcher(object):
 
     def __init__(self):
@@ -272,8 +273,8 @@ class predicateSwitcher(object):
             if adjectiveNode is not None:
                 self.DRSGraph.AppendValueAtSpecificNode(adjectiveNode, propAdjective)
             else:
-                print(
-                    "Error - Encountered duplicate reference for property but did not find adjective node to append to")
+                print("Error - Encountered duplicate reference for property but did not find adjective "
+                      "node to append to")
             return True
 
     # Method used to get the name out of a "named" predicate and associate said name with the appropriate object.
@@ -310,7 +311,7 @@ class questionSwitcher(object):
         method = getattr(self, methodName, lambda: "Unknown predicate")
         # Call the method and return its output
         self.DRSGraph = DRSGraph
-        print(predicateContents)
+        # print(predicateContents)
         method(predicateContents)
 
     def returnDRSGraph(self):
@@ -327,15 +328,15 @@ class questionSwitcher(object):
         # objCount = predicateComponents[5].split(')')[0]
         # Get the item node in the original instruction which this SHOULD correspond to (via role)
         DRSEquivalentNode = self.findItemNodeWithRole(objRole)
-        print(DRSEquivalentNode)
+        # print(DRSEquivalentNode)
         # Replace the reference ID (from APE Webclient) to the equivalent node's reference ID (from the graph)
         if self.DRSGraph.graph.has_node(DRSEquivalentNode):
             DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode][CONST_NODE_VALUE_KEY]
             self.newToOldRefIDMapping.update({objRefId: DRSNodeRefID})
-            print("NEW TO OLD OBJECT REF ID MAPPING", objRefId, DRSNodeRefID)
+            # print("NEW TO OLD OBJECT REF ID MAPPING", objRefId, DRSNodeRefID)
         else:
             self.newToOldRefIDMapping.update({objRefId: None})
-            print("NEW TO OLD OBJECT REF ID NULL MAPPING", objRefId)
+            # print("NEW TO OLD OBJECT REF ID NULL MAPPING", objRefId)
         # WILL NEED TO FIND A WAY TO HANDLE NAME AND ROLE TO GET MORE ACCURATE PICTURE?
 
     # HANDLE PROPERTIES
@@ -372,24 +373,31 @@ class questionSwitcher(object):
 
         # INITIAL NYM TESTING - will need to extend to other predicates as well of course
         adjectiveNymList, antonymList = getNyms(propAdjective)
-        adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
+        if CONTROL_RESOLVE_LEXICAL == True:
+            adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
+        else:
+            adjectiveNodes = self.ListOfNodesWithValue(propAdjective)
         antonymNodes = self.ListOfNodesWithValueFromList(antonymList)
 
-        print("ADJECTIVE NODES", adjectiveNodes)
+        # print("ADJECTIVE NODES", adjectiveNodes)
         newNymCount = 0
         if CONTROL_IDENTIFY_LEXICAL == True:
-            #TODO: Add notification that a lexical gap was encountered?
-            while len(adjectiveNodes) < 1 and len(antonymNodes) < 1 and newNymCount < 3:
-                # No nodes "active"
-                newAdjective = requestNewTermToNymCheck(propAdjective)
-                newNymCount = newNymCount + 1
-                adjectiveNymList, newAntonymList = getNyms(newAdjective)
-                antonymNodes = self.ListOfNodesWithValueFromList(newAntonymList)
-                adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
+            if len(adjectiveNodes) < 1:
+                print("Lexical gap encountered - an adjective was introduced which is not currently in the system's "
+                      "vocabulary.")
+            if CONTROL_RESOLVE_LEXICAL == True:
+                #TODO: Allow user to manually choose yes/no to resolve?
+                while len(adjectiveNodes) < 1 and len(antonymNodes) < 1 and newNymCount < 3:
+                    # No nodes "active"
+                    newAdjective = requestNewTermToNymCheck(propAdjective)
+                    newNymCount = newNymCount + 1
+                    adjectiveNymList, newAntonymList = getNyms(newAdjective)
+                    antonymNodes = self.ListOfNodesWithValueFromList(newAntonymList)
+                    adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
 
         if len(adjectiveNodes) > 0:
             for node in adjectiveNodes:
-                print("AdjectiveNode", node)
+                # print("AdjectiveNode", node)
                 # Add new term into adjective node in order to grow our vocabulary
                 if propAdjective not in self.DRSGraph.graph.node[node][CONST_NODE_VALUE_KEY]:
                     self.DRSGraph.AppendValueAtSpecificNode(node, propAdjective)
@@ -399,25 +407,25 @@ class questionSwitcher(object):
                 if self.DRSGraph.graph.has_node(propertyNode):
                     DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                     self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
-                    print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
+                    # print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                 else:
                     self.newToOldRefIDMapping.update({propRefId: None})
-                    print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
+                    # print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
 
         if len(antonymNodes) > 0:
             # propertyNodesWithAdjective = []
             for node in antonymNodes:
-                print("AntonymNode", node)
+                # print("AntonymNode", node)
                 propertyNode = self.getPropertyNodeFromAdjective(node)
                 self.nodesWithGivenPropertyAntonym.append(propertyNode)
                 # MAP FOUND ANTONYM NODE'S REF ID TO THE INCOMING REF ID
                 if self.DRSGraph.graph.has_node(propertyNode):
                     DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                     self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
-                    print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
+                    # print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                 else:
                     self.newToOldRefIDMapping.update({propRefId: None})
-                    print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
+                    # print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
 
         # ***********************************************************************************************************************************
         # If no adjective nodes are found, then we look for antonyms
@@ -480,20 +488,26 @@ class questionSwitcher(object):
             predSubjRef = self.newToOldRefIDMapping.get(predSubjRef)
             if predSubjRef is None:
                 # TODO: Better define this error case
-                print("SOMETHING WENT WRONG - BETTER ERROR CASE TO COME; A MAPPING WAS NULL ")
+                if CONTROL_IDENTIFY_LEXICAL:
+                    print("Lexical gap encountered - an item was introduced which is not currently in the system's "
+                          "vocabulary.")
                 return None
         if predDirObjRef is not None and predDirObjRef in self.newToOldRefIDMapping:
             predDirObjRef = self.newToOldRefIDMapping.get(predDirObjRef)
             if predDirObjRef is None:
                 # TODO: Better define this error case
-                print("SOMETHING WENT WRONG - BETTER ERROR CASE TO COME; A MAPPING WAS NULL ")
-                return None
+                if CONTROL_IDENTIFY_LEXICAL:
+                    print("Lexical gap encountered - an item was introduced which is not currently in the system's "
+                          "vocabulary.")
+                    return None
         if predIndirObjRef is not None and predIndirObjRef in self.newToOldRefIDMapping:
             predIndirObjRef = self.newToOldRefIDMapping.get(predIndirObjRef)
             if predIndirObjRef is None:
                 # TODO: Better define this error case
-                print("SOMETHING WENT WRONG - BETTER ERROR CASE TO COME; A MAPPING WAS NULL ")
-                return None
+                if CONTROL_IDENTIFY_LEXICAL:
+                    print("Lexical gap encountered - an item was introduced which is not currently in the system's "
+                          "vocabulary.")
+                    return None
 
         if predVerb == CONST_PRED_VERB_BE:
             # If the SUBJECT reference is a proper name
@@ -508,7 +522,7 @@ class questionSwitcher(object):
                         # Need to get the actual item node, not the name node.
                         itemNode = self.findItemNodeConnectedToNameNode(nameNode)
                         itemNodes.append(itemNode)
-                        print("ITEM WITH NAME", itemName, ": ", itemNode)
+                        # print("ITEM WITH NAME", itemName, ": ", itemNode)
                     # If only one item with that name, then we've found our subject node
                     if len(itemNodes) == 1:
                         self.subjectNode = itemNodes[0]
@@ -518,7 +532,7 @@ class questionSwitcher(object):
                 subjectRefVar = predSubjRef
                 subjectNodes = self.ListOfNodesWithValue(subjectRefVar)
                 if len(subjectNodes) > 0:
-                    print("SUBJECT NODES", subjectNodes)
+                    # print("SUBJECT NODES", subjectNodes)
                     self.subjectNode = subjectNodes[0]
 
             # Same as above for OBJECT reference
@@ -532,7 +546,7 @@ class questionSwitcher(object):
                         # Need to get the actual item node, not the name node.
                         itemNode = self.findItemNodeConnectedToNameNode(nameNode)
                         itemNodes.append(itemNode)
-                        print("ITEM WITH NAME", itemName, ": ", itemNode)
+                        # print("ITEM WITH NAME", itemName, ": ", itemNode)
                     # If only one item with that name, then we've found our subject node
                     if len(itemNodes) == 1:
                         self.objectNode = itemNodes[0]
@@ -542,14 +556,14 @@ class questionSwitcher(object):
                 objectRefVar = predDirObjRef
                 objectNodes = self.ListOfNodesWithValue(objectRefVar)
                 if len(objectNodes) > 0:
-                    print("OBJECT NODES", objectNodes)
+                    # print("OBJECT NODES", objectNodes)
                     self.objectNode = objectNodes[0]
 
             # Track how many items and properties, as item-item and item-property have different edges connecting them
-            print("SELF.ITEMCOUNT PRIORITY", self.itemCount)
-            print("SELF.PROPCOUNT PRIORITY", self.propertyCount)
-            print("SELF.SUBJECTNODE", self.subjectNode)
-            print("SELF.OBJECTNODE", self.objectNode)
+            # print("SELF.ITEMCOUNT PRIORITY", self.itemCount)
+            # print("SELF.PROPCOUNT PRIORITY", self.propertyCount)
+            # print("SELF.SUBJECTNODE", self.subjectNode)
+            # print("SELF.OBJECTNODE", self.objectNode)
             if self.subjectNode is not None:
                 if CONST_ITEM_NODE in self.subjectNode:
                     self.itemCount = self.itemCount + 1
@@ -562,8 +576,8 @@ class questionSwitcher(object):
                     self.propertyCount = self.propertyCount + 1
 
     def resolveQuestion(self):
-        print("NAMED SUBJECT NODE", self.subjectNode)
-        print("NAMED OBJECT NODE", self.objectNode)
+        # print("NAMED SUBJECT NODE", self.subjectNode)
+        # print("NAMED OBJECT NODE", self.objectNode)
 
         # Possibly not an actual error condition, just testing this
         if self.objectNode is None or self.subjectNode is None:
@@ -575,8 +589,8 @@ class questionSwitcher(object):
             # This may be an incorrect assumption, will need to test and check
             # Checking if there is an edge with name "Is", since "Is" is the name given to item->property edges.
             # THIS SHOULD BE ABSTRACTED, THERE SHOULD BE A VARIABLE SOMEWHERE THAT HOLDS IMPORTANT EDGE NAMES
-            print("ITEM COUNT", self.itemCount)
-            print("PROP  COUNT", self.propertyCount)
+            # print("ITEM COUNT", self.itemCount)
+            # print("PROP  COUNT", self.propertyCount)
             if self.itemCount == 1 and self.propertyCount == 1:
                 # Try to find positive relationships
                 for node in self.nodesWithGivenProperty:
@@ -664,9 +678,9 @@ class questionSwitcher(object):
         # Handle role nodes
         # Get list of item nodes associated with the role nodes
         for roleNode in roleNodes:
-            print("ROLE NODE", roleNode)
+            # print("ROLE NODE", roleNode)
             roleItemNode = self.findItemNodeConnectedToRoleNode(roleNode)
-            print("ROLE ITEM NODE", roleItemNode)
+            # print("ROLE ITEM NODE", roleItemNode)
             return roleItemNode
 
     def findItemNodeWithNameAndRole(self, strName, strRole):
@@ -698,7 +712,7 @@ class questionSwitcher(object):
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasName, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_NAME_EDGE:
-                print("FOUND NODE WITH NAME:", startNode)
+                # print("FOUND NODE WITH NAME:", startNode)
                 return startNode
 
     def findItemNodeConnectedToRoleNode(self, roleNode):
@@ -706,7 +720,7 @@ class questionSwitcher(object):
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
-                print("FOUND NODE WITH ROLE:", startNode)
+                # print("FOUND NODE WITH ROLE:", startNode)
                 return startNode
 
 
@@ -733,7 +747,7 @@ def APEWebserviceCall(phraseToDRS):
         if line != '[]' and line.strip():
             if line == "importance=\"error\"":
                 error = True
-            print(line)
+            # print(line)
             DRSLines.append(line)
     # Technically it's a little silly to categorize the DRS for a question since it's obviously all
     # a question, but this gets around having to do questionable and inconsistent parsing to deal with
@@ -743,16 +757,16 @@ def APEWebserviceCall(phraseToDRS):
         return None
     else:
         symbolLines = getSymbolLines(DRSLines)
-        print("SYMBOLS - ", symbolLines)
+        # print("SYMBOLS - ", symbolLines)
         categorizedQuestionDRS = categorizeDRSLines(DRSLines, symbolLines)
-        print(categorizedQuestionDRS)
+        # print(categorizedQuestionDRS)
 
         questionLines = []
         # Iterate through DRS lines and get only the actual question lines, none of the headers
         for index, line in enumerate(DRSLines):
             if categorizedQuestionDRS.get(index) == CONST_QUESTION_TAG:
                 questionLines.append(line)
-        print(questionLines)
+        # print(questionLines)
         # Return just the lines that are the actual DRS for the question, no headers
         return questionLines
 
@@ -765,43 +779,38 @@ def getNyms(wordToCheck):
     deriv = []
     uniqueNymList = []
     uniqueAntonymList = []
-    if CONTROL_IDENTIFY_LEXICAL == True:
-        # for currentWord in checkWordList:
-        #synonyms.clear()
-        #hypernyms.clear()
-        #hyponyms.clear()
-        #deriv.clear()
-        print(wordToCheck)
-        # Get synsets of current word to check
-        testWord = wordnet.synsets(wordToCheck)
-        # for each synset (meaning)
-        for syn in testWord:
-            # Get Hypernyms
-            if len(syn.hypernyms()) > 0:
-                currentHypernyms = syn.hypernyms()
-                for hyperSyn in currentHypernyms:
-                    for lemma in hyperSyn.lemmas():
-                        # if(lemma.name() != currentWord):
-                        hypernyms.append(lemma.name())
-            # Get Hyponyms
-            if len(syn.hyponyms()) > 0:
-                currentHyponyms = syn.hyponyms()
-                for hypoSyn in currentHyponyms:
-                    for lemma in hypoSyn.lemmas():
-                        # if(lemma.name() != currentWord):
-                        hyponyms.append(lemma.name())
-            # Get direct synonyms
-            for lemma in syn.lemmas():
-                # if(lemma.name() != currentWord):
-                synonyms.append(lemma.name())
-                # Get derivationally related forms
-                for derivForm in lemma.derivationally_related_forms():
-                    if derivForm.name() not in deriv:
-                        deriv.append(derivForm.name())
-                # Get antonyms
-                if lemma.antonyms():
-                    if lemma.antonyms()[0].name() not in uniqueAntonymList:
-                        uniqueAntonymList.append(lemma.antonyms()[0].name())
+    #if CONTROL_IDENTIFY_LEXICAL == True:
+    # print(wordToCheck)
+    # Get synsets of current word to check
+    testWord = wordnet.synsets(wordToCheck)
+    # for each synset (meaning)
+    for syn in testWord:
+        # Get Hypernyms
+        if len(syn.hypernyms()) > 0:
+            currentHypernyms = syn.hypernyms()
+            for hyperSyn in currentHypernyms:
+                for lemma in hyperSyn.lemmas():
+                    # if(lemma.name() != currentWord):
+                    hypernyms.append(lemma.name())
+        # Get Hyponyms
+        if len(syn.hyponyms()) > 0:
+            currentHyponyms = syn.hyponyms()
+            for hypoSyn in currentHyponyms:
+                for lemma in hypoSyn.lemmas():
+                    # if(lemma.name() != currentWord):
+                    hyponyms.append(lemma.name())
+        # Get direct synonyms
+        for lemma in syn.lemmas():
+            # if(lemma.name() != currentWord):
+            synonyms.append(lemma.name())
+            # Get derivationally related forms
+            for derivForm in lemma.derivationally_related_forms():
+                if derivForm.name() not in deriv:
+                    deriv.append(derivForm.name())
+            # Get antonyms
+            if lemma.antonyms():
+                if lemma.antonyms()[0].name() not in uniqueAntonymList:
+                    uniqueAntonymList.append(lemma.antonyms()[0].name())
         # print("SYNONYMS: ")
         # print(set(synonyms))
         # print('\n HYPERNYMS:')
@@ -892,7 +901,7 @@ def DRSToItem():
 
         # As long as no "exit" given
         if nextStep != 'exit':
-            print(currentInstruction)
+            # print(currentInstruction)
             # If the current line is an instruction
             if categorizedDRSLines.get(index) == CONST_INSTRUCTION_TAG:
                 # Get the predicate type and contents
@@ -927,7 +936,7 @@ def DRSToItem():
             predicateContents = predicateSplit[1]
             # print(categorizedDRSLines.get(index))
             qSwitcher.callFunction(predicateType, predicateContents, DRSGraph)
-            print(currentInstruction)
+            # print(currentInstruction)
 
         result = qSwitcher.resolveQuestion()
         if result:

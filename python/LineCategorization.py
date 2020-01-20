@@ -1,5 +1,6 @@
 from Constants import *
 
+
 # Check if current line is a conditional or a header line
 def getSymbolLines(DRSLines):
     # Declarations
@@ -15,7 +16,7 @@ def getSymbolLines(DRSLines):
         # if line is "QUESTION" then it's the start of a question segment
         elif line == CONST_QUESTION_LINE_SYMBOL:
             symbolLines.update({index: CONST_QUESTION_LINE_TAG})
-    print(symbolLines)
+    # print(symbolLines)
     return symbolLines
 
 

@@ -178,13 +178,13 @@ def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets):
             else:
                 # Get the if block that matches the then block and add it to newThenNodes, in order to still
                 # be able to put in the conditional trigger edges
-                conditional.pprint()
+                # conditional.pprint()
                 for i in range(instructionCountInMatchingIfBlock):
                     currentIfLine = conditionalWithMatchingIfBlock.ifLines[i]
                     predicateSplit = currentIfLine.split('(', 1)
                     predicateContents = predicateSplit[1]
                     currentIfLineNodeReference = predicateContents.split(',')[0]
-                    print("**************************************************", currentIfLineNodeReference)
+                    # print("**************************************************", currentIfLineNodeReference)
                     newThenNodes.append(currentIfLineNodeReference)
         else:
             instructionCountInMatchingIfBlock = instructionCountInMatchingIfBlock - 1
@@ -192,8 +192,8 @@ def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets):
     newIfNodes = list(set(newIfNodes))
     newThenNodes = list(set(newThenNodes))
     # Add edges between if and then nodes to signify which nodes get triggered by conditional
-    print("IF", newIfNodes)
-    print("THEN", newThenNodes)
+    # print("IF", newIfNodes)
+    # print("THEN", newThenNodes)
     for ifNode in newIfNodes:
         for thenNode in newThenNodes:
             if ifNode is not None and thenNode is not None:
