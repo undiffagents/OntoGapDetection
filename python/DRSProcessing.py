@@ -372,12 +372,18 @@ class questionSwitcher(object):
             raise ValueError('Too many components ?')
 
         # INITIAL NYM TESTING - will need to extend to other predicates as well of course
+        #TODO: Resolve occurs before identify here - that shouldn't be the case probably
         adjectiveNymList, antonymList = getNyms(propAdjective)
         if CONTROL_RESOLVE_LEXICAL == True:
             adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
         else:
             adjectiveNodes = self.ListOfNodesWithValue(propAdjective)
-        antonymNodes = self.ListOfNodesWithValueFromList(antonymList)
+        # We
+        if CONTROL_IDENTIFY_NEGATION == True:
+            if CONTROL_RESOLVE_LEXICAL == True:
+                antonymNodes = self.ListOfNodesWithValueFromList(antonymList)
+            else:
+                antonymNodes = self.ListOfNodesWithValue(propAdjective)
 
         # print("ADJECTIVE NODES", adjectiveNodes)
         newNymCount = 0
@@ -387,6 +393,7 @@ class questionSwitcher(object):
                       "vocabulary.")
             if CONTROL_RESOLVE_LEXICAL == True:
                 #TODO: Allow user to manually choose yes/no to resolve?
+                #Should antonymNodes be counted here too?
                 while len(adjectiveNodes) < 1 and len(antonymNodes) < 1 and newNymCount < 3:
                     # No nodes "active"
                     newAdjective = requestNewTermToNymCheck(propAdjective)
@@ -394,6 +401,8 @@ class questionSwitcher(object):
                     adjectiveNymList, newAntonymList = getNyms(newAdjective)
                     antonymNodes = self.ListOfNodesWithValueFromList(newAntonymList)
                     adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
+                    if len(adjectiveNodes) > 0:
+                        print("Lexical gap resolved - an adjective given was found in the knowledge base")
 
         if len(adjectiveNodes) > 0:
             for node in adjectiveNodes:
@@ -413,19 +422,24 @@ class questionSwitcher(object):
                     # print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
 
         if len(antonymNodes) > 0:
-            # propertyNodesWithAdjective = []
-            for node in antonymNodes:
-                # print("AntonymNode", node)
-                propertyNode = self.getPropertyNodeFromAdjective(node)
-                self.nodesWithGivenPropertyAntonym.append(propertyNode)
-                # MAP FOUND ANTONYM NODE'S REF ID TO THE INCOMING REF ID
-                if self.DRSGraph.graph.has_node(propertyNode):
-                    DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
-                    self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
-                    # print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
-                else:
-                    self.newToOldRefIDMapping.update({propRefId: None})
-                    # print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
+            if CONTROL_IDENTIFY_NEGATION == True:
+                print("Negation gap identified - a node has been found that contains an antonym of one of the "
+                      "provided adjectives")
+                # propertyNodesWithAdjective = []
+                if CONTROL_RESOLVE_NEGATION == True:
+                    for node in antonymNodes:
+                        # print("AntonymNode", node)
+                        propertyNode = self.getPropertyNodeFromAdjective(node)
+                        self.nodesWithGivenPropertyAntonym.append(propertyNode)
+                        print("Negation gap resolved - an antonym has been found in the knowledge graph")
+                        # MAP FOUND ANTONYM NODE'S REF ID TO THE INCOMING REF ID
+                        if self.DRSGraph.graph.has_node(propertyNode):
+                            DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
+                            self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
+                            # print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
+                        else:
+                            self.newToOldRefIDMapping.update({propRefId: None})
+                            # print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
 
         # ***********************************************************************************************************************************
         # If no adjective nodes are found, then we look for antonyms
