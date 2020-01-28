@@ -889,7 +889,7 @@ def DRSToItem():
     DRSGraph = None
     DRSLines = []
     # Read in DRS instructions from file
-    DRSFile = open("DRS_read_in.txt", "r")
+    DRSFile = open("DRS_read_in_NOT.txt", "r")
     for line in DRSFile:
         # Get DRS command and remove any leading and ending whitespace
         DRSLines.append(line.strip())

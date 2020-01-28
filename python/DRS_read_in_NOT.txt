@@ -26,3 +26,7 @@ predicate(J,be,G,I)-4/2
    [Q]
    predicate(Q,appear,G)-6/7				
    modifier_pp(Q,in,E)-6/8	
+   NOT
+   [R,S]
+   property(R,active,pos)-7/6
+   predicate(S,be,A,R)-7/4

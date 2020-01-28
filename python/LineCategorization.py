@@ -16,6 +16,8 @@ def getSymbolLines(DRSLines):
         # if line is "QUESTION" then it's the start of a question segment
         elif line == CONST_QUESTION_LINE_SYMBOL:
             symbolLines.update({index: CONST_QUESTION_LINE_TAG})
+        elif line == CONST_NEGATION_LINE_SYMBOL:
+            symbolLines.update({index: CONST_NEGATION_LINE_TAG})
     # print(symbolLines)
     return symbolLines
 
@@ -49,6 +51,9 @@ def categorizeSymbolLines(symbolLines):
             # if previous symbol is a conditional, then header is for a then part of the conditional
             if previousSymbol == CONST_CONDITIONAL_LINE_TAG:
                 categorizedSymbolLines.update({symbolLineNumber: CONST_THEN_HEADER_TAG})
+            # if previous symbol is "NOT", then header is for a negation
+            if previousSymbol == CONST_NEGATION_LINE_TAG:
+                categorizedSymbolLines.update({symbolLineNumber: CONST_NEGATION_HEADER_TAG})
             # if next symbol is a conditional, then header is for an if part of the conditional
             if nextSymbol == CONST_CONDITIONAL_LINE_TAG:
                 categorizedSymbolLines.update({symbolLineNumber: CONST_IF_HEADER_TAG})
