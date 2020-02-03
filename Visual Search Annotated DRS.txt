@@ -1,0 +1,83 @@
+There are at least 2 keys.
+
+W is a key.
+
+R is a key.
+
+There is a screen.
+
+There is a target X1.
+The target X1 is a letter.
+There are at least 2 letters X2.
+The letters X2 appear on a screen X3.
+If the target X1 is on the screen X3 then W is pressed.
+If it is false that the target X1 is on the screen X3 then R is pressed.
+If a letter X4 matches the target X1 then there is a color X5 of the letter X4 and there is an identity X6 of the letter X4 and it is necessary that the color X5 is equal to a color of the target X1 and it is necessary that the identity X6 is equal to an identity of the target X1.
+
+Every letter has a color and has an identity.
+
+
+[A,B,C,D,E,F,G,H,I,J,K,L]
+object(A,key,countable,na,geq,2)-1/4			- There are at least 2 keys
+object(B,key,countable,na,eq,1)-2/6			- Setup of Key #1
+predicate(C,be,named(W),B)-2/4				- Naming Key #1 "W"
+object(D,key,countable,na,eq,1)-3/6			- Set up of Key #2
+predicate(E,be,named(R),D)-3/4				- Naming Key #2 "R"
+object(F,screen,countable,na,eq,1)-4/4			- There is a screen
+object(G,target,countable,na,eq,1)-5/4			- There is a target
+object(H,letter,countable,na,eq,1)-6/5			- There is a letter
+predicate(I,be,G,H)-6/3					- The target is the letter
+object(J,letter,countable,na,geq,2)-7/2			- There are at least 2 letters
+object(L,screen,countable,na,eq,1)-7/6			- There is a screen (FLAG)
+predicate(K,appear,J)-7/3				- The letter appears
+modifier_pp(K,on,L)-7/4					- (The letter appears) on the screen defined in L
+   [M]							- IF
+   predicate(M,be,G)-8/4				- The target is
+   modifier_pp(M,on,L)-8/5				- (The target is) on the screen defined in L
+   =>							
+   [N,O]						- THEN
+   property(N,pressed,pos)-8/13				- Setup of the property "pressed"
+   predicate(O,be,named(W),N)-8/12			- Some object named W is pressed. (FLAG)
+   []
+      NOT						- IF NOT
+      [P]
+      predicate(P,be,G)-9/4				- The target is
+      modifier_pp(P,on,L)-9/6				- (The target is) on the screen defined in L
+   =>
+   [Q,R]						-THEN
+   property(Q,pressed,pos)-9/14				- Setup of the property "pressed"
+   predicate(R,be,named(R),Q)-9/13			- Some object named R is pressed (FLAG)
+   [S]							- IF
+   object(S,letter,countable,na,eq,1)-10/2		- There is a letter
+   =>
+   [T,U,V,W]						- THEN
+   object(T,color,countable,na,eq,1)-10/5		- There is a color
+   predicate(U,have,S,T)-10/3				- The letter (S) has the color (T)
+   object(V,identity,countable,na,eq,1)-10/9		- There is an identity
+   predicate(W,have,S,V)-10/7				- The letteer (S) has the identity T
+   [X,Y]						- IF
+   object(X,letter,countable,na,eq,1)-11/3		- There is a letter
+   predicate(Y,match,X,G)-11/4				- The letter (X) matches the target
+   =>							
+   [Z,A1]						- THEN
+   relation(Z,of,X)-11/10				- Some attribute Z of the letter (X)
+   object(Z,color,countable,na,eq,1)-11/9		- Z = color (The color (Z) of the letter (X)
+      MUST					
+      [B1,C1,D1]					- All of the following must be true
+      relation(D1,of,G)-11/19				- Some attribute (D1) of the target (G)
+      object(D1,color,countable,na,eq,1)-11/18		- D1 = color
+      object(G,target,countable,na,eq,1)-11/21		- G = target (FLAG)
+      property(B1,equal,pos)-11/15			- Establishing equality
+      predicate(C1,be,Z,B1)-11/13			- The color (Z) [of the letter (X)] is equal
+      modifier_pp(C1,to,D1)-11/16			- (The color (Z) [of the letter (X)] is equal) TO the color (D1)
+   relation(A1,of,X)-11/25				- Some attribute A1 of the letter (X)
+   object(A1,identity,countable,na,eq,1)-11/24		- A1 = identity (the identity (A1) of the letter (X))
+      MUST
+      [E1,F1,G1]					- All of the following must be true
+      relation(G1,of,G)-11/34				- Some attribute (G1) of the target (G)
+      object(G1,identity,countable,na,eq,1)-11/33	- G1 = identity (the identity (G1) of the letter (G))
+      object(G,target,countable,na,eq,1)-11/36		- G = target (FLAG)
+      property(E1,equal,pos)-11/30			- Establishing equality
+      predicate(F1,be,A1,E1)-11/28			- The identity (A1) [of the letter X] is equal to
+      modifier_pp(F1,to,G1)-11/31			- (The identity (A1) [of the letter (X)] is equal) TO the identity (G1)
+
