@@ -11,6 +11,7 @@ class Conditional:
         self.thenLines = []
         self.anonThenLines = []
         self.processed = False
+        self.negation = False
 
     def addIfLine(self, newIfLine):
         self.ifLines.append(newIfLine)
@@ -38,6 +39,9 @@ class Conditional:
 
     def markProcessed(self):
         self.processed = True
+
+    def markNegation(self):
+        self.negation = True
 
     def pprint(self):
         print("firstLine: " + self.firstLine)
@@ -99,6 +103,10 @@ def getConditionals(DRSLines, categorizedDRSLines):
         if categorizedDRSLines.get(currentLineNumber) == CONST_IF_TAG:
             conditionalLines.update({currentLineNumber: CONST_IF_TAG})
 
+        # if the current line is part of an IF NOT in a conditional
+        if categorizedDRSLines.get(currentLineNumber) == CONST_IF_NEGATION_TAG:
+            conditionalLines.update({currentLineNumber: CONST_IF_NEGATION_TAG})
+
         # if the current line is part of a THEN in a conditional
         if categorizedDRSLines.get(currentLineNumber) == CONST_THEN_TAG:
             conditionalLines.update({currentLineNumber: CONST_THEN_TAG})
@@ -111,8 +119,9 @@ def getConditionals(DRSLines, categorizedDRSLines):
     conditionalLineIndexes = list(conditionalLines.keys())
     for conditionalIndex, conditionalLineNumber in enumerate(conditionalLineIndexes):
         # print(conditionalIndex, conditionalLineNumber)
-        # If item is an if
-        if conditionalLines[conditionalLineNumber] == CONST_IF_TAG:
+        # If item is an if or an if not
+        if conditionalLines[conditionalLineNumber] == CONST_IF_TAG or \
+                    conditionalLines[conditionalLineNumber] == CONST_IF_NEGATION_TAG:
             # Get index for line
             ifLineIndex = conditionalLineNumber
             # If first conditional line overall, or first line since a then
@@ -122,22 +131,28 @@ def getConditionals(DRSLines, categorizedDRSLines):
                 currentConditional = Conditional(DRSLines[ifLineIndex].split(')-')[0] + ')')
             # Otherwise, just an if line
             currentConditional.addIfLine(DRSLines[ifLineIndex].split(')-')[0] + ')')
+            if conditionalLines[conditionalLineNumber] == CONST_IF_NEGATION_TAG:
+                currentConditional.markNegation()
         # If item is a then
         elif conditionalLines[conditionalLineNumber] == CONST_THEN_TAG:
             thenLineIndex = conditionalLineNumber
             currentConditional.addThenLine(DRSLines[thenLineIndex].split(')-')[0] + ')')
             # If last line overall or last then before an if
             if ((conditionalIndex + 1) >= (len(conditionalLineIndexes))) or\
-                    conditionalLines[conditionalLineIndexes[conditionalIndex + 1]] == CONST_IF_TAG:
+                    conditionalLines[conditionalLineIndexes[conditionalIndex + 1]] == CONST_IF_TAG or\
+                    conditionalLines[conditionalLineIndexes[conditionalIndex + 1]] == CONST_IF_NEGATION_TAG:
                 currentConditional = anonymizeIfs(currentConditional)
                 conditionalList.append(currentConditional)
     return conditionalList
 
 
-def splitAndRun(currentInstruction, predSwitcher):
+def splitAndRun(currentInstruction, predSwitcher, isConditionalConsequence):
     predicateSplit = currentInstruction.split('(', 1)
     predicateType = predicateSplit[0]
-    predicateContents = predicateSplit[1]
+    if isConditionalConsequence:
+        predicateContents = predicateSplit[1] + CONST_CONSEQUENCE_FLAG
+    else:
+        predicateContents = predicateSplit[1]
     # Call appropriate handling function based on predicate type
     DRSGraph = predSwitcher.callFunction(predicateType, predicateContents)
     return DRSGraph
@@ -160,7 +175,7 @@ def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets):
         ifLineNodeReference = predicateContents.split(',')[0]
         newIfNodes.append(ifLineNodeReference)
         # Run the current line
-        DRSGraph = splitAndRun(ifLine, predSwitcher)
+        DRSGraph = splitAndRun(ifLine, predSwitcher, False)
     # Run each then line in the then part of the conditional
     for index, thenLine in enumerate(checkPreparedThenLines):
         # Run the current then line if it isn't in a matching if block
@@ -174,7 +189,7 @@ def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets):
                 thenLineNodeReference = predicateContents.split(',')[0]
                 newThenNodes.append(thenLineNodeReference)
                 # Run the current line
-                DRSGraph = splitAndRun(thenLine, predSwitcher)
+                DRSGraph = splitAndRun(thenLine, predSwitcher, True)
             else:
                 # Get the if block that matches the then block and add it to newThenNodes, in order to still
                 # be able to put in the conditional trigger edges
@@ -197,7 +212,10 @@ def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets):
     for ifNode in newIfNodes:
         for thenNode in newThenNodes:
             if ifNode is not None and thenNode is not None:
-                DRSGraph.addConditionalTriggerEdges(ifNode, thenNode)
+                if conditional.negation is False:
+                    DRSGraph.addConditionalTriggerEdges(ifNode, thenNode)
+                if conditional.negation is True:
+                    DRSGraph.addConditionalNegationTriggerEdges(ifNode, thenNode)
     conditional.markProcessed()
     return DRSGraph
 

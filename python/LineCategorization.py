@@ -9,7 +9,10 @@ def getSymbolLines(DRSLines):
     for index, line in enumerate(DRSLines):
         # If line starts with bracket, it's a header
         if line[0] == CONST_HEADER_LINE_SYMBOL:
-            symbolLines.update({index: CONST_HEADER_LINE_TAG})
+            if line == '[]':
+                symbolLines.update({index: CONST_JUNK_LINE_TAG })
+            else:
+                symbolLines.update({index: CONST_HEADER_LINE_TAG})
         # if line is arrow, it's a conditional
         elif line == CONST_CONDITIONAL_LINE_SYMBOL:
             symbolLines.update({index: CONST_CONDITIONAL_LINE_TAG})
@@ -56,7 +59,10 @@ def categorizeSymbolLines(symbolLines):
                 categorizedSymbolLines.update({symbolLineNumber: CONST_NEGATION_HEADER_TAG})
             # if next symbol is a conditional, then header is for an if part of the conditional
             if nextSymbol == CONST_CONDITIONAL_LINE_TAG:
+                # if previous symbol is "NOT" and the next symbol is => then this is a negated condition:
                 categorizedSymbolLines.update({symbolLineNumber: CONST_IF_HEADER_TAG})
+                if previousSymbol == CONST_NEGATION_LINE_TAG:
+                    categorizedSymbolLines.update({symbolLineNumber: CONST_IF_NEGATION_HEADER_TAG})
         else:
             categorizedSymbolLines.update({symbolLineNumber: currentSymbol})
     return categorizedSymbolLines
@@ -107,4 +113,5 @@ def categorizeDRSLines(DRSLines, symbolLines):
             # Get the type associated with this variable
             currentInstructionType = variablesAndTypes.get(predicateReferenceVariable)
             categorizedDRSLines.update({index: currentInstructionType})
+    print(categorizedDRSLines)
     return categorizedDRSLines

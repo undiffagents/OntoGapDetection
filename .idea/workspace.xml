@@ -6,9 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="92560cf3-bb85-4b4b-bc90-84e6d49a5286" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/ConditionalHandling.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/ConditionalHandling.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/Constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/Constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/DRSProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/DRSProcessing.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/GraphGeneration.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/GraphGeneration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/LineCategorization.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/LineCategorization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/VisualSearchNoNewTerms.graphml" beforeDir="false" afterPath="$PROJECT_DIR$/python/VisualSearchNoNewTerms.graphml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/VisualSearchNoNewTerms.txt" beforeDir="false" afterPath="$PROJECT_DIR$/python/VisualSearchNoNewTerms.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/jsonFile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/python/jsonFile.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -107,8 +111,28 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/python/DRSProcessing.py</url>
-          <line>946</line>
-          <option name="timeStamp" value="5" />
+          <line>20</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/python/DRSProcessing.py</url>
+          <line>954</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/python/DRSProcessing.py</url>
+          <line>923</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/python/DRSProcessing.py</url>
+          <line>938</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/python/ConditionalHandling.py</url>
+          <line>117</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

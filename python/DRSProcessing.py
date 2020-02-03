@@ -72,6 +72,13 @@ class predicateSwitcher(object):
         # Ditransitive verbs: (predName, verb, subjRef, dirObjRef, indirObjRef)
         # - The SubjectRef verbed the DirObjRef to the indirObjRef (The professor (S) gave
         # the paper (D) to the student (I))
+
+        consequence = False
+        # Check if the line passed in was from a conditional's consequence (used to differentiate "be" as an action
+        # or not
+        if CONST_CONSEQUENCE_FLAG in predicateContents:
+            consequence = True
+
         # Break up the predicate
         predicateComponents = predicateContents.split(',')
         numberOfComponents = len(predicateComponents)
@@ -101,7 +108,7 @@ class predicateSwitcher(object):
                 # If so call naming method
                 self.DRSGraph = self.nameItem(predSubjRef, predDirObjRef, self.DRSGraph)
             # If not named(XYZ) but still has 4 components
-            elif numberOfComponents == 4:
+            elif numberOfComponents == 4 and consequence is False:
                 # Get nodes for both subject and direct object
                 subjRefNode = self.DRSGraph.FindItemWithValue(predSubjRef)
                 dirObjRefNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
@@ -115,6 +122,10 @@ class predicateSwitcher(object):
             # If only 3 components predicate(X,be,Y)
             elif numberOfComponents == 3:
                 self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable, numberOfComponents)
+            # If 4 components and part of a predicate
+            elif numberOfComponents == 4 and consequence is True:
+                self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable,
+                                              numberOfComponents, predDirObjRef)
 
         # Hardcode "have" case for composition
         elif predVerb == CONST_PRED_VERB_HAVE:
@@ -129,7 +140,7 @@ class predicateSwitcher(object):
             self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable, numberOfComponents)
 
     def handle_general_predicate(self, predSubjRef, predVerb, predReferenceVariable,
-                                 numberOfComponents, predDirObjRef = None):
+                                 numberOfComponents, predDirObjRef=None):
         # Create Action Node
         self.DRSGraph.AppendItemAffordanceAtSpecificNode(predSubjRef, predVerb)
         actionGraph = ActionGraph(self.graphNumber)
@@ -933,7 +944,7 @@ def DRSToItem():
                 instructionCountInMatchingIfBlock, conditionalWithMatchingIfBlock = \
                     checkCurrentInstructionIf(DRSLines, index, currentInstruction, conditionalSets)
                 if instructionCountInMatchingIfBlock == 0:
-                    DRSGraph = splitAndRun(currentInstruction, predSwitcher)
+                    DRSGraph = splitAndRun(currentInstruction, predSwitcher, False)
 
         # Break out of loop with exit
         else:

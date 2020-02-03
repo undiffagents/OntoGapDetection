@@ -17,7 +17,16 @@ modifier_pp(K,on,F)-8/5
    =>	
    [M,N]
    property(M,pressed,pos)-9/15			
-   predicate(N,be,B,M)-9/14						
+   predicate(N,be,B,M)-9/14	
+   []
+      NOT								
+      [O]							
+      predicate(O,be,G)-10/9					
+      modifier_pp(O,on,F)-10/10					
+   =>
+   [P,Q]							
+   property(P,pressed,pos)-10/19				
+   predicate(Q,be,D,P)-10/18						
    [B1]								
    object(B1,letter,countable,na,eq,1)-12/2			
    =>		

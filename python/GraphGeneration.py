@@ -189,7 +189,16 @@ class ItemGraph(object):
         # We only want to trigger actions, not statement
         if ifNode is not None and thenNode is not None:
             if CONST_ACTION_NODE in thenNode:
-                self.graph.add_edge(ifNode, thenNode, value=CONST_TRIGGERS_EDGE)
+                self.graph.add_edge(ifNode, thenNode, value=CONST_TRIGGERS_IF_TRUE_EDGE)
+                self.graph.add_edge(thenNode, ifNode, value=CONST_TRIGGERED_BY_EDGE)
+
+    def addConditionalNegationTriggerEdges(self, ifNodeValue, thenNodeValue):
+        ifNode = self.FindItemWithValue(ifNodeValue)
+        thenNode = self.FindItemWithValue(thenNodeValue)
+        # We only want to trigger actions, not statement
+        if ifNode is not None and thenNode is not None:
+            if CONST_ACTION_NODE in thenNode:
+                self.graph.add_edge(ifNode, thenNode, value=CONST_TRIGGERS_IF_FALSE_EDGE)
                 self.graph.add_edge(thenNode, ifNode, value=CONST_TRIGGERED_BY_EDGE)
 
     # Methods to replace values of specific nodes
@@ -416,4 +425,3 @@ class ModifierPPGraph(object):
                 if values[CONST_NODE_VALUE_KEY] == valueToFind:
                     return node
         return None
-
