@@ -1,4 +1,4 @@
-[A,B,C,D,E,F,G,H,I,J,K]
+[A,B,C,D,E,F,G,H,I,J,K,T,U]
 object(A,key,countable,na,geq,2)-1/6
 object(B,key,countable,na,eq,1)-2/6
 predicate(C,be,named(W),B)-2/4	
@@ -10,7 +10,9 @@ object(H,letter,countable,na,eq,1)-6/6
 predicate(I,be,G,H)-6/4					
 object(J,letter,countable,na,geq,2)-7/6			
 predicate(K,appear,J)-8/4				
-modifier_pp(K,on,F)-8/5					
+modifier_pp(K,on,F)-8/5								
+object(T,color,countable,na,eq,1)-11/13		
+relation(T,of,B)-11/15	
    [L]							
    predicate(L,be,G)-9/5				
    modifier_pp(L,on,F)-9/6				
@@ -34,4 +36,4 @@ modifier_pp(K,on,F)-8/5
    object(C1,color,countable,na,eq,1)-12/5		
    predicate(D1,have,B1,C1)-12/3			
    object(E1,identity,countable,na,eq,1)-12/9		
-   predicate(F1,have,B1,E1)-12/7			
+   predicate(F1,have,B1,E1)-12/7		

@@ -74,6 +74,13 @@ def generateModPPGraph(graphNumber):
     return modPPGraph
 
 
+def generateRelationGraph(graphNumber):
+    relationGraph = networkx.MultiDiGraph()
+    relationGraph.add_node(CONST_RELATION_NODE + str(graphNumber), value=CONST_RELATION_NODE + str(graphNumber))
+
+    return relationGraph
+
+
 class ItemGraph(object):
     # Constructor
     def __init__(self, graphNumber):
@@ -182,6 +189,14 @@ class ItemGraph(object):
     def addModifierObjectEdges(self, modifierNode, objectNode):
         self.graph.add_edge(modifierNode, objectNode, value=CONST_MODIFIES_OBJECT_EDGE)
         self.graph.add_edge(objectNode, modifierNode, value=CONST_IS_MODIFIED_EDGE)
+
+    def addRelationAttributeEdges(self, attributeNode, relationNode):
+        self.graph.add_edge(attributeNode, relationNode, value=CONST_RELATION_IS_ATTRIBUTE_EDGE)
+        self.graph.add_edge(relationNode, attributeNode, value=CONST_RELATION_HAS_PARENT_EDGE)
+
+    def addRelationParentEdges(self, parentNode, relationNode):
+        self.graph.add_edge(parentNode, relationNode, value=CONST_RELATION_IS_PARENT_EDGE)
+        self.graph.add_edge(relationNode, parentNode, value=CONST_RELATION_HAS_ATTRIBUTE_EDGE)
 
     def addConditionalTriggerEdges(self, ifNodeValue, thenNodeValue):
         ifNode = self.FindItemWithValue(ifNodeValue)
@@ -415,6 +430,47 @@ class ModifierPPGraph(object):
 
     def replaceModPPPrep(self, newPreposition):
         self.__replace(CONST_MODPP_PREP_NODE, newPreposition)
+
+    # Method to find a node containing a given value
+    def FindModWithValue(self, valueToFind):
+        if self.graph is not None:
+            # iterate through all graph nodes
+            for node, values in self.graph.nodes.data():
+                # If the current Node's value = the value passed in
+                if values[CONST_NODE_VALUE_KEY] == valueToFind:
+                    return node
+        return None
+
+
+# Relation Graph
+class RelationGraph(object):
+    # Constructor
+    def __init__(self, graphNumber):
+        self.graphNumber = graphNumber
+        if graphNumber is not None:
+            self.graph = generateRelationGraph(self.graphNumber)
+        else:
+            self.graph = None
+
+    # Generic append method based on whatever target is passed in
+    def __append(self, target, newValue):
+        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY]
+        if currentValue == '':
+            updatedValue = newValue
+        else:
+            updatedValue = currentValue + '|' + newValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
+
+    # Generic replace method based on whatever target is passed in
+    def __replace(self, target, newValue):
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = newValue
+
+    # Append/replace methods for each node value in Property Graph
+    def appendModPPValue(self, newValue):
+        self.__append(CONST_RELATION_NODE, newValue)
+
+    def replaceModPPValue(self, newValue):
+        self.__replace(CONST_RELATION_NODE, newValue)
 
     # Method to find a node containing a given value
     def FindModWithValue(self, valueToFind):

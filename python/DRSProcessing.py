@@ -239,6 +239,34 @@ class predicateSwitcher(object):
     def predicate_modifier_adv(self, predicateContents):
         pass
 
+    def predicate_relation(self, predicateContents):
+        predicateComponents = predicateContents.split(',')
+        relationAttributeNodeRef = predicateComponents[0]
+        relationOf = predicateComponents[1]
+        relationParentNodeRef = predicateComponents[2].split(')')[0]
+
+        # Create Relation Node
+        modGraph = RelationGraph(self.graphNumber)
+
+
+        # Increase the graph number for auto-generation of names
+        self.graphNumber = self.graphNumber + 1
+
+        # If a main graph already exists, then add the new graph in to it
+        if self.DRSGraph.graph is not None:
+            self.DRSGraph.graph = networkx.algorithms.operators.binary.compose(self.DRSGraph.graph, modGraph.graph)
+        # if no main graph exists, this is the main graph
+        else:
+            self.DRSGraph.graph = modGraph.graph
+
+        # Add relation edges between attribute/parent/relation nodes
+        # Get newly created relation node
+        relationNode = self.DRSGraph.FindItemWithValue(CONST_RELATION_NODE + str(self.graphNumber - 1))
+        attributeNode = self.DRSGraph.FindItemWithValue(relationAttributeNodeRef)
+        parentNode = self.DRSGraph.FindItemWithValue(relationParentNodeRef)
+        self.DRSGraph.addRelationAttributeEdges(attributeNode, relationNode)
+        self.DRSGraph.addRelationParentEdges(parentNode, relationNode)
+
     # HANDLE PROPERTIES
     # TODO: Handle 4/6 component properties
     # TODO: Handle degrees besides "pos"
@@ -954,7 +982,7 @@ def DRSToItem():
     # process conditionals first:
     for conditional in conditionalSets:
         if not conditional.processed:
-            print("PRocessing conditional")
+            # print("PRocessing conditional")
             DRSGraph = runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets)
 
     # Set up questionSwitcher

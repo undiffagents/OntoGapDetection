@@ -45,6 +45,14 @@ CONST_MODPP_PREP_NODE = 'ModPPPrep'
 
 CONST_MODPP_HAS_PREP_EDGE = 'ModPPHasPrep'
 
+# Relation Graph node
+CONST_RELATION_NODE = "RelationOf"
+
+CONST_RELATION_IS_ATTRIBUTE_EDGE = "IsAttribute"
+CONST_RELATION_HAS_PARENT_EDGE = "HasParent"
+CONST_RELATION_IS_PARENT_EDGE = "IsParent"
+CONST_RELATION_HAS_ATTRIBUTE_EDGE = "HasAttribute"
+
 # Assorted keys and edge names
 CONST_NODE_VALUE_KEY = 'value'
 
