@@ -1,3 +1,6 @@
+# INPUT FILE NAME/OUTPUT GRAPH NAME
+CONST_INPUT_FILE_NAME = 'VisualSearchNoNewTerms'
+
 # GRAPH GENERATION
 
 # Item Graph nodes and edge
@@ -6,11 +9,15 @@ CONST_ITEM_NAME_NODE = 'ItemName'
 CONST_ITEM_AFFORDANCE_NODE = 'ItemAffordance'
 CONST_ITEM_DESCRIPTION_NODE = 'ItemDescription'
 CONST_ITEM_ROLE_NODE = 'ItemRole'
+CONST_ITEM_OP_NODE = 'ItemOp'
+CONST_ITEM_COUNT_NODE = 'ItemCount'
 
 CONST_ITEM_HAS_NAME_EDGE = 'ItemHasName'
 CONST_ITEM_HAS_AFFORDANCE_EDGE = 'ItemHasAffordance'
 CONST_ITEM_HAS_DESCRIPTION_EDGE = 'ItemHasDescription'
 CONST_ITEM_HAS_ROLE_EDGE = 'ItemHasRole'
+CONST_ITEM_HAS_OP_EDGE = 'ItemHasOp'
+CONST_ITEM_HAS_COUNT_EDGE = 'ItemHasCount'
 
 # Property Graph nodes and edges
 CONST_PROP_NODE = 'Property'

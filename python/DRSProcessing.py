@@ -38,13 +38,16 @@ class predicateSwitcher(object):
         # FOLLOWING ONES PROBABLY UNUSED BUT LEAVING COMMENTED OUT SO I HAVE ACCESS EASILY
         # objClass = predicateComponents[2]
         # objUnit = predicateComponents[3]
-        # objOperator = predicateComponents[4]
-        # objCount = predicateComponents[5].split(')')[0]
+        objOperator = predicateComponents[4]
+        objCount = predicateComponents[5].split(')')[0]
         if self.DRSGraph.FindItemWithValue(objReferenceVariable) is None:
             # Apply appropriate variables to ItemGraph
             objectGraph = ItemGraph(self.graphNumber)
             objectGraph.appendItemValue(objReferenceVariable)
             objectGraph.appendItemRole(objName)
+            objectGraph.appendItemOp(objOperator)
+            objectGraph.appendItemCount(objCount)
+
             # Increase the graph number for auto-generation of names
             self.graphNumber = self.graphNumber + 1
             # If a main graph already exists, then add the new graph in to it
@@ -109,6 +112,9 @@ class predicateSwitcher(object):
                 elif subjRefNode is not None and dirObjRefNode is not None and CONST_PROP_NODE in dirObjRefNode:
                     self.DRSGraph.addPropertyEdge(subjRefNode, dirObjRefNode)
             # HANDLE ANY OTHER CASES????
+            # If only 3 components predicate(X,be,Y)
+            elif numberOfComponents == 3:
+                self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable, numberOfComponents)
 
         # Hardcode "have" case for composition
         elif predVerb == CONST_PRED_VERB_HAVE:
@@ -120,38 +126,43 @@ class predicateSwitcher(object):
                 if subjRefNode is not None and dirObjRefNode is not None:
                     self.DRSGraph.addCompositionEdges(subjRefNode, dirObjRefNode)
         else:
-            # Create Action Node
-            self.DRSGraph.AppendItemAffordanceAtSpecificNode(predSubjRef, predVerb)
-            actionGraph = ActionGraph(self.graphNumber)
-            actionGraph.appendActionValue(predReferenceVariable)
-            actionGraph.appendActionVerb(predVerb)
-            # Increase the graph number for auto-generation of names
-            self.graphNumber = self.graphNumber + 1
-            # If a main graph already exists, then add the new graph in to it
-            if self.DRSGraph.graph is not None:
-                self.DRSGraph.graph = networkx.algorithms.operators.binary.compose(self.DRSGraph.graph,
-                                                                                   actionGraph.graph)
-            # if no main graph exists, this is the main graph
-            else:
-                self.DRSGraph.graph = actionGraph.graph
+            self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable, numberOfComponents)
 
-            # Get subject reference node
-            subjRefNode = self.DRSGraph.FindItemWithValue(predSubjRef)
-            actionNode = self.DRSGraph.FindItemWithValue(predReferenceVariable)
+    def handle_general_predicate(self, predSubjRef, predVerb, predReferenceVariable,
+                                 numberOfComponents, predDirObjRef = None):
+        # Create Action Node
+        self.DRSGraph.AppendItemAffordanceAtSpecificNode(predSubjRef, predVerb)
+        actionGraph = ActionGraph(self.graphNumber)
+        actionGraph.appendActionValue(predReferenceVariable)
+        actionGraph.appendActionVerb(predVerb)
+        # Increase the graph number for auto-generation of names
+        self.graphNumber = self.graphNumber + 1
+        # If a main graph already exists, then add the new graph in to it
+        if self.DRSGraph.graph is not None:
+            self.DRSGraph.graph = networkx.algorithms.operators.binary.compose(self.DRSGraph.graph,
+                                                                               actionGraph.graph)
+        # if no main graph exists, this is the main graph
+        else:
+            self.DRSGraph.graph = actionGraph.graph
 
-            # If just one subject "The target appears"
-            if numberOfComponents == 3:
-                self.DRSGraph.addActionPerformerEdges(subjRefNode, actionNode)
-            # If subject and direct object (e.g. "The subject remembers the letter")
-            # predSubjRef = "Subject", predDirObjRef = "letter"
-            elif numberOfComponents == 4:
-                dirObjRefNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
-                self.DRSGraph.addActionPerformerEdges(subjRefNode, actionNode)
-                self.DRSGraph.addActionTargetEdges(actionNode, dirObjRefNode)
+        # Get subject reference node
+        subjRefNode = self.DRSGraph.FindItemWithValue(predSubjRef)
+        actionNode = self.DRSGraph.FindItemWithValue(predReferenceVariable)
 
-            # TODO TODO TODO TODO
-            elif numberOfComponents == 5:
-                pass
+        # If just one subject "The target appears"
+        if numberOfComponents == 3:
+            self.DRSGraph.addActionPerformerEdges(subjRefNode, actionNode)
+        # If subject and direct object (e.g. "The subject remembers the letter")
+        # predSubjRef = "Subject", predDirObjRef = "letter"
+        elif numberOfComponents == 4:
+            dirObjRefNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
+            self.DRSGraph.addActionPerformerEdges(subjRefNode, actionNode)
+            self.DRSGraph.addActionTargetEdges(actionNode, dirObjRefNode)
+
+        # TODO TODO TODO TODO
+        elif numberOfComponents == 5:
+            pass
+
 
     # For has_part() predicates
     def predicate_has_part(self, predicateContents):
@@ -889,7 +900,7 @@ def DRSToItem():
     DRSGraph = None
     DRSLines = []
     # Read in DRS instructions from file
-    DRSFile = open("DRS_read_in_NOT.txt", "r")
+    DRSFile = open(CONST_INPUT_FILE_NAME + ".txt", "r")
     for line in DRSFile:
         # Get DRS command and remove any leading and ending whitespace
         DRSLines.append(line.strip())
@@ -915,7 +926,7 @@ def DRSToItem():
 
         # As long as no "exit" given
         if nextStep != 'exit':
-            # print(currentInstruction)
+            print(currentInstruction)
             # If the current line is an instruction
             if categorizedDRSLines.get(index) == CONST_INSTRUCTION_TAG:
                 # Get the predicate type and contents
@@ -932,6 +943,7 @@ def DRSToItem():
     # process conditionals first:
     for conditional in conditionalSets:
         if not conditional.processed:
+            print("PRocessing conditional")
             DRSGraph = runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets)
 
     # Set up questionSwitcher
@@ -976,7 +988,7 @@ def DRSToItem():
         jsonSerializable = networkx.readwrite.json_graph.node_link_data(DRSGraph.graph)
         jsonOutput = json.dumps(jsonSerializable)
         jsonFile.write(jsonOutput)
-        networkx.write_graphml_lxml(DRSGraph.graph, "DRSGraph.graphml")
+        networkx.write_graphml_lxml(DRSGraph.graph, CONST_INPUT_FILE_NAME + ".graphml")
 
 
 DRSToItem()

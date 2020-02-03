@@ -10,6 +10,8 @@ def generateItemGraph(graphNumber):
     itemGraph.add_node(CONST_ITEM_AFFORDANCE_NODE + str(graphNumber), value='')
     itemGraph.add_node(CONST_ITEM_DESCRIPTION_NODE + str(graphNumber), value='')
     itemGraph.add_node(CONST_ITEM_ROLE_NODE + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_OP_NODE + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_COUNT_NODE + str(graphNumber), value='')
 
     itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_NAME_NODE + str(graphNumber),
                        value=CONST_ITEM_HAS_NAME_EDGE)
@@ -19,6 +21,10 @@ def generateItemGraph(graphNumber):
                        value=CONST_ITEM_HAS_DESCRIPTION_EDGE)
     itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_ROLE_NODE + str(graphNumber),
                        value=CONST_ITEM_HAS_ROLE_EDGE)
+    itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_OP_NODE + str(graphNumber),
+                       value=CONST_ITEM_HAS_OP_EDGE)
+    itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_COUNT_NODE + str(graphNumber),
+                       value=CONST_ITEM_HAS_COUNT_EDGE)
 
     return itemGraph
 
@@ -120,6 +126,18 @@ class ItemGraph(object):
 
     def replaceItemRole(self, newRole):
         self.__replace(CONST_ITEM_ROLE_NODE, newRole)
+
+    def appendItemOp(self, newOp):
+        self.__append(CONST_ITEM_OP_NODE, newOp)
+
+    def replaceItemOp(self, newOp):
+        self.__replace(CONST_ITEM_OP_NODE, newOp)
+
+    def appendItemCount(self, newCount):
+        self.__append(CONST_ITEM_COUNT_NODE, newCount)
+
+    def replaceItemCount(self, newCount):
+        self.__replace(CONST_ITEM_COUNT_NODE, newCount)
 
     # Method to find a node containing a given value
     def FindItemWithValue(self, valueToFind):
