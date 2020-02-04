@@ -137,7 +137,11 @@ class predicateSwitcher(object):
                 if subjRefNode is not None and dirObjRefNode is not None:
                     self.DRSGraph.addCompositionEdges(subjRefNode, dirObjRefNode)
         else:
-            self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable, numberOfComponents)
+            if numberOfComponents == 3:
+                self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable, numberOfComponents)
+            elif numberOfComponents == 4:
+                self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable,
+                                              numberOfComponents, predDirObjRef)
 
     def handle_general_predicate(self, predSubjRef, predVerb, predReferenceVariable,
                                  numberOfComponents, predDirObjRef=None):
@@ -332,7 +336,7 @@ class predicateSwitcher(object):
         # Get item name out of "named(XYZ)"
         itemName = predSubjRef[predSubjRef.find("(") + 1:predSubjRef.find(")")]
         # Replace the name
-        DRSGraph.ReplaceItemNameAtSpecificNode(predDirObjRef, itemName)
+        DRSGraph.ReplaceItemNameAtSpecificNode(predDirObjRef, "\"" + itemName + "\"")
         # Return graph
         return DRSGraph
 
