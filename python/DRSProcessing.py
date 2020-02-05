@@ -244,24 +244,30 @@ class predicateSwitcher(object):
         pass
 
     def predicate_relation(self, predicateContents):
+
+        consequence = False
+        # Check if the line passed in was from a conditional's consequence (used to differentiate "be" as an action
+        # or not
+        if CONST_CONSEQUENCE_FLAG in predicateContents:
+            consequence = True
+
         predicateComponents = predicateContents.split(',')
         relationAttributeNodeRef = predicateComponents[0]
         relationOf = predicateComponents[1]
         relationParentNodeRef = predicateComponents[2].split(')')[0]
 
         # Create Relation Node
-        modGraph = RelationGraph(self.graphNumber)
-
+        relationGraph = RelationGraph(self.graphNumber)
 
         # Increase the graph number for auto-generation of names
         self.graphNumber = self.graphNumber + 1
 
         # If a main graph already exists, then add the new graph in to it
         if self.DRSGraph.graph is not None:
-            self.DRSGraph.graph = networkx.algorithms.operators.binary.compose(self.DRSGraph.graph, modGraph.graph)
+            self.DRSGraph.graph = networkx.algorithms.operators.binary.compose(self.DRSGraph.graph, relationGraph.graph)
         # if no main graph exists, this is the main graph
         else:
-            self.DRSGraph.graph = modGraph.graph
+            self.DRSGraph.graph = relationGraph.graph
 
         # Add relation edges between attribute/parent/relation nodes
         # Get newly created relation node

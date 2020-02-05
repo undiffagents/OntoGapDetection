@@ -465,15 +465,8 @@ class RelationGraph(object):
     def __replace(self, target, newValue):
         self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = newValue
 
-    # Append/replace methods for each node value in Property Graph
-    def appendModPPValue(self, newValue):
-        self.__append(CONST_RELATION_NODE, newValue)
-
-    def replaceModPPValue(self, newValue):
-        self.__replace(CONST_RELATION_NODE, newValue)
-
     # Method to find a node containing a given value
-    def FindModWithValue(self, valueToFind):
+    def FindRelationWithValue(self, valueToFind):
         if self.graph is not None:
             # iterate through all graph nodes
             for node, values in self.graph.nodes.data():

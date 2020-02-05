@@ -31,8 +31,11 @@ modifier_pp(K,on,F)-8/5
    object(R,letter,countable,na,eq,1)-11/3			
    predicate(S,match,R,G)-11/5					
    =>
-   [T]						
-   object(T,color,countable,na,eq,1)-11/13									
+   [T,U]						
+   object(T,color,countable,na,eq,1)-11/13		
+   relation(T,of,R)-11/15				
+   object(U,identity,countable,na,eq,1)-11/23		
+   relation(U,of,R)-11/25								
    [B1]								
    object(B1,letter,countable,na,eq,1)-12/2			
    =>		

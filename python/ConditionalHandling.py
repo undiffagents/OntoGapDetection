@@ -173,7 +173,8 @@ def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets):
         predicateSplit = ifLine.split('(', 1)
         predicateContents = predicateSplit[1]
         ifLineNodeReference = predicateContents.split(',')[0]
-        newIfNodes.append(ifLineNodeReference)
+        if ifLineNodeReference not in newIfNodes:
+            newIfNodes.append(ifLineNodeReference)
         # Run the current line
         DRSGraph = splitAndRun(ifLine, predSwitcher, False)
     # Run each then line in the then part of the conditional

@@ -19,8 +19,12 @@ def getSymbolLines(DRSLines):
         # if line is "QUESTION" then it's the start of a question segment
         elif line == CONST_QUESTION_LINE_SYMBOL:
             symbolLines.update({index: CONST_QUESTION_LINE_TAG})
+        # if line is "NOT" then it's the start of a negation segment
         elif line == CONST_NEGATION_LINE_SYMBOL:
             symbolLines.update({index: CONST_NEGATION_LINE_TAG})
+        # if line is "MUST" then it's the start of a necessity segment
+        elif line == CONST_NECESSITY_LINE_SYMBOL:
+            symbolLines.update({index: CONST_NECESSITY_LINE_TAG})
     # print(symbolLines)
     return symbolLines
 

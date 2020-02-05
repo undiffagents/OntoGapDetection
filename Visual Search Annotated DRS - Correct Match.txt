@@ -1,0 +1,75 @@
+There are at least 2 keys.
+p:W is a key X1.
+p:R is a key X2.
+There is a screen X3.
+There is a target X4.
+The target X4 is a letter.
+There are at least 2 letters X5.
+The letters X5 appear on the screen X3.
+If the target X4 is on the screen X3 then the key X1 is pressed.
+If it is false that the target X4 is on the screen X3 then the key X2 is pressed.
+If there is a color X6 of the letter X8 and there is an identity X7 of the letter X8 and it is necessary that the color X6 is equal to a color of the target X4 and it is necessary that the identity X7 is equal to an identity of the target X4 then the letter X8 matches the target X4.
+Every letter has a color and has an identity.
+
+
+
+[A,B,C,D,E,F,G,H,I,J,K]
+object(A,key,countable,na,geq,2)-1/6 					- There are at least 2 keys
+object(B,key,countable,na,eq,1)-2/6					- There is a key (Setup of Key #1)
+predicate(C,be,named(W),B)-2/4						- Key #1 is named "W"
+object(D,key,countable,na,eq,1)-3/6					- There is a key (Setup of Key #2)
+predicate(E,be,named(R),D)-3/4						- Key #2 is named "R"
+object(F,screen,countable,na,eq,1)-4/4					- There is a screen
+object(G,target,countable,na,eq,1)-5/4					- There is a target
+object(H,letter,countable,na,eq,1)-6/6					- There is a letter
+predicate(I,be,G,H)-6/4							- The target is the letter
+object(J,letter,countable,na,geq,2)-7/6					- There are at least two letters
+predicate(K,appear,J)-8/4						- The letters appear
+modifier_pp(K,on,F)-8/5							- [The letters appears] on the screen
+   [L]									- IF
+   predicate(L,be,G)-9/5						- The target is
+   modifier_pp(L,on,F)-9/6						- [The target is] on the screen
+   =>	
+   [M,N]								- THEN
+   property(M,pressed,pos)-9/15						- Setup of a property "pressed"
+   predicate(N,be,B,M)-9/14						- The key named "W" is pressed
+   []
+      NOT								
+      [O]								- IF NOT
+      predicate(O,be,G)-10/9						- The target is
+      modifier_pp(O,on,F)-10/10						- [The target is] on the screen
+   =>
+   [P,Q]								- THEN
+   property(P,pressed,pos)-10/19					- Setup of a property "pressed"
+   predicate(Q,be,D,P)-10/18						- The key named "R" is pressed
+   [R,S,T]								- IF
+   object(R,color,countable,na,eq,1)-11/5				- There is a color (R)
+   object(S,letter,countable,na,eq,1)-11/9				- There is a letter (S)
+   relation(R,of,S)-11/7						- (R) is the color of (S)
+   object(T,identity,countable,na,eq,1)-11/15				- There is an identity (T)
+   relation(T,of,S)-11/17						- (T) is the identity of (S)
+      MUST								- THE FOLLOWING MUST BE TRUE
+      [U,V,W]
+      object(U,color,countable,na,eq,1)-11/33				- There is a color (U)
+      relation(U,of,G)-11/34						- (U) is the color of the target (G)
+      property(V,equal,pos)-11/30					- Setting up equality
+      predicate(W,be,R,V)-11/29						- The color (R) must be equal
+      modifier_pp(W,to,U)-11/31						- (The color (R) must be equal) to the color (U)
+      MUST								- THE FOLLOWING MUST BE TRUE
+      [X,Y,Z]
+      object(X,identity,countable,na,eq,1)-11/50			- There is an identity (X)
+      relation(X,of,G)-11/51						- (X) is the identity of the target (G)
+      property(Y,equal,pos)-11/47					- Setting up equality
+      predicate(Z,be,T,Y)-11/46						- The identity (T) must be equal
+      modifier_pp(Z,to,X)-11/48						- (The identity (T) must be equal) to the identity (X)
+   =>
+   [A1]									- THEN
+   predicate(A1,match,S,G)-11/59					- The letter (S) matches the target (G)
+   [B1]									- IF 
+   object(B1,letter,countable,na,eq,1)-12/2				- There is a letter
+   =>		
+   [C1,D1,E1,F1]							- THEN
+   object(C1,color,countable,na,eq,1)-12/5				- There is a color (C1)
+   predicate(D1,have,B1,C1)-12/3					- The letter has the color C1
+   object(E1,identity,countable,na,eq,1)-12/9				- There is an identity (E1)
+   predicate(F1,have,B1,E1)-12/7					- The letter has the identity E1

@@ -259,29 +259,11 @@
 <node id="ItemCount18">
   <data key="d0">1</data>
 </node>
-<node id="Item19">
-  <data key="d0">B1</data>
-</node>
-<node id="ItemName19">
-  <data key="d0"></data>
-</node>
-<node id="ItemAffordance19">
-  <data key="d0"></data>
-</node>
-<node id="ItemDescription19">
-  <data key="d0"></data>
-</node>
-<node id="ItemRole19">
-  <data key="d0">letter</data>
-</node>
-<node id="ItemOp19">
-  <data key="d0">eq</data>
-</node>
-<node id="ItemCount19">
-  <data key="d0">1</data>
+<node id="RelationOf19">
+  <data key="d0">RelationOf19</data>
 </node>
 <node id="Item20">
-  <data key="d0">C1</data>
+  <data key="d0">U</data>
 </node>
 <node id="ItemName20">
   <data key="d0"></data>
@@ -293,7 +275,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole20">
-  <data key="d0">color</data>
+  <data key="d0">identity</data>
 </node>
 <node id="ItemOp20">
   <data key="d0">eq</data>
@@ -301,25 +283,70 @@
 <node id="ItemCount20">
   <data key="d0">1</data>
 </node>
-<node id="Item21">
-  <data key="d0">E1</data>
+<node id="RelationOf21">
+  <data key="d0">RelationOf21</data>
 </node>
-<node id="ItemName21">
+<node id="Item22">
+  <data key="d0">B1</data>
+</node>
+<node id="ItemName22">
   <data key="d0"></data>
 </node>
-<node id="ItemAffordance21">
+<node id="ItemAffordance22">
   <data key="d0"></data>
 </node>
-<node id="ItemDescription21">
+<node id="ItemDescription22">
   <data key="d0"></data>
 </node>
-<node id="ItemRole21">
-  <data key="d0">identity</data>
+<node id="ItemRole22">
+  <data key="d0">letter</data>
 </node>
-<node id="ItemOp21">
+<node id="ItemOp22">
   <data key="d0">eq</data>
 </node>
-<node id="ItemCount21">
+<node id="ItemCount22">
+  <data key="d0">1</data>
+</node>
+<node id="Item23">
+  <data key="d0">C1</data>
+</node>
+<node id="ItemName23">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance23">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription23">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole23">
+  <data key="d0">color</data>
+</node>
+<node id="ItemOp23">
+  <data key="d0">eq</data>
+</node>
+<node id="ItemCount23">
+  <data key="d0">1</data>
+</node>
+<node id="Item24">
+  <data key="d0">E1</data>
+</node>
+<node id="ItemName24">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance24">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription24">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole24">
+  <data key="d0">identity</data>
+</node>
+<node id="ItemOp24">
+  <data key="d0">eq</data>
+</node>
+<node id="ItemCount24">
   <data key="d0">1</data>
 </node>
 <edge id="0" source="Item0" target="ItemName0">
@@ -598,6 +625,12 @@
 <edge id="0" source="Item16" target="Action17">
   <data key="d1">IsSourceOf</data>
 </edge>
+<edge id="0" source="Item16" target="RelationOf19">
+  <data key="d1">IsParent</data>
+</edge>
+<edge id="0" source="Item16" target="RelationOf21">
+  <data key="d1">IsParent</data>
+</edge>
 <edge id="0" source="Action17" target="ActionVerb17">
   <data key="d1">ActionHasVerb</data>
 </edge>
@@ -625,29 +658,14 @@
 <edge id="0" source="Item18" target="ItemCount18">
   <data key="d1">ItemHasCount</data>
 </edge>
-<edge id="0" source="Item19" target="ItemName19">
-  <data key="d1">ItemHasName</data>
+<edge id="0" source="Item18" target="RelationOf19">
+  <data key="d1">IsAttribute</data>
 </edge>
-<edge id="0" source="Item19" target="ItemAffordance19">
-  <data key="d1">ItemHasAffordance</data>
+<edge id="0" source="RelationOf19" target="Item18">
+  <data key="d1">HasParent</data>
 </edge>
-<edge id="0" source="Item19" target="ItemDescription19">
-  <data key="d1">ItemHasDescription</data>
-</edge>
-<edge id="0" source="Item19" target="ItemRole19">
-  <data key="d1">ItemHasRole</data>
-</edge>
-<edge id="0" source="Item19" target="ItemOp19">
-  <data key="d1">ItemHasOp</data>
-</edge>
-<edge id="0" source="Item19" target="ItemCount19">
-  <data key="d1">ItemHasCount</data>
-</edge>
-<edge id="0" source="Item19" target="Item20">
-  <data key="d1">HasA</data>
-</edge>
-<edge id="0" source="Item19" target="Item21">
-  <data key="d1">HasA</data>
+<edge id="0" source="RelationOf19" target="Item16">
+  <data key="d1">HasAttribute</data>
 </edge>
 <edge id="0" source="Item20" target="ItemName20">
   <data key="d1">ItemHasName</data>
@@ -667,28 +685,79 @@
 <edge id="0" source="Item20" target="ItemCount20">
   <data key="d1">ItemHasCount</data>
 </edge>
-<edge id="0" source="Item20" target="Item19">
-  <data key="d1">IsPartOf</data>
+<edge id="0" source="Item20" target="RelationOf21">
+  <data key="d1">IsAttribute</data>
 </edge>
-<edge id="0" source="Item21" target="ItemName21">
+<edge id="0" source="RelationOf21" target="Item20">
+  <data key="d1">HasParent</data>
+</edge>
+<edge id="0" source="RelationOf21" target="Item16">
+  <data key="d1">HasAttribute</data>
+</edge>
+<edge id="0" source="Item22" target="ItemName22">
   <data key="d1">ItemHasName</data>
 </edge>
-<edge id="0" source="Item21" target="ItemAffordance21">
+<edge id="0" source="Item22" target="ItemAffordance22">
   <data key="d1">ItemHasAffordance</data>
 </edge>
-<edge id="0" source="Item21" target="ItemDescription21">
+<edge id="0" source="Item22" target="ItemDescription22">
   <data key="d1">ItemHasDescription</data>
 </edge>
-<edge id="0" source="Item21" target="ItemRole21">
+<edge id="0" source="Item22" target="ItemRole22">
   <data key="d1">ItemHasRole</data>
 </edge>
-<edge id="0" source="Item21" target="ItemOp21">
+<edge id="0" source="Item22" target="ItemOp22">
   <data key="d1">ItemHasOp</data>
 </edge>
-<edge id="0" source="Item21" target="ItemCount21">
+<edge id="0" source="Item22" target="ItemCount22">
   <data key="d1">ItemHasCount</data>
 </edge>
-<edge id="0" source="Item21" target="Item19">
+<edge id="0" source="Item22" target="Item23">
+  <data key="d1">HasA</data>
+</edge>
+<edge id="0" source="Item22" target="Item24">
+  <data key="d1">HasA</data>
+</edge>
+<edge id="0" source="Item23" target="ItemName23">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item23" target="ItemAffordance23">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item23" target="ItemDescription23">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item23" target="ItemRole23">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item23" target="ItemOp23">
+  <data key="d1">ItemHasOp</data>
+</edge>
+<edge id="0" source="Item23" target="ItemCount23">
+  <data key="d1">ItemHasCount</data>
+</edge>
+<edge id="0" source="Item23" target="Item22">
+  <data key="d1">IsPartOf</data>
+</edge>
+<edge id="0" source="Item24" target="ItemName24">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item24" target="ItemAffordance24">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item24" target="ItemDescription24">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item24" target="ItemRole24">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item24" target="ItemOp24">
+  <data key="d1">ItemHasOp</data>
+</edge>
+<edge id="0" source="Item24" target="ItemCount24">
+  <data key="d1">ItemHasCount</data>
+</edge>
+<edge id="0" source="Item24" target="Item22">
   <data key="d1">IsPartOf</data>
 </edge>
 </graph></graphml>
