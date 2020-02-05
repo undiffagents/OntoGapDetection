@@ -384,19 +384,21 @@ class questionSwitcher(object):
         objRole = predicateComponents[1]
         # objClass = predicateComponents[2]
         # objUnit = predicateComponents[3]
-        # objOperator = predicateComponents[4]
-        # objCount = predicateComponents[5].split(')')[0]
+        objOperator = predicateComponents[4]
+        objCount = predicateComponents[5].split(')')[0]
         # Get the item node in the original instruction which this SHOULD correspond to (via role)
-        DRSEquivalentNode = self.findItemNodeWithRole(objRole)
+        # DRSEquivalentNode = self.findItemNodeWithRole(objRole)
+        # Get item node in original instruction which this SHOULD correspond to (ignoring name for now)
+        DRSEquivalentNode = self.findMatchingItemNode(objRole, objOperator, objCount)
         # print(DRSEquivalentNode)
         # Replace the reference ID (from APE Webclient) to the equivalent node's reference ID (from the graph)
         if self.DRSGraph.graph.has_node(DRSEquivalentNode):
             DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode][CONST_NODE_VALUE_KEY]
             self.newToOldRefIDMapping.update({objRefId: DRSNodeRefID})
-            # print("NEW TO OLD OBJECT REF ID MAPPING", objRefId, DRSNodeRefID)
+            print("NEW TO OLD OBJECT REF ID MAPPING", objRefId, DRSNodeRefID)
         else:
             self.newToOldRefIDMapping.update({objRefId: None})
-            # print("NEW TO OLD OBJECT REF ID NULL MAPPING", objRefId)
+            print("NEW TO OLD OBJECT REF ID NULL MAPPING", objRefId)
         # WILL NEED TO FIND A WAY TO HANDLE NAME AND ROLE TO GET MORE ACCURATE PICTURE?
 
     # HANDLE PROPERTIES
@@ -476,10 +478,10 @@ class questionSwitcher(object):
                 if self.DRSGraph.graph.has_node(propertyNode):
                     DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                     self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
-                    # print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
+                    print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                 else:
                     self.newToOldRefIDMapping.update({propRefId: None})
-                    # print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
+                    print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
 
         if len(antonymNodes) > 0:
             if CONTROL_IDENTIFY_NEGATION == True:
@@ -633,6 +635,19 @@ class questionSwitcher(object):
                     # print("OBJECT NODES", objectNodes)
                     self.objectNode = objectNodes[0]
 
+        else:
+            if numberOfComponents == 3:
+                pass
+            elif numberOfComponents == 4:
+                # Get action node by its name
+                actionNode = self.findActionNodeConnectedToVerbNode(predVerb)
+                # Check if the subject node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
+                
+                # Check if the object node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
+                # If both are connected to the action node, then the action links them
+                # Else, unknown/no?
+                pass
+
             # Track how many items and properties, as item-item and item-property have different edges connecting them
             # print("SELF.ITEMCOUNT PRIORITY", self.itemCount)
             # print("SELF.PROPCOUNT PRIORITY", self.propertyCount)
@@ -745,6 +760,38 @@ class questionSwitcher(object):
                 # Update graph with name
                 return startNode
 
+    def findMatchingItemNode(self, role, operator, count):
+        itemNodes = []
+        matchingNodes = []
+        # Get list of nodes with the given role
+        roleNodes = self.ListOfNodesWithValue(role)
+        # Handle role nodes
+        # Get list of item nodes associated with the role nodes
+        for roleNode in roleNodes:
+            # print("ROLE NODE", roleNode)
+            itemNodes.append(self.findItemNodeConnectedToRoleNode(roleNode))
+        # Handle remaining matching nodes - check their operator and count nodes
+        for itemNode in itemNodes:
+            opNode = self.findOpNodeConnectedToItemNode(itemNode)
+            countNode = self.findCountNodeConnectedToItemNode(itemNode)
+            if self.DRSGraph.graph.nodes[opNode][CONST_NODE_VALUE_KEY] == operator and\
+                            self.DRSGraph.graph.nodes[countNode][CONST_NODE_VALUE_KEY] == count:
+                matchingNodes.append(itemNode)
+        if len(matchingNodes) > 1:
+            # RAISE A GAP HERE, Found more than one possible node with this value. Have user select.
+            print("GAP: More than one node found that matches the given description.")
+            print("DEBUG OPTION: Please select which node you would like to use.")
+            print(matchingNodes)
+            nodeSelected = input("Enter a node value")
+            while nodeSelected not in matchingNodes:
+                nodeSelected = input("Enter a node value")
+            return nodeSelected
+        elif len(matchingNodes) == 0:
+            # NO NODE FOUND matching the description given
+            print("GAP???  No node found matching the given description.")
+        else:
+            return matchingNodes.pop()
+
     # TEMP UNTIL FIGURE OUT NAME HANDLING
     def findItemNodeWithRole(self, strRole):
         # Get list of nodes with the given role
@@ -756,6 +803,18 @@ class questionSwitcher(object):
             roleItemNode = self.findItemNodeConnectedToRoleNode(roleNode)
             # print("ROLE ITEM NODE", roleItemNode)
             return roleItemNode
+
+    # TEMP UNTIL FIGURE OUT NAME HANDLING
+    def findActionNodeWithVerb(self, verb):
+        # Get list of nodes with the given role
+        verbNodes = self.ListOfNodesWithValue(verb)
+        # Handle role nodes
+        # Get list of item nodes associated with the role nodes
+        for verbNode in verbNodes:
+            # print("ROLE NODE", roleNode)
+            verbActionNode = self.findActionNodeConnectedToVerbNode(verbNode)
+            # print("ROLE ITEM NODE", roleItemNode)
+            return verbNode
 
     def findItemNodeWithNameAndRole(self, strName, strRole):
         # Get list of nodes with the given name
@@ -789,6 +848,15 @@ class questionSwitcher(object):
                 # print("FOUND NODE WITH NAME:", startNode)
                 return startNode
 
+    def findActionNodeConnectedToVerbNode(self, verbNode):
+        # Edges seem to be a little weird, so getting
+        inEdgesFromNode = self.DRSGraph.graph.in_edges(verbNode, data=True)
+        for startNode, endNode, edgeValues in inEdgesFromNode:
+            # If an edge has the value ItemHasName, then we want to return the start node (the item node itself)
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ACTION_HAS_VERB_EDGE:
+                # print("FOUND NODE WITH NAME:", startNode)
+                return startNode
+
     def findItemNodeConnectedToRoleNode(self, roleNode):
         inEdgesFromNode = self.DRSGraph.graph.in_edges(roleNode, data=True)
         for startNode, endNode, edgeValues in inEdgesFromNode:
@@ -796,6 +864,22 @@ class questionSwitcher(object):
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
                 # print("FOUND NODE WITH ROLE:", startNode)
                 return startNode
+
+    def findOpNodeConnectedToItemNode(self, itemNode):
+        outEdgesFromNode = self.DRSGraph.graph.out_edges(itemNode, data=True)
+        for startNode, endNode, edgeValues in outEdgesFromNode:
+            # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_OP_EDGE:
+                # print("FOUND NODE WITH ROLE:", startNode)
+                return endNode
+
+    def findCountNodeConnectedToItemNode(self, itemNode):
+        outEdgesFromNode = self.DRSGraph.graph.out_edges(itemNode, data=True)
+        for startNode, endNode, edgeValues in outEdgesFromNode:
+            # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_COUNT_EDGE:
+                # print("FOUND NODE WITH ROLE:", startNode)
+                return endNode
 
 
 def requestNewTermToNymCheck(originalTerm):
@@ -816,6 +900,7 @@ def APEWebserviceCall(phraseToDRS):
     error = False
     for line in returnedDRS:
         line = line.strip()
+        print(line)
         # Exclude first, useless line
         # Also skip empty lines (if line.strip() returns true if line is non-empty.)
         if line != '[]' and line.strip():
