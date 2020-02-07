@@ -12,8 +12,8 @@ Want to avoid:                                        Solution:
 
     cardinality restrictions				       Can only talk about specific, named, or singular things, or 
     								else rules about all of them (\forall, \exists)
-
-
+								
+    nested conditionals					       not allowed (weird to speak that way anyways)
 
 
 Translation rules:
@@ -21,6 +21,7 @@ Translation rules:
 	object(X,a,countable,na,eq,1)           =>       a(B)		atomic unary predicate
 	predicate(Y,be,named(B),X)
 		or
+	object(X,a,countable,na,eq,1)
 	predicate(Y,be,string(B),X)
 
 
@@ -44,10 +45,10 @@ Translation rules:
 												ONLY in this predicate. 
 
 
-	object(A,target,countable,na,eq,1)	=>	 predicateName(A) subClassOf predicateName(B)
+	object(A,target,countable,na,eq,1)	=>	 predicateName(A) subClassOf predicateName(B)?
 	   =>
-	object(B,letter,countable,na,eq,1)
-	predicate(C,be,A,B)
+	object(B,letter,countable,na,eq,1)		 predicateName(A) => predicateName(B)?
+	predicate(C,be,A,B)			 	 (not sure what symbol to use for implication)
 
 
 	ToDo

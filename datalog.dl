@@ -1,0 +1,24 @@
+%facts
+task(psychomotorvigilance).
+button(acknowledge).
+subject(subject).
+_box(_box).
+target(target).
+isPartOf(subject,psychomotorvigilance).
+isPartOf(acknowledge,psychomotorvigilance).
+isPartOf(_box,psychomotorvigilance).
+isPartOf(target,psychomotorvigilance).
+
+%rules
+letter(L) :- target(L).
+hasProperty(A,active) :- subject(C),task(A),isPartOf(C,A).
+remember(C,J) :- subject(C),target(J),appearsIn(J,H),button(E),_box(H).
+click(C,E) :- subject(C),target(J),appearsIn(J,H),button(E),_box(H).
+appearsIn(J,H) :- task(A),hasProperty(A,active),target(J),_box(H).
+
+%queries
+letter(L)?
+hasProperty(A,active)?
+remember(C,J)?
+click(C,E)?
+appearsIn(J,H)?

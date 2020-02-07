@@ -11,24 +11,26 @@ rm -f $output
 started=false
 while IFS= read -r line
 do
-  if [[ $line == *"  <drspp>"* ]]; then
-	echo $line | cut -c8-99 >> $output
-	started=true
-	continue
-  fi
-  if [[ $line == *"</drspp>"* ]]; then
+
+  if [[ $started ]] && [[ $line == *"</drspp>"* ]]; then
 	break
-  fi
-  if [[ $line == *"   =&gt;"* ]]; then
+  elif [[ $started == false ]] && [[ $line == *"  <drspp>"* ]]; then
+	line="$(echo "$line" | cut -c10-99)"
+	started=true
+  elif [[ $started ]] && [[ $line == *"   =&gt;"* ]]; then
 	line="   =>"
   fi
+
   if $started; then 
 	echo "$line" >> $output
   fi
+
 done < "$tmp"
+
 
 rm -f $tmp
 
+<<<<<<< HEAD
 letters=()
 names=()
 rm -f $output2
@@ -80,3 +82,6 @@ for i in "${names[@]}"
 do
 	echo $i
 done 
+=======
+python3 DRS_to_Rules.py
+>>>>>>> e56b28db80ddb34cd814a6faead0b8ae9ff6d61b

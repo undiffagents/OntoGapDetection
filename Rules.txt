@@ -1,0 +1,16 @@
+Facts:
+task(psychomotorvigilance)
+button(acknowledge)
+subject(subject)
+_box(_box)
+target(target)
+isPartOf(subject,psychomotorvigilance)
+isPartOf(acknowledge,psychomotorvigilance)
+isPartOf(_box,psychomotorvigilance)
+isPartOf(target,psychomotorvigilance)
+
+Rules:
+target(L) => letter(L)
+subject(C),task(A),isPartOf(C,A) => hasProperty(A,active)
+subject(C),target(J),appearsIn(J,H),button(E),_box(H) => remember(C,J),click(C,E)
+task(A),hasProperty(A,active),target(J),_box(H) => appearsIn(J,H)
