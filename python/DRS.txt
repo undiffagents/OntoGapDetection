@@ -1,0 +1,36 @@
+[A,B,C,D,E,F,G,H,I,J,K]
+object(A,task,countable,na,eq,1)-1/6
+predicate(B,be,named(psychomotorvigilance),A)-1/4
+object(C,subject,countable,na,eq,1)-2/4
+predicate(D,isPartOf,C,A)-2/8
+object(E,button,countable,na,eq,1)-3/6
+predicate(F,isPartOf,E,A)-3/10
+predicate(G,be,named(acknowledge),E)-3/4
+object(H,container,countable,na,eq,1)-4/4
+predicate(I,isPartOf,H,A)-4/8
+object(J,target,countable,na,geq,1)-5/6
+predicate(K,isPartOf,J,A)-5/10
+   [L]
+   object(L,target,countable,na,eq,1)-6/2
+   =>
+   [M,N]
+   object(M,letter,countable,na,eq,1)-6/5
+   predicate(N,be,L,M)-6/3
+   [O]
+   predicate(O,isPartOf,C,A)-7/6
+   =>
+   [P,Q]
+   property(P,active,pos)-7/13
+   predicate(Q,be,A,P)-7/12
+   [R]
+   predicate(R,appearsIn,J,H)-8/6
+   =>
+   [S,T]
+   predicate(S,click,C,E)-8/12
+   predicate(T,remember,C,J)-8/18
+   [U,V]
+   property(U,active,pos)-9/5
+   predicate(V,be,A,U)-9/4
+   =>
+   [W]
+   predicate(W,appearsIn,J,H)-9/11

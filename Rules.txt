@@ -11,6 +11,6 @@ isPartOf(target,psychomotorvigilance)
 
 Rules:
 target(L) => letter(L)
-subject(C),isPartOf(C,A),task(A) => hasProperty(A,active)
-container(H),button(E),subject(C),appearsIn(J,H),target(J) => remember(C,J),click(C,E)
+isPartOf(C,A),task(A),subject(C) => hasProperty(A,active)
+target(J),subject(C),appearsIn(J,H),container(H),button(E) => remember(C,J),click(C,E)
 task(A),hasProperty(A,active),target(J),container(H) => appearsIn(J,H)
