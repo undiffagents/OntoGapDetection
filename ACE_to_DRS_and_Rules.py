@@ -1,4 +1,5 @@
-import re
+import re,os
+from Dapylog import *
 
 def lowercase(s):
     return s[:1].lower() + s[1:] if s else ''
@@ -78,8 +79,8 @@ def parsePredicateLine(line):
             return 'hasProperty({},{})'.format(lookupTerm(line[1]),lookupProperty(line[2]))
         else:
             rules.append('{}({}) => {}({})'.format(a,line[1],b,line[1]))
-            datalog.append('{}({}) :- {}({}).'.format(b,line[1],a,line[1]))
-            queries.append('{}({})?'.format(b,line[1]))
+            datalog.append('{}({})->{}({})'.format(a,line[1],b,line[1]))
+            queries.append(('{}({})'.format(b,line[1]),b,line[1]))
             body = [] ; head= []
             return
     elif not antecedent and not consequent:
@@ -125,9 +126,34 @@ def checkVars(atom):
                 body.append(atom)
         
         vrsBody = determineVars(body)
-        vrsHead = determineVars(head)        
+        vrsHead = determineVars(head)   
+
+def stripXML(new,tmp):
+    newFile = open(new,"w")
+    tmpFile = open(tmp,"r")
+    started=False
+    for line in tmpFile:
+        if "</drspp>" in line:
+            break
+        elif "<drspp>" in line:
+            line = line.split(">")[1]
+            started=True
+        elif '&gt;' in line:
+            line=line.replace("&gt;",">")
+        if started: newFile.write(line)
+    newFile.close()
+    tmpFile.close()
+    os.remove(tmp)
 
 if __name__ == "__main__":
+    
+    aceFile = "ACE_in.txt"
+    tmp = "tmp_DRS.txt"
+    drsFile = "DRS.txt"
+
+    os.system('"./APE/ape.exe" -file {} -cdrspp > {}'.format(aceFile,tmp))
+    stripXML(drsFile,tmp)
+    
     varlist = []
     unGround = []
     objs = []
@@ -141,7 +167,7 @@ if __name__ == "__main__":
     body = []
     head= []
     
-    drsfile = open("DRS.txt","r")
+    drsfile = open(drsFile,"r")
     antecedent = False
     consequent = False
     unnamedFacts = []
@@ -175,8 +201,7 @@ if __name__ == "__main__":
                             if a in head: head.remove(a)
                         rules.append('{} => {}'.format(','.join(body),','.join(head))) 
                         for atom in head:
-                            datalog.append('{} :- {}.'.format(atom,','.join(body)))
-                            queries.append('{}?'.format(atom))
+                            datalog.append('{}->{}'.format('^'.join(body),atom))
                     body = [] ; head= []
         elif ' object' in line:
             objs.append(parseObjectLine(line)) 
@@ -195,8 +220,8 @@ if __name__ == "__main__":
     if len(body) > 0 and len(head) > 0: 
         rules.append('{} => {}'.format(','.join(body),','.join(head)))
         for atom in head:
-            datalog.append('{} :- {}.'.format(atom,','.join(body)))
-            queries.append('{}?'.format(atom))
+            datalog.append('{}->{}'.format('^'.join(body),atom))
+            queries.append((atom,atom.split("(")[0],(atom.split("(")[1]).split(")")[0]))
     
     drsfile.close()
     
@@ -208,7 +233,7 @@ if __name__ == "__main__":
 
     for fact in facts:
         rulesfile.write('{}\n'.format(fact))
-        datalogfile.write('{}.\n'.format(fact))
+        datalogfile.write('{}\n'.format(fact))
     
     rulesfile.write('\nRules:\n')
     datalogfile.write("\n%rules\n")
@@ -220,9 +245,11 @@ if __name__ == "__main__":
     
     rulesfile.close()
 
-    datalogfile.write("\n%queries\n")
+    #datalogfile.write("\n%queries\n")
     
-    for question in queries:
-        datalogfile.write('{}\n'.format(question))
+    #for i in range(len(queries)):
+        #datalogfile.write('{}?\n'.format(queries[i][0],queries[i][1],"" if i == len(queries)-1 else ","))
 
     datalogfile.close()
+    
+    Dapylog()
