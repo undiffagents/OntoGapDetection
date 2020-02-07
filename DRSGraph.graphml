@@ -5,7 +5,7 @@
   <data key="d0">A</data>
 </node>
 <node id="ItemName0">
-  <data key="d0"></data>
+  <data key="d0">Psychomotor-Vigilance</data>
 </node>
 <node id="ItemAffordance0">
   <data key="d0"></data>
@@ -20,7 +20,7 @@
   <data key="d0">C</data>
 </node>
 <node id="ItemName1">
-  <data key="d0"></data>
+  <data key="d0">Acknowledge</data>
 </node>
 <node id="ItemAffordance1">
   <data key="d0">isPartOf</data>
@@ -37,13 +37,27 @@
 <node id="ActionVerb2">
   <data key="d0">isPartOf</data>
 </node>
-<node id="Action3">
-  <data key="d0">G</data>
+<node id="Item3">
+  <data key="d0">F</data>
 </node>
-<node id="ActionVerb3">
+<node id="ItemName3">
+  <data key="d0"></data>
+</node>
+<node id="ItemAffordance3">
   <data key="d0">isPartOf</data>
 </node>
-<node id="None"/>
+<node id="ItemDescription3">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole3">
+  <data key="d0">target</data>
+</node>
+<node id="Action4">
+  <data key="d0">G</data>
+</node>
+<node id="ActionVerb4">
+  <data key="d0">isPartOf</data>
+</node>
 <edge id="0" source="Item0" target="ItemName0">
   <data key="d1">ItemHasName</data>
 </edge>
@@ -59,7 +73,7 @@
 <edge id="0" source="Item0" target="Action2">
   <data key="d1">IsTargetOf</data>
 </edge>
-<edge id="0" source="Item0" target="Action3">
+<edge id="0" source="Item0" target="Action4">
   <data key="d1">IsTargetOf</data>
 </edge>
 <edge id="0" source="Item1" target="ItemName1">
@@ -86,16 +100,28 @@
 <edge id="0" source="Action2" target="Item0">
   <data key="d1">HasTarget</data>
 </edge>
-<edge id="0" source="Action3" target="ActionVerb3">
+<edge id="0" source="Item3" target="ItemName3">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item3" target="ItemAffordance3">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item3" target="ItemDescription3">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item3" target="ItemRole3">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item3" target="Action4">
+  <data key="d1">Performs</data>
+</edge>
+<edge id="0" source="Action4" target="ActionVerb4">
   <data key="d1">ActionHasVerb</data>
 </edge>
-<edge id="0" source="Action3" target="None">
+<edge id="0" source="Action4" target="Item3">
   <data key="d1">IsPerformedBy</data>
 </edge>
-<edge id="0" source="Action3" target="Item0">
+<edge id="0" source="Action4" target="Item0">
   <data key="d1">HasTarget</data>
-</edge>
-<edge id="0" source="None" target="Action3">
-  <data key="d1">Performs</data>
 </edge>
 </graph></graphml>
