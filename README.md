@@ -10,6 +10,6 @@ ACE_to_DRS_and_Rules.py reads the ACE_in.txt file and runs the APE software on i
 
 https://github.com/aaronEberhart/Dapylog
 
-Integrated custom datalog reasoner for rules and facts extracted from instructions - can check for rule coverage _gaps_. Works but is repurposed from the link above. Will modify to suit this task at a later time.
+Integrated custom datalog reasoner for rules and facts extracted from instructions - can check for rule coverage **gaps**. Works but is repurposed from the link above. Will modify to suit this task at a later time.
 
 ## TODO: Make README
