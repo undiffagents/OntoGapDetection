@@ -178,7 +178,6 @@ class predicateSwitcher(object):
         elif numberOfComponents == 5:
             pass
 
-
     # For has_part() predicates
     def predicate_has_part(self, predicateContents):
         # Get predicate items
@@ -362,6 +361,8 @@ class questionSwitcher(object):
         self.itemCount = 0
         self.propertyCount = 0
         self.newToOldRefIDMapping = {}
+        # TODO: totally unsure if this is right
+        self.predicateTrue = None
 
     # Method to call the appropriate function based on the argument passed in
     def callFunction(self, predicateType, predicateContents, DRSGraph):
@@ -434,7 +435,7 @@ class questionSwitcher(object):
             raise ValueError('Too many components ?')
 
         # INITIAL NYM TESTING - will need to extend to other predicates as well of course
-        #TODO: Resolve occurs before identify here - that shouldn't be the case probably
+        # TODO: Resolve occurs before identify here - that shouldn't be the case probably
         adjectiveNymList, antonymList = getNyms(propAdjective)
         if CONTROL_RESOLVE_LEXICAL == True:
             adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
@@ -454,8 +455,8 @@ class questionSwitcher(object):
                 print("Lexical gap encountered - an adjective was introduced which is not currently in the system's "
                       "vocabulary.")
             if CONTROL_RESOLVE_LEXICAL == True:
-                #TODO: Allow user to manually choose yes/no to resolve?
-                #Should antonymNodes be counted here too?
+                # TODO: Allow user to manually choose yes/no to resolve?
+                # Should antonymNodes be counted here too?
                 while len(adjectiveNodes) < 1 and len(antonymNodes) < 1 and newNymCount < 3:
                     # No nodes "active"
                     newAdjective = requestNewTermToNymCheck(propAdjective)
@@ -640,13 +641,28 @@ class questionSwitcher(object):
                 pass
             elif numberOfComponents == 4:
                 # Get action node by its name
-                actionNode = self.findActionNodeConnectedToVerbNode(predVerb)
-                # Check if the subject node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
-                
-                # Check if the object node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
+                actionNode = self.findActionNodeWithVerb(predVerb)
+                # actionNode = self.findActionNodeConnectedToVerbNode(verbNode)
+                # Get the subject node
+                subjectNode = self.DRSGraph.FindItemWithValue(predSubjRef)
+                # Get the object nodes
+                objectNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
                 # If both are connected to the action node, then the action links them
+                subjectNodeConnected = False
+                objectNodeConnected = False
+                # Check if the subject node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
+                if self.HasEdgeWithValue(actionNode, subjectNode, CONST_HAS_TARGET_EDGE) or\
+                    self.HasEdgeWithValue(actionNode, subjectNode, CONST_HAS_SOURCE_EDGE):
+                    subjectNodeConnected = True
+                # Check if the object node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
+                if self.HasEdgeWithValue(actionNode, objectNode, CONST_HAS_TARGET_EDGE) or\
+                    self.HasEdgeWithValue(actionNode, objectNode, CONST_HAS_SOURCE_EDGE):
+                    objectNodeConnected = True
+                if subjectNodeConnected is True and objectNodeConnected is True:
+                    self.subjectNode = subjectNode
+                    self.objectNode = objectNode
+                    self.predicateTrue = True
                 # Else, unknown/no?
-                pass
 
             # Track how many items and properties, as item-item and item-property have different edges connecting them
             # print("SELF.ITEMCOUNT PRIORITY", self.itemCount)
@@ -709,6 +725,7 @@ class questionSwitcher(object):
                 return None
 
             # Assuming if there are two items, there are no properties in the predicate (again, may need corrections)
+            #TODO: This should learn to deal with predicates
             if self.itemCount == 2:
                 edgeBetweenNodes = self.DRSGraph.graph.get_edge_data(self.subjectNode, self.objectNode)
                 # Iterate through each edge connecting the two nodes if not empty list
@@ -721,8 +738,24 @@ class questionSwitcher(object):
                             return True
                     # If IsEquivalentTo edge is not found connecting the subject node and the object node then FALSE
                     return False
+                # TODO: This is probably not right
+                if self.predicateTrue is True:
+                    return True
             # If neither of the above scenarios has occurred, then unknown
             return None
+
+    # TODO: INEFFICIENT AS HELL
+    def HasEdgeWithValue(self, node1, node2, value):
+        for (n1, n2, datum) in self.DRSGraph.graph.edges([node1, node2], data=True):
+            if n1 == node1 and n2 == node2 and datum['value'] == value:
+                # print("FOUND")
+                return True
+            if n1 == node2 and n2 == node1 and datum['value'] == value:
+                # print("FOUND2")
+                return True
+        # print("done")
+        return False
+
 
     def ListOfNodesWithValueFromList(self, listOfNyms):
         nodeList = []
@@ -774,24 +807,31 @@ class questionSwitcher(object):
         for itemNode in itemNodes:
             opNode = self.findOpNodeConnectedToItemNode(itemNode)
             countNode = self.findCountNodeConnectedToItemNode(itemNode)
-            if self.DRSGraph.graph.nodes[opNode][CONST_NODE_VALUE_KEY] == operator and\
-                            self.DRSGraph.graph.nodes[countNode][CONST_NODE_VALUE_KEY] == count:
+            if self.DRSGraph.graph.nodes[opNode][CONST_NODE_VALUE_KEY] == operator and \
+                    self.DRSGraph.graph.nodes[countNode][CONST_NODE_VALUE_KEY] == count:
                 matchingNodes.append(itemNode)
-        if len(matchingNodes) > 1:
-            # RAISE A GAP HERE, Found more than one possible node with this value. Have user select.
-            print("GAP: More than one node found that matches the given description.")
-            print("DEBUG OPTION: Please select which node you would like to use.")
-            print(matchingNodes)
-            nodeSelected = input("Enter a node value")
-            while nodeSelected not in matchingNodes:
-                nodeSelected = input("Enter a node value")
-            return nodeSelected
-        elif len(matchingNodes) == 0:
-            # NO NODE FOUND matching the description given
-            print("GAP???  No node found matching the given description.")
+        if CONTROL_IDENTIFY_TARGET is True:
+            if len(matchingNodes) > 1:
+                # RAISE A GAP HERE, Found more than one possible node with this value. Have user select.
+                print("TARGET GAP???: More than one node found that describes an item with the role of " + role +
+                      ", the operator of " + operator + ", and the count of " + count + ".")
+                if CONTROL_RESOLVE_TARGET is True:
+                    print("DEBUG OPTION: Please select which node you would like to use.")
+                    print(matchingNodes)
+                    nodeSelected = input("Enter a node value")
+                    while nodeSelected not in matchingNodes:
+                        nodeSelected = input("Enter a node value")
+                    return nodeSelected
+            elif len(matchingNodes) == 0:
+                # NO NODE FOUND matching the description given
+                print("TARGET GAP???  No node found that describes an item with the role of " + role +
+                      ", the operator of " + operator + ", and the count of " + count + ".")
+            else:
+                return matchingNodes.pop()
         else:
             return matchingNodes.pop()
 
+    # TODO: NEED TO HANDLE CASE WHERE MULTIPLE ITEMS
     # TEMP UNTIL FIGURE OUT NAME HANDLING
     def findItemNodeWithRole(self, strRole):
         # Get list of nodes with the given role
@@ -804,7 +844,7 @@ class questionSwitcher(object):
             # print("ROLE ITEM NODE", roleItemNode)
             return roleItemNode
 
-    # TEMP UNTIL FIGURE OUT NAME HANDLING
+    # TODO: NEED TO HANDLE CASE WHERE MULTIPLE POSSIBLE ACTIONS
     def findActionNodeWithVerb(self, verb):
         # Get list of nodes with the given role
         verbNodes = self.ListOfNodesWithValue(verb)
@@ -813,8 +853,9 @@ class questionSwitcher(object):
         for verbNode in verbNodes:
             # print("ROLE NODE", roleNode)
             verbActionNode = self.findActionNodeConnectedToVerbNode(verbNode)
-            # print("ROLE ITEM NODE", roleItemNode)
-            return verbNode
+            if verbActionNode is not None:
+                return verbActionNode
+        return None
 
     def findItemNodeWithNameAndRole(self, strName, strRole):
         # Get list of nodes with the given name
@@ -850,6 +891,7 @@ class questionSwitcher(object):
 
     def findActionNodeConnectedToVerbNode(self, verbNode):
         # Edges seem to be a little weird, so getting
+        outEdgesFromNode = self.DRSGraph.graph.out_edges(verbNode, data=True)
         inEdgesFromNode = self.DRSGraph.graph.in_edges(verbNode, data=True)
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasName, then we want to return the start node (the item node itself)
@@ -938,7 +980,7 @@ def getNyms(wordToCheck):
     deriv = []
     uniqueNymList = []
     uniqueAntonymList = []
-    #if CONTROL_IDENTIFY_LEXICAL == True:
+    # if CONTROL_IDENTIFY_LEXICAL == True:
     # print(wordToCheck)
     # Get synsets of current word to check
     testWord = wordnet.synsets(wordToCheck)

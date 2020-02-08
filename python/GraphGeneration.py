@@ -175,8 +175,8 @@ class ItemGraph(object):
 
     # Methods to add different types of edges between nodes
     def addActionPerformerEdges(self, performerNode, actionNode):
-        self.graph.add_edge(performerNode, actionNode, value=CONST_PERFORMS_EDGE)
-        self.graph.add_edge(actionNode, performerNode, value=CONST_IS_PERFORMED_EDGE)
+        self.graph.add_edge(performerNode, actionNode, value=CONST_IS_SOURCE_EDGE)
+        self.graph.add_edge(actionNode, performerNode, value=CONST_HAS_SOURCE_EDGE)
 
     def addActionTargetEdges(self, actionNode, targetNode):
         self.graph.add_edge(actionNode, targetNode, value=CONST_HAS_TARGET_EDGE)
