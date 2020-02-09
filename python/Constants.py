@@ -1,6 +1,3 @@
-# INPUT FILE NAME/OUTPUT GRAPH NAME
-CONST_INPUT_FILE_NAME = 'VisualSearchNoNewTerms'
-
 # GRAPH GENERATION
 
 # Item Graph nodes and edge

@@ -9,7 +9,6 @@
       <change beforePath="$PROJECT_DIR$/python/Constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/Constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/ControlPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/ControlPanel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/DRSProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/DRSProcessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/GraphGeneration.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/GraphGeneration.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/jsonFile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/python/jsonFile.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

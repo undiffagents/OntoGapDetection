@@ -437,24 +437,24 @@ class questionSwitcher(object):
         # INITIAL NYM TESTING - will need to extend to other predicates as well of course
         # TODO: Resolve occurs before identify here - that shouldn't be the case probably
         adjectiveNymList, antonymList = getNyms(propAdjective)
-        if CONTROL_RESOLVE_LEXICAL == True:
+        if CONTROL_RESOLVE_LEXICAL is True:
             adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
         else:
             adjectiveNodes = self.ListOfNodesWithValue(propAdjective)
         # We
-        if CONTROL_IDENTIFY_NEGATION == True:
-            if CONTROL_RESOLVE_LEXICAL == True:
+        if CONTROL_IDENTIFY_NEGATION is True:
+            if CONTROL_RESOLVE_LEXICAL is True:
                 antonymNodes = self.ListOfNodesWithValueFromList(antonymList)
             else:
                 antonymNodes = self.ListOfNodesWithValue(propAdjective)
 
         # print("ADJECTIVE NODES", adjectiveNodes)
         newNymCount = 0
-        if CONTROL_IDENTIFY_LEXICAL == True:
+        if CONTROL_IDENTIFY_LEXICAL is True:
             if len(adjectiveNodes) < 1:
                 print("Lexical gap encountered - an adjective was introduced which is not currently in the system's "
                       "vocabulary.")
-            if CONTROL_RESOLVE_LEXICAL == True:
+            if CONTROL_RESOLVE_LEXICAL is True:
                 # TODO: Allow user to manually choose yes/no to resolve?
                 # Should antonymNodes be counted here too?
                 while len(adjectiveNodes) < 1 and len(antonymNodes) < 1 and newNymCount < 3:
@@ -1075,6 +1075,7 @@ def DRSToItem():
     # Declare relevant variables
     DRSGraph = None
     DRSLines = []
+    outputFiles = 0
     # Read in DRS instructions from file
     DRSFile = open(CONST_INPUT_FILE_NAME + ".txt", "r")
     for line in DRSFile:
@@ -1110,17 +1111,31 @@ def DRSToItem():
                     checkCurrentInstructionIf(DRSLines, index, currentInstruction, conditionalSets)
                 if instructionCountInMatchingIfBlock == 0:
                     DRSGraph = splitAndRun(currentInstruction, predSwitcher, False)
+                    # If we want to export a graph for each step of the way, we do that here
+                    if CONTROL_EXPORT_EACH_STEP_GRAPH is True:
+                        networkx.write_graphml_lxml(DRSGraph.graph, CONST_INPUT_FILE_NAME
+                                                    + "aINSTRUCTION_STEP" + str(outputFiles) + ".graphml")
+                        # Increase the counter
+                        outputFiles = outputFiles + 1
 
         # Break out of loop with exit
         else:
             break
 
+    # Reset the output counter so the conditionals are tracked separately from the instructions
+    outputFiles = 0
     # On end of reading in instructions
     # process conditionals first:
     for conditional in conditionalSets:
         if not conditional.processed:
-            # print("PRocessing conditional")
+            # print("Processing conditional")
             DRSGraph = runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets)
+            # If we want to export a graph for each step of the way, we do that here
+            if CONTROL_EXPORT_EACH_STEP_GRAPH is True:
+                networkx.write_graphml_lxml(DRSGraph.graph, CONST_INPUT_FILE_NAME
+                                            + "bCONDITIONAL_STEP" + str(outputFiles) + ".graphml")
+                # Increase the counter
+                outputFiles = outputFiles + 1
 
     # Set up questionSwitcher
     qSwitcher = questionSwitcher()
