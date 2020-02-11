@@ -1,5 +1,6 @@
 import re
 from Constants import *
+from GraphGeneration import *
 
 
 class Conditional:
@@ -121,7 +122,7 @@ def getConditionals(DRSLines, categorizedDRSLines):
         # print(conditionalIndex, conditionalLineNumber)
         # If item is an if or an if not
         if conditionalLines[conditionalLineNumber] == CONST_IF_TAG or \
-                    conditionalLines[conditionalLineNumber] == CONST_IF_NEGATION_TAG:
+                conditionalLines[conditionalLineNumber] == CONST_IF_NEGATION_TAG:
             # Get index for line
             ifLineIndex = conditionalLineNumber
             # If first conditional line overall, or first line since a then
@@ -138,8 +139,8 @@ def getConditionals(DRSLines, categorizedDRSLines):
             thenLineIndex = conditionalLineNumber
             currentConditional.addThenLine(DRSLines[thenLineIndex].split(')-')[0] + ')')
             # If last line overall or last then before an if
-            if ((conditionalIndex + 1) >= (len(conditionalLineIndexes))) or\
-                    conditionalLines[conditionalLineIndexes[conditionalIndex + 1]] == CONST_IF_TAG or\
+            if ((conditionalIndex + 1) >= (len(conditionalLineIndexes))) or \
+                    conditionalLines[conditionalLineIndexes[conditionalIndex + 1]] == CONST_IF_TAG or \
                     conditionalLines[conditionalLineIndexes[conditionalIndex + 1]] == CONST_IF_NEGATION_TAG:
                 currentConditional = anonymizeIfs(currentConditional)
                 conditionalList.append(currentConditional)
@@ -158,11 +159,24 @@ def splitAndRun(currentInstruction, predSwitcher, isConditionalConsequence):
     return DRSGraph
 
 
-def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets):
+def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets, conditionalCount):
     checkPreparedThenLines = []
     newIfNodes = []
     newThenNodes = []
     instructionCountInMatchingIfBlock = 0
+
+    # Create Conditional node
+    conditionalGraph = ConditionalGraph(conditionalCount)
+
+    # If a main graph already exists, then add the new graph in to it
+    if DRSGraph.graph is not None:
+        DRSGraph.graph = networkx.algorithms.operators.binary.compose(DRSGraph.graph,
+                                                                      conditionalGraph.graph)
+    # if no main graph exists, this is the main graph
+    else:
+        DRSGraph.graph = conditionalGraph.graph
+
+    conditionalNode = CONST_CONDITIONAL_NODE + str(conditionalCount)
 
     # HACKY WAY to avoid second parentheses being appended due to not having a -x/y at the end
     for thenLine in conditional.thenLines:
@@ -210,13 +224,22 @@ def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets):
     # Add edges between if and then nodes to signify which nodes get triggered by conditional
     # print("IF", newIfNodes)
     # print("THEN", newThenNodes)
+    # for ifNode in newIfNodes:
+    #    for thenNode in newThenNodes:
+    #        if ifNode is not None and thenNode is not None:
+    #            if conditional.negation is False:
+    #                DRSGraph.addConditionalTriggerEdges(ifNode, thenNode)
+    #            if conditional.negation is True:
+    #                DRSGraph.addConditionalNegationTriggerEdges(ifNode, thenNode)
     for ifNode in newIfNodes:
-        for thenNode in newThenNodes:
-            if ifNode is not None and thenNode is not None:
-                if conditional.negation is False:
-                    DRSGraph.addConditionalTriggerEdges(ifNode, thenNode)
-                if conditional.negation is True:
-                    DRSGraph.addConditionalNegationTriggerEdges(ifNode, thenNode)
+        if ifNode is not None and conditionalNode is not None:
+            if conditional.negation is False:
+                DRSGraph.addConditionalConditionEdges(ifNode, conditionalNode)
+            if conditional.negation is True:
+                DRSGraph.addConditionalNegationConditionEdges(ifNode, conditionalNode)
+    for thenNode in newThenNodes:
+        if thenNode is not None and conditionalNode is not None:
+            DRSGraph.addConditionalConsequenceEdges(thenNode, conditionalNode)
     conditional.markProcessed()
     return DRSGraph
 
@@ -261,4 +284,3 @@ def checkCurrentInstructionIf(DRSLines, currentInstructionIndex, currentInstruct
                 conditionalWithMatchingIfBlock = conditional
     # return DRSGraph
     return instructionCountInMatchingIfBlock, conditionalWithMatchingIfBlock
-

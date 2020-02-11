@@ -747,10 +747,10 @@ class questionSwitcher(object):
     # TODO: INEFFICIENT AS HELL
     def HasEdgeWithValue(self, node1, node2, value):
         for (n1, n2, datum) in self.DRSGraph.graph.edges([node1, node2], data=True):
-            if n1 == node1 and n2 == node2 and datum['value'] == value:
+            if n1 == node1 and n2 == node2 and datum[CONST_NODE_VALUE_KEY] == value:
                 # print("FOUND")
                 return True
-            if n1 == node2 and n2 == node1 and datum['value'] == value:
+            if n1 == node2 and n2 == node1 and datum[CONST_NODE_VALUE_KEY] == value:
                 # print("FOUND2")
                 return True
         # print("done")
@@ -1028,6 +1028,73 @@ def getNyms(wordToCheck):
     return uniqueNymList, uniqueAntonymList
 
 
+# HORRIBLY INEFFICIENT, BUT PROOF OF CONCEPT SO IT'S OKAY
+def checkForContextGap(DRSGraph):
+    # Get all the nodes in the graph
+    graphNodes = DRSGraph.graph.nodes()
+    # Establish the regex patterns to find the nodes of interest (in this case ItemX and PropertyX)
+    itemNodePattern = re.compile(CONST_REGEX_ITEM_NODE)
+    propertyNodePattern = re.compile(CONST_REGEX_PROPERTY_NODE)
+    # Identify the usual attribute edges which we want to ignore
+    itemEdgesToIgnore = [CONST_ITEM_HAS_NAME_EDGE, CONST_ITEM_HAS_AFFORDANCE_EDGE, CONST_ITEM_HAS_DESCRIPTION_EDGE,
+                         CONST_ITEM_HAS_ROLE_EDGE, CONST_ITEM_HAS_OP_EDGE, CONST_ITEM_HAS_COUNT_EDGE]
+    propertyEdgesToIgnore = [CONST_PROP_HAS_ADJECTIVE_EDGE, CONST_PROP_HAS_SEC_OBJECT_EDGE,
+                             CONST_PROP_HAS_TERT_OBJECT_EDGE, CONST_PROP_HAS_DEG_EDGE, CONST_PROP_HAS_COMP_TARGET_EDGE]
+    # Isolate the item and property nodes
+    itemNodes = []
+    propertyNodes = []
+    for node in graphNodes:
+        if re.match(itemNodePattern, node):
+            itemNodes.append(node)
+        elif re.match(propertyNodePattern, node):
+            propertyNodes.append(node)
+    print("DEBUG", itemNodes)
+    print("DEBUG", propertyNodes)
+
+    # Iterate through all the main ItemX nodes
+    for itemNode in itemNodes:
+        # Set the number of contextual edges for this node to none
+        contextualEdges = 0
+        # Get all the edges for the node
+        inEdgesFromNode = DRSGraph.graph.in_edges(itemNode, data=True)
+        outEdgesFromNode = DRSGraph.graph.out_edges(itemNode, data=True)
+        edgesFromNode = list(inEdgesFromNode) + list(outEdgesFromNode)
+        # For each edge in the node
+        for startNode, endNode, edgeData in edgesFromNode:
+            # Get the value of the edge
+            edgeValue = edgeData[CONST_NODE_VALUE_KEY]
+            # if there is an edge which we don't ignore (a contextual edge), then we increase that count
+            if edgeValue not in itemEdgesToIgnore:
+                contextualEdges = contextualEdges + 1
+        # If there are no contextual edges, immediately raise a context gap
+        if contextualEdges == 0:
+            print("CONTEXT GAP IDENTIFIED: ", itemNode, " has no contextual edges and thus has no context in the task")
+
+    # Iterate through all the main PropertyX nodes
+    for propertyNode in propertyNodes:
+        # Set the number of contextual edges for this node to none
+        contextualEdges = 0
+        # Get all the edges for the node
+        inEdgesFromNode = DRSGraph.graph.in_edges(propertyNode, data=True)
+        outEdgesFromNode = DRSGraph.graph.out_edges(propertyNode, data=True)
+        edgesFromNode = list(inEdgesFromNode) + list(outEdgesFromNode)
+        # For each edge in the node
+        for startNode, endNode, edgeData in edgesFromNode:
+            # Get the value of the edge
+            edgeValue = edgeData[CONST_NODE_VALUE_KEY]
+            # if there is an edge which we don't ignore (a contextual edge), then we increase that count
+            if edgeValue not in propertyEdgesToIgnore:
+                contextualEdges = contextualEdges + 1
+        # If there are no contextual edges, immediately raise a context gap
+        if contextualEdges == 0:
+            print("CONTEXT GAP IDENTIFIED: ", propertyNode, " has no contextual edges and "
+                                                            "thus has no context in the task")
+    # Ignore the edges which are the usual ones (list of ignored edges stored in array)
+    # For each main ItemX and PropertyX node, see if there are edges besides the usual attribute edges
+    # If yes, no problem with that node, move on
+
+    # If no, context gap found.
+
 # TODO: handle 5-item predicate() tags
 # TODO: handle conditionals - SPECIFICALLY X -> Y; Y -> Z, how to avoid Y just being stored twice (target appears)
 # TODO: make overarching situationGraph which contains Item/Prop graphs and has graph-wide functions (move some to it)
@@ -1076,6 +1143,7 @@ def DRSToItem():
     DRSGraph = None
     DRSLines = []
     outputFiles = 0
+    conditionalCount = 0
     # Read in DRS instructions from file
     DRSFile = open(CONST_INPUT_FILE_NAME + ".txt", "r")
     for line in DRSFile:
@@ -1129,13 +1197,19 @@ def DRSToItem():
     for conditional in conditionalSets:
         if not conditional.processed:
             # print("Processing conditional")
-            DRSGraph = runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets)
+            DRSGraph = runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets, conditionalCount)
+            conditionalCount = conditionalCount + 1
             # If we want to export a graph for each step of the way, we do that here
             if CONTROL_EXPORT_EACH_STEP_GRAPH is True:
                 networkx.write_graphml_lxml(DRSGraph.graph, CONST_INPUT_FILE_NAME
                                             + "bCONDITIONAL_STEP" + str(outputFiles) + ".graphml")
                 # Increase the counter
                 outputFiles = outputFiles + 1
+
+    # Post-instruction pre-query gap identification goes here
+    # In this case, Context Gap
+    if CONTROL_IDENTIFY_CONTEXT == True:
+        checkForContextGap(DRSGraph)
 
     # Set up questionSwitcher
     qSwitcher = questionSwitcher()

@@ -81,6 +81,13 @@ def generateRelationGraph(graphNumber):
     return relationGraph
 
 
+def generateConditionalGraph(graphNumber):
+    conditionalGraph = networkx.MultiDiGraph()
+    conditionalGraph.add_node(CONST_CONDITIONAL_NODE + str(graphNumber), value=CONST_CONDITIONAL_NODE + str(graphNumber))
+
+    return conditionalGraph
+
+
 class ItemGraph(object):
     # Constructor
     def __init__(self, graphNumber):
@@ -198,6 +205,7 @@ class ItemGraph(object):
         self.graph.add_edge(parentNode, relationNode, value=CONST_RELATION_IS_PARENT_EDGE)
         self.graph.add_edge(relationNode, parentNode, value=CONST_RELATION_HAS_ATTRIBUTE_EDGE)
 
+    # Add positive conditional trigger edge between nodes - POSSIBLY DEPRECATED
     def addConditionalTriggerEdges(self, ifNodeValue, thenNodeValue):
         ifNode = self.FindItemWithValue(ifNodeValue)
         thenNode = self.FindItemWithValue(thenNodeValue)
@@ -207,6 +215,7 @@ class ItemGraph(object):
                 self.graph.add_edge(ifNode, thenNode, value=CONST_TRIGGERS_IF_TRUE_EDGE)
                 self.graph.add_edge(thenNode, ifNode, value=CONST_TRIGGERED_BY_EDGE)
 
+    # Add negative conditional trigger edge between nodes - POSSIBLY DEPRECATED
     def addConditionalNegationTriggerEdges(self, ifNodeValue, thenNodeValue):
         ifNode = self.FindItemWithValue(ifNodeValue)
         thenNode = self.FindItemWithValue(thenNodeValue)
@@ -215,6 +224,36 @@ class ItemGraph(object):
             if CONST_ACTION_NODE in thenNode:
                 self.graph.add_edge(ifNode, thenNode, value=CONST_TRIGGERS_IF_FALSE_EDGE)
                 self.graph.add_edge(thenNode, ifNode, value=CONST_TRIGGERED_BY_EDGE)
+
+    # Add positive condition edge between if node and conditional node
+    def addConditionalConditionEdges(self, ifNodeValue, conditionalNodeValue):
+        ifNode = self.FindItemWithValue(ifNodeValue)
+        conditionalNode = self.FindItemWithValue(conditionalNodeValue)
+        # We only want to trigger actions, not statement
+        if ifNode is not None and conditionalNode is not None:
+            if CONST_CONDITIONAL_NODE in conditionalNode:
+                self.graph.add_edge(ifNode, conditionalNode, value=CONST_TRUE_CONDITION_OF_EDGE)
+                self.graph.add_edge(conditionalNode, ifNode, value=CONST_HAS_TRUE_CONDITION_EDGE)
+
+    # Add negative condition edge between if node and conditional node
+    def addConditionalNegationConditionEdges(self, ifNodeValue, conditionalNodeValue):
+        ifNode = self.FindItemWithValue(ifNodeValue)
+        conditionalNode = self.FindItemWithValue(conditionalNodeValue)
+        # We only want to trigger actions, not statement
+        if ifNode is not None and conditionalNode is not None:
+            if CONST_CONDITIONAL_NODE in conditionalNode:
+                self.graph.add_edge(ifNode, conditionalNode, value=CONST_FALSE_CONDITION_OF_EDGE)
+                self.graph.add_edge(conditionalNode, ifNode, value=CONST_HAS_FALSE_CONDITION_EDGE)
+
+    # Add consequence edge between then node and conditional node
+    def addConditionalConsequenceEdges(self, thenNodeValue, conditionalNodeValue):
+        thenNode = self.FindItemWithValue(thenNodeValue)
+        conditionalNode = self.FindItemWithValue(conditionalNodeValue)
+        # We only want to trigger actions, not statement
+        if thenNode is not None and conditionalNode is not None:
+            if CONST_CONDITIONAL_NODE in conditionalNode:
+                self.graph.add_edge(thenNode, conditionalNode, value=CONST_CONSEQUENCE_OF_EDGE)
+                self.graph.add_edge(conditionalNode, thenNode, value=CONST_HAS_CONSEQUENCE_EDGE)
 
     # Methods to replace values of specific nodes
     def ReplaceItemAffordanceAtSpecificNode(self, nodeToAddAffordance, newAffordance):
@@ -467,6 +506,40 @@ class RelationGraph(object):
 
     # Method to find a node containing a given value
     def FindRelationWithValue(self, valueToFind):
+        if self.graph is not None:
+            # iterate through all graph nodes
+            for node, values in self.graph.nodes.data():
+                # If the current Node's value = the value passed in
+                if values[CONST_NODE_VALUE_KEY] == valueToFind:
+                    return node
+        return None
+
+
+# Relation Graph
+class ConditionalGraph(object):
+    # Constructor
+    def __init__(self, graphNumber):
+        self.graphNumber = graphNumber
+        if graphNumber is not None:
+            self.graph = generateConditionalGraph(self.graphNumber)
+        else:
+            self.graph = None
+
+    # Generic append method based on whatever target is passed in
+    def __append(self, target, newValue):
+        currentValue = self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY]
+        if currentValue == '':
+            updatedValue = newValue
+        else:
+            updatedValue = currentValue + '|' + newValue
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
+
+    # Generic replace method based on whatever target is passed in
+    def __replace(self, target, newValue):
+        self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = newValue
+
+    # Method to find a node containing a given value
+    def FindConditionalWithValue(self, valueToFind):
         if self.graph is not None:
             # iterate through all graph nodes
             for node, values in self.graph.nodes.data():
