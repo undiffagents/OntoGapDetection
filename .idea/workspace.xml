@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92560cf3-bb85-4b4b-bc90-84e6d49a5286" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/ConditionalHandling.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/ConditionalHandling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/Constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/Constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/python/ControlPanel.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/ControlPanel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/DRSProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/DRSProcessing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/GraphGeneration.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/GraphGeneration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python/jsonFile.txt" beforeDir="false" afterPath="$PROJECT_DIR$/python/jsonFile.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
