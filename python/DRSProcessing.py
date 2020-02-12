@@ -148,6 +148,7 @@ class predicateSwitcher(object):
     def handle_general_predicate(self, predSubjRef, predVerb, predReferenceVariable,
                                  numberOfComponents, predDirObjRef=None):
         # Create Action Node
+        # TODO: CHECK IF THIS CAN'T BE REWORKED TO AVOID USING THIS
         self.DRSGraph.AppendItemAffordanceAtSpecificNode(predSubjRef, predVerb)
         actionGraph = ActionGraph(self.graphNumber)
         actionGraph.appendActionValue(predReferenceVariable)
@@ -332,6 +333,7 @@ class predicateSwitcher(object):
                     # Update graph with name
                     adjectiveNode = endNode
             if adjectiveNode is not None:
+                #TODO: SEE IF I CAN UPDATE THIS TO NOT USE THIS FUNCTION
                 self.DRSGraph.AppendValueAtSpecificNode(adjectiveNode, propAdjective)
             else:
                 print("Error - Encountered duplicate reference for property but did not find adjective "
@@ -398,6 +400,7 @@ class questionSwitcher(object):
         if self.DRSGraph.graph.has_node(DRSEquivalentNode):
             DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode][CONST_NODE_VALUE_KEY]
             self.newToOldRefIDMapping.update({objRefId: DRSNodeRefID})
+            self.itemCount = self.itemCount + 1
             print("NEW TO OLD OBJECT REF ID MAPPING", objRefId, DRSNodeRefID)
         else:
             self.newToOldRefIDMapping.update({objRefId: None})
@@ -474,6 +477,7 @@ class questionSwitcher(object):
                 # print("AdjectiveNode", node)
                 # Add new term into adjective node in order to grow our vocabulary
                 if propAdjective not in self.DRSGraph.graph.node[node][CONST_NODE_VALUE_KEY]:
+                    # TODO: SEE IF I CAN CHANGE THIS  TO NOT USE THIS FUNCTION
                     self.DRSGraph.AppendValueAtSpecificNode(node, propAdjective)
                 propertyNode = self.getPropertyNodeFromAdjective(node)
                 self.nodesWithGivenProperty.append(propertyNode)
@@ -481,6 +485,7 @@ class questionSwitcher(object):
                 if self.DRSGraph.graph.has_node(propertyNode):
                     DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                     self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
+                    self.propertyCount = self.propertyCount + 1
                     print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                 else:
                     self.newToOldRefIDMapping.update({propRefId: None})
@@ -501,6 +506,7 @@ class questionSwitcher(object):
                         if self.DRSGraph.graph.has_node(propertyNode):
                             DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                             self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
+                            self.propertyCount = self.propertyCount + 1
                             # print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                         else:
                             self.newToOldRefIDMapping.update({propRefId: None})
@@ -608,11 +614,7 @@ class questionSwitcher(object):
                     # Need to figure out a case if more than one item with the name
             # If the subject reference is another variable, not a proper name
             else:
-                subjectRefVar = predSubjRef
-                subjectNodes = self.ListOfNodesWithValue(subjectRefVar)
-                if len(subjectNodes) > 0:
-                    # print("SUBJECT NODES", subjectNodes)
-                    self.subjectNode = subjectNodes[0]
+                self.handleActionQuestion(numberOfComponents, predVerb, predSubjRef, predDirObjRef)
 
             # Same as above for OBJECT reference
             if CONST_PRED_SUBJ_NAMED in predDirObjRef:
@@ -632,55 +634,54 @@ class questionSwitcher(object):
                     # Need to figure out a case if more than one item with the name
             # If the subject reference is another variable, not a proper name
             else:
-                objectRefVar = predDirObjRef
-                objectNodes = self.ListOfNodesWithValue(objectRefVar)
-                if len(objectNodes) > 0:
-                    # print("OBJECT NODES", objectNodes)
-                    self.objectNode = objectNodes[0]
+                self.handleActionQuestion(numberOfComponents, predVerb, predSubjRef, predDirObjRef)
 
         else:
-            if numberOfComponents == 3:
-                pass
-            elif numberOfComponents == 4:
-                # Get action node by its name
-                actionNode = self.findActionNodeWithVerb(predVerb)
-                # actionNode = self.findActionNodeConnectedToVerbNode(verbNode)
-                # Get the subject node
-                subjectNode = self.DRSGraph.FindItemWithValue(predSubjRef)
-                # Get the object nodes
-                objectNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
-                # If both are connected to the action node, then the action links them
-                subjectNodeConnected = False
-                objectNodeConnected = False
-                # Check if the subject node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
-                if self.HasEdgeWithValue(actionNode, subjectNode, CONST_HAS_TARGET_EDGE) or\
-                    self.HasEdgeWithValue(actionNode, subjectNode, CONST_HAS_SOURCE_EDGE):
-                    subjectNodeConnected = True
-                # Check if the object node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
-                if self.HasEdgeWithValue(actionNode, objectNode, CONST_HAS_TARGET_EDGE) or\
-                    self.HasEdgeWithValue(actionNode, objectNode, CONST_HAS_SOURCE_EDGE):
-                    objectNodeConnected = True
-                if subjectNodeConnected is True and objectNodeConnected is True:
-                    self.subjectNode = subjectNode
-                    self.objectNode = objectNode
-                    self.predicateTrue = True
-                # Else, unknown/no?
+            self.handleActionQuestion(numberOfComponents, predVerb, predSubjRef, predDirObjRef)
 
             # Track how many items and properties, as item-item and item-property have different edges connecting them
             # print("SELF.ITEMCOUNT PRIORITY", self.itemCount)
             # print("SELF.PROPCOUNT PRIORITY", self.propertyCount)
             # print("SELF.SUBJECTNODE", self.subjectNode)
             # print("SELF.OBJECTNODE", self.objectNode)
-            if self.subjectNode is not None:
-                if CONST_ITEM_NODE in self.subjectNode:
-                    self.itemCount = self.itemCount + 1
-                elif CONST_PROP_NODE in self.subjectNode:
-                    self.propertyCount = self.propertyCount + 1
-            if self.objectNode is not None:
-                if CONST_ITEM_NODE in self.objectNode:
-                    self.itemCount = self.itemCount + 1
-                elif CONST_PROP_NODE in self.objectNode:
-                    self.propertyCount = self.propertyCount + 1
+            # if self.subjectNode is not None:
+            #   if CONST_ITEM_NODE in self.subjectNode:
+            #       self.itemCount = self.itemCount + 1
+            #   elif CONST_PROP_NODE in self.subjectNode:
+            #       self.propertyCount = self.propertyCount + 1
+            #if self.objectNode is not None:
+            #    if CONST_ITEM_NODE in self.objectNode:
+            #        self.itemCount = self.itemCount + 1
+            #    elif CONST_PROP_NODE in self.objectNode:
+            #        self.propertyCount = self.propertyCount + 1
+
+    def handleActionQuestion(self, numberOfComponents, predVerb, predSubjRef, predDirObjRef=None):
+        if numberOfComponents == 3:
+            pass
+        elif numberOfComponents == 4:
+            # Get action node by its name
+            actionNode = self.findActionNodeWithVerb(predVerb)
+            # actionNode = self.findActionNodeConnectedToVerbNode(verbNode)
+            # Get the subject node
+            subjectNode = self.DRSGraph.FindItemWithValue(predSubjRef)
+            # Get the object nodes
+            objectNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
+            # If both are connected to the action node, then the action links them
+            subjectNodeConnected = False
+            objectNodeConnected = False
+            # Check if the subject node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
+            if self.HasEdgeWithValue(actionNode, subjectNode, CONST_HAS_TARGET_EDGE) or \
+                    self.HasEdgeWithValue(actionNode, subjectNode, CONST_HAS_SOURCE_EDGE):
+                subjectNodeConnected = True
+            # Check if the object node has an "IsTargetOf" or "IsSourceOf" relationship with the action node
+            if self.HasEdgeWithValue(actionNode, objectNode, CONST_HAS_TARGET_EDGE) or \
+                    self.HasEdgeWithValue(actionNode, objectNode, CONST_HAS_SOURCE_EDGE):
+                objectNodeConnected = True
+            if subjectNodeConnected is True and objectNodeConnected is True:
+                self.subjectNode = subjectNode
+                self.objectNode = objectNode
+                self.predicateTrue = True
+            # Else, unknown/no?
 
     def resolveQuestion(self):
         # print("NAMED SUBJECT NODE", self.subjectNode)

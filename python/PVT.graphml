@@ -8,7 +8,7 @@
   <data key="d0">"Psychomotor-Vigilance"</data>
 </node>
 <node id="ItemAffordance0">
-  <data key="d0"></data>
+  <data key="d0">be</data>
 </node>
 <node id="ItemDescription0">
   <data key="d0"></data>
@@ -92,7 +92,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemAffordance4">
-  <data key="d0">appear</data>
+  <data key="d0">be|appear</data>
 </node>
 <node id="ItemDescription4">
   <data key="d0"></data>
@@ -128,67 +128,97 @@
   <data key="d0">1</data>
 </node>
 <node id="Action6">
-  <data key="d0">K</data>
+  <data key="d0">J</data>
 </node>
 <node id="ActionVerb6">
+  <data key="d0">be</data>
+</node>
+<node id="Conditional0">
+  <data key="d0">Conditional0</data>
+</node>
+<node id="Action7">
+  <data key="d0">K</data>
+</node>
+<node id="ActionVerb7">
   <data key="d0">appear</data>
 </node>
-<node id="ModPP7">
+<node id="ModPP8">
   <data key="d0">Kmod</data>
 </node>
-<node id="ModPPPrep7">
+<node id="ModPPPrep8">
   <data key="d0">in</data>
 </node>
-<node id="Item8">
+<node id="Item9">
   <data key="d0">L</data>
 </node>
-<node id="ItemName8">
+<node id="ItemName9">
   <data key="d0"></data>
 </node>
-<node id="ItemAffordance8">
+<node id="ItemAffordance9">
   <data key="d0">click|remember</data>
 </node>
-<node id="ItemDescription8">
+<node id="ItemDescription9">
   <data key="d0"></data>
 </node>
-<node id="ItemRole8">
+<node id="ItemRole9">
   <data key="d0">subject</data>
 </node>
-<node id="ItemOp8">
+<node id="ItemOp9">
   <data key="d0">eq</data>
 </node>
-<node id="ItemCount8">
+<node id="ItemCount9">
   <data key="d0">1</data>
 </node>
-<node id="Action9">
+<node id="Action10">
   <data key="d0">M</data>
 </node>
-<node id="ActionVerb9">
+<node id="ActionVerb10">
   <data key="d0">click</data>
 </node>
-<node id="Action10">
+<node id="Action11">
   <data key="d0">N</data>
 </node>
-<node id="ActionVerb10">
+<node id="ActionVerb11">
   <data key="d0">remember</data>
 </node>
-<node id="Property11">
+<node id="Conditional1">
+  <data key="d0">Conditional1</data>
+</node>
+<node id="Property12">
   <data key="d0">O</data>
 </node>
-<node id="PropertyAdjective11">
+<node id="PropertyAdjective12">
   <data key="d0">active</data>
 </node>
-<node id="PropertySecondaryObject11">
+<node id="PropertySecondaryObject12">
   <data key="d0"></data>
 </node>
-<node id="PropertyTertiaryObject11">
+<node id="PropertyTertiaryObject12">
   <data key="d0"></data>
 </node>
-<node id="PropertyDegree11">
+<node id="PropertyDegree12">
   <data key="d0">pos</data>
 </node>
-<node id="PropertyCompTarget11">
+<node id="PropertyCompTarget12">
   <data key="d0"></data>
+</node>
+<node id="Action13">
+  <data key="d0">P</data>
+</node>
+<node id="ActionVerb13">
+  <data key="d0">be</data>
+</node>
+<node id="Action14">
+  <data key="d0">Q</data>
+</node>
+<node id="ActionVerb14">
+  <data key="d0">appear</data>
+</node>
+<node id="ModPP15">
+  <data key="d0">Qmod</data>
+</node>
+<node id="ModPPPrep15">
+  <data key="d0">in</data>
 </node>
 <edge id="0" source="Item0" target="ItemName0">
   <data key="d1">ItemHasName</data>
@@ -211,8 +241,8 @@
 <edge id="0" source="Item0" target="Item3">
   <data key="d1">HasA</data>
 </edge>
-<edge id="0" source="Item0" target="Property11">
-  <data key="d1">Is</data>
+<edge id="0" source="Item0" target="Action13">
+  <data key="d1">IsSourceOf</data>
 </edge>
 <edge id="0" source="Item1" target="ItemName1">
   <data key="d1">ItemHasName</data>
@@ -232,7 +262,7 @@
 <edge id="0" source="Item1" target="ItemCount1">
   <data key="d1">ItemHasCount</data>
 </edge>
-<edge id="0" source="Item1" target="Action9">
+<edge id="0" source="Item1" target="Action10">
   <data key="d1">IsTargetOf</data>
 </edge>
 <edge id="0" source="Item2" target="ItemName2">
@@ -256,7 +286,10 @@
 <edge id="0" source="Item2" target="Item3">
   <data key="d1">IsMemberOf</data>
 </edge>
-<edge id="0" source="Item2" target="ModPP7">
+<edge id="0" source="Item2" target="ModPP8">
+  <data key="d1">isModifiedBy</data>
+</edge>
+<edge id="0" source="Item2" target="ModPP15">
   <data key="d1">isModifiedBy</data>
 </edge>
 <edge id="0" source="Item3" target="ItemName3">
@@ -307,10 +340,13 @@
 <edge id="0" source="Item4" target="Item3">
   <data key="d1">IsMemberOf</data>
 </edge>
-<edge id="0" source="Item4" target="Item5">
-  <data key="d1">IsEquivalentTo</data>
-</edge>
 <edge id="0" source="Item4" target="Action6">
+  <data key="d1">IsSourceOf</data>
+</edge>
+<edge id="0" source="Item4" target="Action7">
+  <data key="d1">IsSourceOf</data>
+</edge>
+<edge id="0" source="Item4" target="Action14">
   <data key="d1">IsSourceOf</data>
 </edge>
 <edge id="0" source="Item5" target="ItemName5">
@@ -331,10 +367,10 @@
 <edge id="0" source="Item5" target="ItemCount5">
   <data key="d1">ItemHasCount</data>
 </edge>
-<edge id="0" source="Item5" target="Item4">
-  <data key="d1">IsEquivalentTo</data>
+<edge id="0" source="Item5" target="Action6">
+  <data key="d1">IsTargetOf</data>
 </edge>
-<edge id="0" source="Item5" target="Action10">
+<edge id="0" source="Item5" target="Action11">
   <data key="d1">IsTargetOf</data>
 </edge>
 <edge id="0" source="Action6" target="ActionVerb6">
@@ -343,91 +379,154 @@
 <edge id="0" source="Action6" target="Item4">
   <data key="d1">HasSource</data>
 </edge>
-<edge id="0" source="Action6" target="ModPP7">
-  <data key="d1">isModifiedBy</data>
-</edge>
-<edge id="0" source="Action6" target="Action9">
-  <data key="d1">triggersIfTrue</data>
-</edge>
-<edge id="0" source="Action6" target="Action10">
-  <data key="d1">triggersIfTrue</data>
-</edge>
-<edge id="0" source="Action6" target="Property11">
-  <data key="d1">isTriggeredBy</data>
-</edge>
-<edge id="0" source="ModPP7" target="ModPPPrep7">
-  <data key="d1">ModPPHasPrep</data>
-</edge>
-<edge id="0" source="ModPP7" target="Action6">
-  <data key="d1">ModifiesVerb</data>
-</edge>
-<edge id="0" source="ModPP7" target="Item2">
-  <data key="d1">ModifiesObject</data>
-</edge>
-<edge id="0" source="Item8" target="ItemName8">
-  <data key="d1">ItemHasName</data>
-</edge>
-<edge id="0" source="Item8" target="ItemAffordance8">
-  <data key="d1">ItemHasAffordance</data>
-</edge>
-<edge id="0" source="Item8" target="ItemDescription8">
-  <data key="d1">ItemHasDescription</data>
-</edge>
-<edge id="0" source="Item8" target="ItemRole8">
-  <data key="d1">ItemHasRole</data>
-</edge>
-<edge id="0" source="Item8" target="ItemOp8">
-  <data key="d1">ItemHasOp</data>
-</edge>
-<edge id="0" source="Item8" target="ItemCount8">
-  <data key="d1">ItemHasCount</data>
-</edge>
-<edge id="0" source="Item8" target="Action9">
-  <data key="d1">IsSourceOf</data>
-</edge>
-<edge id="0" source="Item8" target="Action10">
-  <data key="d1">IsSourceOf</data>
-</edge>
-<edge id="0" source="Action9" target="ActionVerb9">
-  <data key="d1">ActionHasVerb</data>
-</edge>
-<edge id="0" source="Action9" target="Item8">
-  <data key="d1">HasSource</data>
-</edge>
-<edge id="0" source="Action9" target="Item1">
+<edge id="0" source="Action6" target="Item5">
   <data key="d1">HasTarget</data>
 </edge>
-<edge id="0" source="Action9" target="Action6">
-  <data key="d1">isTriggeredBy</data>
+<edge id="0" source="Conditional0" target="Action7">
+  <data key="d1">HasTrueCondition</data>
+</edge>
+<edge id="0" source="Conditional0" target="Action11">
+  <data key="d1">HasConsequence</data>
+</edge>
+<edge id="0" source="Conditional0" target="Item9">
+  <data key="d1">HasConsequence</data>
+</edge>
+<edge id="0" source="Conditional0" target="Action10">
+  <data key="d1">HasConsequence</data>
+</edge>
+<edge id="0" source="Action7" target="ActionVerb7">
+  <data key="d1">ActionHasVerb</data>
+</edge>
+<edge id="0" source="Action7" target="Item4">
+  <data key="d1">HasSource</data>
+</edge>
+<edge id="0" source="Action7" target="ModPP8">
+  <data key="d1">isModifiedBy</data>
+</edge>
+<edge id="0" source="Action7" target="Conditional0">
+  <data key="d1">TrueConditionOf</data>
+</edge>
+<edge id="0" source="ModPP8" target="ModPPPrep8">
+  <data key="d1">ModPPHasPrep</data>
+</edge>
+<edge id="0" source="ModPP8" target="Action7">
+  <data key="d1">ModifiesVerb</data>
+</edge>
+<edge id="0" source="ModPP8" target="Item2">
+  <data key="d1">ModifiesObject</data>
+</edge>
+<edge id="0" source="Item9" target="ItemName9">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item9" target="ItemAffordance9">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item9" target="ItemDescription9">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item9" target="ItemRole9">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item9" target="ItemOp9">
+  <data key="d1">ItemHasOp</data>
+</edge>
+<edge id="0" source="Item9" target="ItemCount9">
+  <data key="d1">ItemHasCount</data>
+</edge>
+<edge id="0" source="Item9" target="Action10">
+  <data key="d1">IsSourceOf</data>
+</edge>
+<edge id="0" source="Item9" target="Action11">
+  <data key="d1">IsSourceOf</data>
+</edge>
+<edge id="0" source="Item9" target="Conditional0">
+  <data key="d1">ConsequenceOf</data>
 </edge>
 <edge id="0" source="Action10" target="ActionVerb10">
   <data key="d1">ActionHasVerb</data>
 </edge>
-<edge id="0" source="Action10" target="Item8">
+<edge id="0" source="Action10" target="Item9">
   <data key="d1">HasSource</data>
 </edge>
-<edge id="0" source="Action10" target="Item5">
+<edge id="0" source="Action10" target="Item1">
   <data key="d1">HasTarget</data>
 </edge>
-<edge id="0" source="Action10" target="Action6">
-  <data key="d1">isTriggeredBy</data>
+<edge id="0" source="Action10" target="Conditional0">
+  <data key="d1">ConsequenceOf</data>
 </edge>
-<edge id="0" source="Property11" target="PropertyAdjective11">
+<edge id="0" source="Action11" target="ActionVerb11">
+  <data key="d1">ActionHasVerb</data>
+</edge>
+<edge id="0" source="Action11" target="Item9">
+  <data key="d1">HasSource</data>
+</edge>
+<edge id="0" source="Action11" target="Item5">
+  <data key="d1">HasTarget</data>
+</edge>
+<edge id="0" source="Action11" target="Conditional0">
+  <data key="d1">ConsequenceOf</data>
+</edge>
+<edge id="0" source="Conditional1" target="Action13">
+  <data key="d1">HasTrueCondition</data>
+</edge>
+<edge id="0" source="Conditional1" target="Property12">
+  <data key="d1">HasTrueCondition</data>
+</edge>
+<edge id="0" source="Conditional1" target="Action14">
+  <data key="d1">HasConsequence</data>
+</edge>
+<edge id="0" source="Property12" target="PropertyAdjective12">
   <data key="d1">PropertyHasAdjective</data>
 </edge>
-<edge id="0" source="Property11" target="PropertySecondaryObject11">
+<edge id="0" source="Property12" target="PropertySecondaryObject12">
   <data key="d1">PropertyHasSecondaryObject</data>
 </edge>
-<edge id="0" source="Property11" target="PropertyTertiaryObject11">
+<edge id="0" source="Property12" target="PropertyTertiaryObject12">
   <data key="d1">PropertyHasTertiaryObject</data>
 </edge>
-<edge id="0" source="Property11" target="PropertyDegree11">
+<edge id="0" source="Property12" target="PropertyDegree12">
   <data key="d1">PropertyHasDegree</data>
 </edge>
-<edge id="0" source="Property11" target="PropertyCompTarget11">
+<edge id="0" source="Property12" target="PropertyCompTarget12">
   <data key="d1">PropertyHasCompTarget</data>
 </edge>
-<edge id="0" source="Property11" target="Action6">
-  <data key="d1">triggersIfTrue</data>
+<edge id="0" source="Property12" target="Action13">
+  <data key="d1">IsTargetOf</data>
+</edge>
+<edge id="0" source="Property12" target="Conditional1">
+  <data key="d1">TrueConditionOf</data>
+</edge>
+<edge id="0" source="Action13" target="ActionVerb13">
+  <data key="d1">ActionHasVerb</data>
+</edge>
+<edge id="0" source="Action13" target="Item0">
+  <data key="d1">HasSource</data>
+</edge>
+<edge id="0" source="Action13" target="Property12">
+  <data key="d1">HasTarget</data>
+</edge>
+<edge id="0" source="Action13" target="Conditional1">
+  <data key="d1">TrueConditionOf</data>
+</edge>
+<edge id="0" source="Action14" target="ActionVerb14">
+  <data key="d1">ActionHasVerb</data>
+</edge>
+<edge id="0" source="Action14" target="Item4">
+  <data key="d1">HasSource</data>
+</edge>
+<edge id="0" source="Action14" target="ModPP15">
+  <data key="d1">isModifiedBy</data>
+</edge>
+<edge id="0" source="Action14" target="Conditional1">
+  <data key="d1">ConsequenceOf</data>
+</edge>
+<edge id="0" source="ModPP15" target="ModPPPrep15">
+  <data key="d1">ModPPHasPrep</data>
+</edge>
+<edge id="0" source="ModPP15" target="Action14">
+  <data key="d1">ModifiesVerb</data>
+</edge>
+<edge id="0" source="ModPP15" target="Item2">
+  <data key="d1">ModifiesObject</data>
 </edge>
 </graph></graphml>

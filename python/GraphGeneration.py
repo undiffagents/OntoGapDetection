@@ -1,5 +1,6 @@
 import networkx
 from Constants import *
+import re
 
 
 # Create Graph
@@ -103,7 +104,12 @@ class ItemGraph(object):
         if currentValue == '':
             updatedValue = newValue
         else:
-            updatedValue = currentValue + '|' + newValue
+            # Check if new value is already in the current value
+            newValuePattern = re.compile('\\b' + newValue + '\\b')
+            if re.search(newValuePattern, currentValue):
+                updatedValue = currentValue
+            else:
+                updatedValue = currentValue + '|' + newValue
         self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
@@ -270,6 +276,7 @@ class ItemGraph(object):
             print("No node with direct object reference as value found")
             return False
 
+    # TODO: UPDATE THIS TO USE __append
     # Methods to replace values of specific nodes
     def AppendItemAffordanceAtSpecificNode(self, nodeToAddAffordance, newAffordance):
         node = self.FindItemWithValue(nodeToAddAffordance)
@@ -283,7 +290,12 @@ class ItemGraph(object):
                     if currentValue == '':
                         updatedValue = newAffordance
                     else:
-                        updatedValue = currentValue + '|' + newAffordance
+                        # Check if new value is already in the current value
+                        newValuePattern = re.compile(r"(^|\|)" + newAffordance + r"(\||$)")
+                        if re.search(newValuePattern, currentValue):
+                            updatedValue = currentValue
+                        else:
+                            updatedValue = currentValue + '|' + newAffordance
                     self.graph.nodes(data=True)[endNode][CONST_NODE_VALUE_KEY] = updatedValue
                     return True
         else:
@@ -297,7 +309,12 @@ class ItemGraph(object):
         if currentValue == '':
             updatedValue = newValue
         else:
-            updatedValue = currentValue + '|' + newValue
+            # Check if new value is already in the current value
+            newValuePattern = re.compile('\\b' + newValue + '\\b')
+            if re.search(newValuePattern, currentValue):
+                updatedValue = currentValue
+            else:
+                updatedValue = currentValue + '|' + newValue
         self.graph.nodes(data=True)[nodeToAddValue][CONST_NODE_VALUE_KEY] = updatedValue
         return True
 
@@ -333,7 +350,12 @@ class PropertyGraph(object):
         if currentValue == '':
             updatedValue = newValue
         else:
-            updatedValue = currentValue + '|' + newValue
+            # Check if new value is already in the current value
+            newValuePattern = re.compile('\\b' + newValue + '\\b')
+            if re.search(newValuePattern, currentValue):
+                updatedValue = currentValue
+            else:
+                updatedValue = currentValue + '|' + newValue
         self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
@@ -403,7 +425,12 @@ class ActionGraph(object):
         if currentValue == '':
             updatedValue = newValue
         else:
-            updatedValue = currentValue + '|' + newValue
+            # Check if new value is already in the current value
+            newValuePattern = re.compile('\\b' + newValue + '\\b')
+            if re.search(newValuePattern, currentValue):
+                updatedValue = currentValue
+            else:
+                updatedValue = currentValue + '|' + newValue
         self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
@@ -450,7 +477,12 @@ class ModifierPPGraph(object):
         if currentValue == '':
             updatedValue = newValue
         else:
-            updatedValue = currentValue + '|' + newValue
+            # Check if new value is already in the current value
+            newValuePattern = re.compile('\\b' + newValue + '\\b')
+            if re.search(newValuePattern, currentValue):
+                updatedValue = currentValue
+            else:
+                updatedValue = currentValue + '|' + newValue
         self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
@@ -497,7 +529,12 @@ class RelationGraph(object):
         if currentValue == '':
             updatedValue = newValue
         else:
-            updatedValue = currentValue + '|' + newValue
+            # Check if new value is already in the current value
+            newValuePattern = re.compile('\\b' + newValue + '\\b')
+            if re.search(newValuePattern, currentValue):
+                updatedValue = currentValue
+            else:
+                updatedValue = currentValue + '|' + newValue
         self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
@@ -531,7 +568,12 @@ class ConditionalGraph(object):
         if currentValue == '':
             updatedValue = newValue
         else:
-            updatedValue = currentValue + '|' + newValue
+            # Check if new value is already in the current value
+            newValuePattern = re.compile('\\b' + newValue + '\\b')
+            if re.search(newValuePattern, currentValue):
+                updatedValue = currentValue
+            else:
+                updatedValue = currentValue + '|' + newValue
         self.graph.nodes(data=True)[target + str(self.graphNumber)][CONST_NODE_VALUE_KEY] = updatedValue
 
     # Generic replace method based on whatever target is passed in
