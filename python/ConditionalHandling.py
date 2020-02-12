@@ -194,30 +194,30 @@ def runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets, con
     # Run each then line in the then part of the conditional
     for index, thenLine in enumerate(checkPreparedThenLines):
         # Run the current then line if it isn't in a matching if block
-        if instructionCountInMatchingIfBlock == 0:
-            instructionCountInMatchingIfBlock, conditionalWithMatchingIfBlock = checkCurrentInstructionIf(
-                checkPreparedThenLines, index, thenLine, conditionalSets)
-            if instructionCountInMatchingIfBlock == 0:
-                # Append newly created node to array - should probably make this a separate  function
-                predicateSplit = thenLine.split('(', 1)
-                predicateContents = predicateSplit[1]
-                thenLineNodeReference = predicateContents.split(',')[0]
-                newThenNodes.append(thenLineNodeReference)
-                # Run the current line
-                DRSGraph = splitAndRun(thenLine, predSwitcher, True)
-            else:
+        # if instructionCountInMatchingIfBlock == 0:
+        #    instructionCountInMatchingIfBlock, conditionalWithMatchingIfBlock = checkCurrentInstructionIf(
+        #        checkPreparedThenLines, index, thenLine, conditionalSets)
+        #       if instructionCountInMatchingIfBlock == 0:
+        # Append newly created node to array - should probably make this a separate  function
+        predicateSplit = thenLine.split('(', 1)
+        predicateContents = predicateSplit[1]
+        thenLineNodeReference = predicateContents.split(',')[0]
+        newThenNodes.append(thenLineNodeReference)
+        # Run the current line
+        DRSGraph = splitAndRun(thenLine, predSwitcher, True)
+        #    else:
                 # Get the if block that matches the then block and add it to newThenNodes, in order to still
                 # be able to put in the conditional trigger edges
                 # conditional.pprint()
-                for i in range(instructionCountInMatchingIfBlock):
-                    currentIfLine = conditionalWithMatchingIfBlock.ifLines[i]
-                    predicateSplit = currentIfLine.split('(', 1)
-                    predicateContents = predicateSplit[1]
-                    currentIfLineNodeReference = predicateContents.split(',')[0]
+        #        for i in range(instructionCountInMatchingIfBlock):
+        #            currentIfLine = conditionalWithMatchingIfBlock.ifLines[i]
+        #            predicateSplit = currentIfLine.split('(', 1)
+        #            predicateContents = predicateSplit[1]
+        #            currentIfLineNodeReference = predicateContents.split(',')[0]
                     # print("**************************************************", currentIfLineNodeReference)
-                    newThenNodes.append(currentIfLineNodeReference)
-        else:
-            instructionCountInMatchingIfBlock = instructionCountInMatchingIfBlock - 1
+         #           newThenNodes.append(currentIfLineNodeReference)
+        # else:
+        #    instructionCountInMatchingIfBlock = instructionCountInMatchingIfBlock - 1
     # make lists contain only distinct members
     newIfNodes = list(set(newIfNodes))
     newThenNodes = list(set(newThenNodes))

@@ -109,15 +109,17 @@ class predicateSwitcher(object):
                 self.DRSGraph = self.nameItem(predSubjRef, predDirObjRef, self.DRSGraph)
             # If not named(XYZ) but still has 4 components
             elif numberOfComponents == 4 and consequence is False:
+                self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable,
+                                              numberOfComponents, predDirObjRef)
                 # Get nodes for both subject and direct object
-                subjRefNode = self.DRSGraph.FindItemWithValue(predSubjRef)
-                dirObjRefNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
+                # subjRefNode = self.DRSGraph.FindItemWithValue(predSubjRef)
+                # dirObjRefNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
                 # If both are ITEM nodes in the graph, then the "Be" is setting an equivalency
-                if subjRefNode is not None and dirObjRefNode is not None and CONST_ITEM_NODE in dirObjRefNode:
-                    self.DRSGraph.addNodeEquivalencyEdges(subjRefNode, dirObjRefNode)
+                # if subjRefNode is not None and dirObjRefNode is not None and CONST_ITEM_NODE in dirObjRefNode:
+                    # self.DRSGraph.addNodeEquivalencyEdges(subjRefNode, dirObjRefNode)
                 # If the target node is a PROPERTY node, then the 'BE' is setting an "is" property relationship
-                elif subjRefNode is not None and dirObjRefNode is not None and CONST_PROP_NODE in dirObjRefNode:
-                    self.DRSGraph.addPropertyEdge(subjRefNode, dirObjRefNode)
+                # elif subjRefNode is not None and dirObjRefNode is not None and CONST_PROP_NODE in dirObjRefNode:
+                    # self.DRSGraph.addPropertyEdge(subjRefNode, dirObjRefNode)
             # HANDLE ANY OTHER CASES????
             # If only 3 components predicate(X,be,Y)
             elif numberOfComponents == 3:
@@ -1177,14 +1179,14 @@ def DRSToItem():
                 # Get the predicate type and contents
                 instructionCountInMatchingIfBlock, conditionalWithMatchingIfBlock = \
                     checkCurrentInstructionIf(DRSLines, index, currentInstruction, conditionalSets)
-                if instructionCountInMatchingIfBlock == 0:
-                    DRSGraph = splitAndRun(currentInstruction, predSwitcher, False)
-                    # If we want to export a graph for each step of the way, we do that here
-                    if CONTROL_EXPORT_EACH_STEP_GRAPH is True:
-                        networkx.write_graphml_lxml(DRSGraph.graph, CONST_INPUT_FILE_NAME
-                                                    + "aINSTRUCTION_STEP" + str(outputFiles) + ".graphml")
-                        # Increase the counter
-                        outputFiles = outputFiles + 1
+                # if instructionCountInMatchingIfBlock == 0:
+                DRSGraph = splitAndRun(currentInstruction, predSwitcher, False)
+                # If we want to export a graph for each step of the way, we do that here
+                if CONTROL_EXPORT_EACH_STEP_GRAPH is True:
+                    networkx.write_graphml_lxml(DRSGraph.graph, CONST_INPUT_FILE_NAME
+                                                + "aINSTRUCTION_STEP" + str(outputFiles) + ".graphml")
+                    # Increase the counter
+                    outputFiles = outputFiles + 1
 
         # Break out of loop with exit
         else:
