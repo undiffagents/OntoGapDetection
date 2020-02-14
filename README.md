@@ -14,6 +14,8 @@ Integrated custom datalog reasoner for rules and facts extracted from instructio
 
 # Fuseki 
 
+https://jena.apache.org/documentation/fuseki2/
+
 Will initialize this process after parsing the input file so that data can be loaded into it. Then Fuseki will allow queries and interaction with the ontology it has read. Currently it is not hooked up but the configuration is in progress
 
 ## TODO: Improve README
