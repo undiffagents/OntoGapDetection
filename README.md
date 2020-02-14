@@ -12,4 +12,8 @@ https://github.com/aaronEberhart/Dapylog
 
 Integrated custom datalog reasoner for rules and facts extracted from instructions - can check for rule coverage **gaps**. Works but is repurposed from the link above. Will modify to suit this task at a later time.
 
-## TODO: Make README
+# Fuseki 
+
+Will initialize this process after parsing the input file so that data can be loaded into it. Then Fuseki will allow queries and interaction with the ontology it has read. Currently it is not hooked up but the configuration is in progress
+
+## TODO: Improve README
