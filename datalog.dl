@@ -11,7 +11,7 @@ isPartOf(target,psychomotorvigilance)
 
 %rules
 target(L)->letter(L)
-subject(C)^task(A)^isPartOf(C,A)->hasProperty(A,active)
-button(E)^box(H)^subject(C)^target(J)^appearsIn(J,H)->click(C,E)
-button(E)^box(H)^subject(C)^target(J)^appearsIn(J,H)->remember(C,J)
+subject(C)^isPartOf(C,A)^task(A)->hasProperty(A,active)
+appearsIn(J,H)^button(E)^target(J)^box(H)^subject(C)->click(C,E)
+appearsIn(J,H)^button(E)^target(J)^box(H)^subject(C)->remember(C,J)
 task(A)^hasProperty(A,active)^target(J)^box(H)->appearsIn(J,H)

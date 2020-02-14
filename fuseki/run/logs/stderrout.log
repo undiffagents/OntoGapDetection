@@ -1,0 +1,47 @@
+[2020-02-14 15:07:54] Server     INFO  Apache Jena Fuseki 3.14.0
+[2020-02-14 15:07:54] Config     INFO  FUSEKI_HOME=/home/aaron/git/OntoGapDetection/fuseki
+[2020-02-14 15:07:54] Config     INFO  FUSEKI_BASE=/home/aaron/git/OntoGapDetection/fuseki/run
+[2020-02-14 15:07:54] Config     INFO  Shiro file: file:///home/aaron/git/OntoGapDetection/fuseki/run/shiro.ini
+[2020-02-14 15:07:54] Config     INFO  Configuration file: /home/aaron/git/OntoGapDetection/fuseki/run/config.ttl
+[2020-02-14 15:07:54] Config     INFO  Load configuration: file:///home/aaron/git/OntoGapDetection/fuseki/run/configuration/uagent.ttl
+[2020-02-14 15:07:54] Server     ERROR Exception in initialization: Process ID 8064 can't open database at location /home/aaron/git/OntoGapDetection/fuseki/run/system/ because it is already locked by the process with PID 6240. TDB databases do not permit concurrent usage across JVMs so in order to prevent possible data corruption you cannot open this location from the JVM that does not own the lock for the dataset
+[2020-02-14 15:07:54] WebAppContext WARN  Failed startup of context o.e.j.w.WebAppContext@7808f638{Apache Jena Fuseki Server,/,file:///home/aaron/git/OntoGapDetection/fuseki/webapp/,UNAVAILABLE}
+org.apache.jena.tdb.TDBException: Process ID 8064 can't open database at location /home/aaron/git/OntoGapDetection/fuseki/run/system/ because it is already locked by the process with PID 6240. TDB databases do not permit concurrent usage across JVMs so in order to prevent possible data corruption you cannot open this location from the JVM that does not own the lock for the dataset
+	at org.apache.jena.tdb.StoreConnection._makeAndCache(StoreConnection.java:282)
+	at org.apache.jena.tdb.StoreConnection.make(StoreConnection.java:244)
+	at org.apache.jena.fuseki.webapp.SystemState.init$(SystemState.java:89)
+	at org.apache.jena.fuseki.webapp.SystemState.init(SystemState.java:56)
+	at org.apache.jena.fuseki.webapp.SystemState.getDataset(SystemState.java:45)
+	at org.apache.jena.fuseki.webapp.FusekiWebapp.initializeDataAccessPoints(FusekiWebapp.java:217)
+	at org.apache.jena.fuseki.webapp.FusekiServerListener.serverInitialization(FusekiServerListener.java:93)
+	at org.apache.jena.fuseki.webapp.FusekiServerListener.contextInitialized(FusekiServerListener.java:53)
+	at org.eclipse.jetty.server.handler.ContextHandler.callContextInitialized(ContextHandler.java:952)
+	at org.eclipse.jetty.servlet.ServletContextHandler.callContextInitialized(ServletContextHandler.java:558)
+	at org.eclipse.jetty.server.handler.ContextHandler.startContext(ContextHandler.java:917)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:370)
+	at org.eclipse.jetty.webapp.WebAppContext.startWebapp(WebAppContext.java:1497)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1459)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:847)
+	at org.eclipse.jetty.servlet.ServletContextHandler.doStart(ServletContextHandler.java:287)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:545)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.start(ContainerLifeCycle.java:138)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.doStart(ContainerLifeCycle.java:108)
+	at org.eclipse.jetty.server.handler.AbstractHandler.doStart(AbstractHandler.java:113)
+	at org.eclipse.jetty.server.handler.gzip.GzipHandler.doStart(GzipHandler.java:410)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.start(ContainerLifeCycle.java:138)
+	at org.eclipse.jetty.server.Server.start(Server.java:416)
+	at org.eclipse.jetty.util.component.ContainerLifeCycle.doStart(ContainerLifeCycle.java:108)
+	at org.eclipse.jetty.server.handler.AbstractHandler.doStart(AbstractHandler.java:113)
+	at org.eclipse.jetty.server.Server.doStart(Server.java:383)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at org.apache.jena.fuseki.cmd.JettyFusekiWebapp.start(JettyFusekiWebapp.java:138)
+	at org.apache.jena.fuseki.cmd.FusekiCmd.runFuseki(FusekiCmd.java:372)
+	at org.apache.jena.fuseki.cmd.FusekiCmd$FusekiCmdInner.exec(FusekiCmd.java:356)
+	at jena.cmd.CmdMain.mainMethod(CmdMain.java:93)
+	at jena.cmd.CmdMain.mainRun(CmdMain.java:58)
+	at jena.cmd.CmdMain.mainRun(CmdMain.java:45)
+	at org.apache.jena.fuseki.cmd.FusekiCmd$FusekiCmdInner.innerMain(FusekiCmd.java:104)
+	at org.apache.jena.fuseki.cmd.FusekiCmd.main(FusekiCmd.java:67)
+[2020-02-14 15:07:54] Server     ERROR SPARQLServer (port=3030): Failed to start server: Address already in use
