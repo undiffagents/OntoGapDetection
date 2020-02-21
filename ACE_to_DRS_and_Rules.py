@@ -1,4 +1,4 @@
-import re,os
+import re,os,subprocess
 from Dapylog import *
 
 def lowercase(s):
@@ -58,11 +58,15 @@ def parsePropertyLine(line):
     line=(line.split('(')[1]).split(',')
     return(line[0],line[1])
 
+def isVar(st):
+    if len(st) == 1: return False
+    return len(st) > 2
+
 def parsePredicateLine(line):
     line=(line.split('(',1)[1]).split(',')[1:]
     line[2]=line[2].split(')')[0]
-    if len(line[1]) > 1: line[-2]=(line[-2].split('(')[1]).split(')')[0]
-    if len(line[1]) > 1 and line[0] == 'be':
+    if isVar(line[1]): line[-2]=(line[-2].split('(')[1]).split(')')[0]
+    if isVar(line[1]) and line[0] == 'be':
         b = line[1]
         a = lookupObject(line[2])
         if not a:
@@ -147,7 +151,7 @@ def stripXML(new,tmp):
 
 if __name__ == "__main__":
     
-    aceFile = "ACE_in.txt"
+    aceFile = "ACE_in2.txt"
     tmp = "tmp_DRS.txt"
     drsFile = "DRS.txt"
 
@@ -165,7 +169,7 @@ if __name__ == "__main__":
     datalog = []
     queries = []
     body = []
-    head= []
+    head = []
     
     drsfile = open(drsFile,"r")
     antecedent = False
@@ -209,9 +213,14 @@ if __name__ == "__main__":
             props.append(parsePropertyLine(line))
         elif 'predicate' in line and not ('named' in line or 'string' in line):
             if not antecedent and not consequent: preds.append(parsePredicateLine(line))
-            elif antecedent: body.append(parsePredicateLine(line))
+            elif antecedent: 
+                body.append(parsePredicateLine(line))
             elif len(body) == 0 and len(head) == 0:  
                 a = parsePredicateLine(line)
+                if len(head) > 0: 
+                    body = head
+                    head = []
+                    head.append(a)
             elif len(body) > 0:
                 a = parsePredicateLine(line)
                 checkVars(a)
@@ -253,3 +262,7 @@ if __name__ == "__main__":
     datalogfile.close()
     
     Dapylog()
+    
+    #subprocess.call(['java', '-jar', 'fuseki-server.jar'])
+    
+    #
