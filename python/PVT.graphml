@@ -385,13 +385,13 @@
 <edge id="0" source="Conditional0" target="Action7">
   <data key="d1">HasTrueCondition</data>
 </edge>
+<edge id="0" source="Conditional0" target="Action10">
+  <data key="d1">HasConsequence</data>
+</edge>
 <edge id="0" source="Conditional0" target="Action11">
   <data key="d1">HasConsequence</data>
 </edge>
 <edge id="0" source="Conditional0" target="Item9">
-  <data key="d1">HasConsequence</data>
-</edge>
-<edge id="0" source="Conditional0" target="Action10">
   <data key="d1">HasConsequence</data>
 </edge>
 <edge id="0" source="Action7" target="ActionVerb7">

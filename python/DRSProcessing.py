@@ -974,7 +974,6 @@ def APEWebserviceCall(phraseToDRS):
         # Return just the lines that are the actual DRS for the question, no headers
         return questionLines
 
-
 def getNyms(wordToCheck):
     # Iterate through all words to check
     synonyms = []
@@ -1147,6 +1146,8 @@ def DRSToItem():
     DRSLines = []
     outputFiles = 0
     conditionalCount = 0
+    currentACELine = 0
+    currentAnnotationLine = 0
     # Read in DRS instructions from file
     DRSFile = open(CONST_INPUT_FILE_NAME + ".txt", "r")
     for line in DRSFile:
@@ -1175,6 +1176,8 @@ def DRSToItem():
         # As long as no "exit" given
         if nextStep != 'exit':
             print(currentInstruction)
+            currentAnnotation = Annotations[currentAnnotationLine]
+            currentACE = ACELines[currentACELine]
             # If the current line is an instruction
             if categorizedDRSLines.get(index) == CONST_INSTRUCTION_TAG:
                 # Get the predicate type and contents
@@ -1188,6 +1191,11 @@ def DRSToItem():
                                                 + "aINSTRUCTION_STEP" + str(outputFiles) + ".graphml")
                     # Increase the counter
                     outputFiles = outputFiles + 1
+                    if currentAnnotationLine == 1 or currentAnnotationLine == 3 or currentAnnotationLine == 9 or\
+                            currentAnnotationLine == 11 or currentAnnotationLine == 12 or currentAnnotationLine == 13:
+                        currentACELine = currentACELine + 1
+                    currentAnnotationLine = currentAnnotationLine + 1
+
 
         # Break out of loop with exit
         else:
@@ -1199,6 +1207,8 @@ def DRSToItem():
     # process conditionals first:
     for conditional in conditionalSets:
         if not conditional.processed:
+            currentAnnotation = Annotations[currentAnnotationLine]
+            currentACE = ACELines[currentACELine]
             # print("Processing conditional")
             DRSGraph = runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets, conditionalCount)
             conditionalCount = conditionalCount + 1
@@ -1208,6 +1218,10 @@ def DRSToItem():
                                             + "bCONDITIONAL_STEP" + str(outputFiles) + ".graphml")
                 # Increase the counter
                 outputFiles = outputFiles + 1
+                currentAnnotationLine = currentAnnotationLine + 1
+                if currentAnnotationLine == 1 or currentAnnotationLine == 3 or currentAnnotationLine == 9 or \
+                        currentAnnotationLine == 11 or currentAnnotationLine == 12 or currentAnnotationLine == 13:
+                    currentACELine = currentACELine + 1
 
     # Post-instruction pre-query gap identification goes here
     # In this case, Context Gap

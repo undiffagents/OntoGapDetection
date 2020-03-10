@@ -122,3 +122,16 @@ CONST_PRED_MOD_TAG = 'mod'
 # REGEX SEARCH STRINGS
 CONST_REGEX_ITEM_NODE = "Item\\d+"
 CONST_REGEX_PROPERTY_NODE = "Property\\d+"
+
+ACELines = ["Psychomotor-Vigilance is a task X1.", "Acknowledge is a button X2.", "X1 has a box X3 and a target X4.",
+            "X4 is a letter X5.", "If X4 appears in X3 then a subject X6 clicks X2 and X6 remembers X5.",
+            "If X1 is active then X4 appears in X3."]
+
+Annotations = ["There is exactly one task represented by A", "Predicate B: The task (A) has a name 'Psychomotor-Vigilance'",
+               "There is exactly one button represented by C", "Predicate D: The button (C) has a name 'Acknowledge'",
+               "There is exactly one box represented by E", "The box (E) is a member of the group of objects represented by H",
+               "Predicate F: The task (A) has a group of objects H", "There is exactly one target represented by G",
+               "The target (G) is a member of the group of objects represented by H", "There are exactly 2 objects in the group represented by H",
+               "There is exactly one letter represented by I", "Predicate J: The target (G) is the letter (I)",
+               "Conditional 1: If the target (G) appears in the box (E), then there is exactly one subject represented by L.  The subject (L) clicks on the button (C) and remembers the letter (I)",
+               "Conditional 2: If the task (A) has the property active (O), then the target (G) appears in the box (E)"]
