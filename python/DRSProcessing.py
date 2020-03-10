@@ -367,6 +367,7 @@ class questionSwitcher(object):
         self.newToOldRefIDMapping = {}
         # TODO: totally unsure if this is right
         self.predicateTrue = None
+        self.negationActive = None
 
     # Method to call the appropriate function based on the argument passed in
     def callFunction(self, predicateType, predicateContents, DRSGraph):
@@ -396,6 +397,26 @@ class questionSwitcher(object):
         # Get item node in original instruction which this SHOULD correspond to (ignoring name for now)
         DRSEquivalentNode = self.findMatchingItemNode(objRole, objOperator, objCount)
         # print(DRSEquivalentNode)
+        # If we don't find a node for this item, then we have encountered a lexical gap.
+
+        newNymCount = 0
+        if CONTROL_IDENTIFY_LEXICAL is True:
+            if DRSEquivalentNode == None:
+                print("Lexical gap encountered - an adjective was introduced which is not currently in the system's "
+                      "vocabulary.")
+            if CONTROL_RESOLVE_LEXICAL is True:
+                # TODO: Allow user to manually choose yes/no to resolve?
+                # Should antonymNodes be counted here too?
+                while DRSEquivalentNode == None and newNymCount < 3:
+                    # No nodes "active"
+                    newRole = requestNewTermToNymCheck(objRole)
+                    newNymCount = newNymCount + 1
+                    # adjectiveNymList, newAntonymList = getNyms(newRole)
+                    DRSEquivalentNode = self.findMatchingItemNode(newRole, objOperator, objCount)
+                    if DRSEquivalentNode != None:
+                        print("Lexical gap resolved - a role given was found associated with an item in the "
+                              "knowledge base")
+                        self.DRSGraph.AppendValueAtSpecificNode(DRSEquivalentNode, objRole)
         # Replace the reference ID (from APE Webclient) to the equivalent node's reference ID (from the graph)
         if self.DRSGraph.graph.has_node(DRSEquivalentNode):
             DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode][CONST_NODE_VALUE_KEY]
@@ -507,6 +528,7 @@ class questionSwitcher(object):
                             DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                             self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
                             self.propertyCount = self.propertyCount + 1
+                            self.negationActive = True
                             # print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                         else:
                             self.newToOldRefIDMapping.update({propRefId: None})
@@ -600,6 +622,8 @@ class questionSwitcher(object):
             if CONST_PRED_SUBJ_NAMED in predSubjRef:
                 # Get item name out of "named(XYZ)"
                 itemName = predSubjRef[predSubjRef.find("(") + 1:predSubjRef.find(")")]
+                # Add quotes around item name to actually find them since they are added on naming
+                itemName = "\"" + itemName + "\""
                 nodesWithGivenName = self.ListOfNodesWithValue(itemName)
                 if len(nodesWithGivenName) > 0:
                     itemNodes = []
@@ -639,22 +663,6 @@ class questionSwitcher(object):
         else:
             self.handleActionQuestion(numberOfComponents, predVerb, predSubjRef, predDirObjRef)
 
-            # Track how many items and properties, as item-item and item-property have different edges connecting them
-            # print("SELF.ITEMCOUNT PRIORITY", self.itemCount)
-            # print("SELF.PROPCOUNT PRIORITY", self.propertyCount)
-            # print("SELF.SUBJECTNODE", self.subjectNode)
-            # print("SELF.OBJECTNODE", self.objectNode)
-            # if self.subjectNode is not None:
-            #   if CONST_ITEM_NODE in self.subjectNode:
-            #       self.itemCount = self.itemCount + 1
-            #   elif CONST_PROP_NODE in self.subjectNode:
-            #       self.propertyCount = self.propertyCount + 1
-            #if self.objectNode is not None:
-            #    if CONST_ITEM_NODE in self.objectNode:
-            #        self.itemCount = self.itemCount + 1
-            #    elif CONST_PROP_NODE in self.objectNode:
-            #        self.propertyCount = self.propertyCount + 1
-
     def handleActionQuestion(self, numberOfComponents, predVerb, predSubjRef, predDirObjRef=None):
         if numberOfComponents == 3:
             pass
@@ -663,9 +671,15 @@ class questionSwitcher(object):
             actionNode = self.findActionNodeWithVerb(predVerb)
             # actionNode = self.findActionNodeConnectedToVerbNode(verbNode)
             # Get the subject node
-            subjectNode = self.DRSGraph.FindItemWithValue(predSubjRef)
+            if self.subjectNode is None:
+                subjectNode = self.DRSGraph.FindItemWithValue(predSubjRef)
+            else:
+                subjectNode = self.subjectNode
             # Get the object nodes
-            objectNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
+            if self.objectNode is None:
+                objectNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
+            else:
+                objectNode = self.objectNode
             # If both are connected to the action node, then the action links them
             subjectNodeConnected = False
             objectNodeConnected = False
@@ -691,12 +705,13 @@ class questionSwitcher(object):
         if self.objectNode is None or self.subjectNode is None:
             print("Either the subject or object is missing, so something is wrong")
             return None
+        elif self.predicateTrue == True:
+            if self.negationActive == True:
+                return False
+            else:
+                return True
         else:
             # Assuming that if there is one item and one property, the item is the subject node,
-            # so the "Is" edge will be in the outEdges
-            # This may be an incorrect assumption, will need to test and check
-            # Checking if there is an edge with name "Is", since "Is" is the name given to item->property edges.
-            # THIS SHOULD BE ABSTRACTED, THERE SHOULD BE A VARIABLE SOMEWHERE THAT HOLDS IMPORTANT EDGE NAMES
             # print("ITEM COUNT", self.itemCount)
             # print("PROP  COUNT", self.propertyCount)
             if self.itemCount == 1 and self.propertyCount == 1:
@@ -849,6 +864,8 @@ class questionSwitcher(object):
 
     # TODO: NEED TO HANDLE CASE WHERE MULTIPLE POSSIBLE ACTIONS
     def findActionNodeWithVerb(self, verb):
+        # Declare list of found nodes
+        actionNodes = []
         # Get list of nodes with the given role
         verbNodes = self.ListOfNodesWithValue(verb)
         # Handle role nodes
@@ -857,7 +874,28 @@ class questionSwitcher(object):
             # print("ROLE NODE", roleNode)
             verbActionNode = self.findActionNodeConnectedToVerbNode(verbNode)
             if verbActionNode is not None:
-                return verbActionNode
+                # If an action node is found which has this verb, add it to the list.
+                actionNodes.append(verbActionNode)
+        # If there are multiple action nodes with the same verb, identify a target gap and ask the user to pick
+        # which verb should be used.
+        # THIS COULD HAVE AUTOMATED RESOLUTION BY LOOKING AT CONNECTED OBJECT NODES
+        if CONTROL_IDENTIFY_TARGET is True:
+            if len(actionNodes) > 1:
+                # RAISE A GAP HERE, Found more than one possible node with this value. Have user select.
+                print("TARGET GAP: More than one action node found that describes an action with the verb " + verb
+                      + ".")
+                if CONTROL_RESOLVE_TARGET is True:
+                    print("DEBUG OPTION: Please select which action node you would like to use.")
+                    print(actionNodes)
+                    nodeSelected = input("Enter a node value")
+                    while nodeSelected not in actionNodes:
+                        nodeSelected = input("Enter a node value")
+                    return nodeSelected
+            elif len(actionNodes) == 0:
+                # NO NODE FOUND matching the description given
+                print("TARGET GAP: No node found that describes an action with the verb " + verb + ".")
+            else:
+                return actionNodes.pop()
         return None
 
     def findItemNodeWithNameAndRole(self, strName, strRole):
