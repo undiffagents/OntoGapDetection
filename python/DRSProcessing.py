@@ -416,7 +416,8 @@ class questionSwitcher(object):
                     if DRSEquivalentNode != None:
                         print("Lexical gap resolved - a role given was found associated with an item in the "
                               "knowledge base")
-                        self.DRSGraph.AppendValueAtSpecificNode(DRSEquivalentNode, objRole)
+                        DRSEquivalentNameNode = self.findRoleNodeConnectedToItemNode(DRSEquivalentNode)
+                        self.DRSGraph.AppendValueAtSpecificNode(DRSEquivalentNameNode, objRole)
         # Replace the reference ID (from APE Webclient) to the equivalent node's reference ID (from the graph)
         if self.DRSGraph.graph.has_node(DRSEquivalentNode):
             DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode][CONST_NODE_VALUE_KEY]
@@ -615,8 +616,15 @@ class questionSwitcher(object):
                     print("Lexical gap encountered - an item was introduced which is not currently in the system's "
                           "vocabulary.")
                     return None
+        self.handleActionQuestion(numberOfComponents, predVerb, predSubjRef, predDirObjRef)
 
-        if predVerb == CONST_PRED_VERB_BE:
+    def handleActionQuestion(self, numberOfComponents, predVerb, predSubjRef, predDirObjRef=None):
+        if numberOfComponents == 3:
+            pass
+        elif numberOfComponents == 4:
+            # Get action node by its name
+            actionNode = self.findActionNodeWithVerb(predVerb)
+            # actionNode = self.findActionNodeConnectedToVerbNode(verbNode)
             # If the SUBJECT reference is a proper name
             # Check if we find a node containing said name
             if CONST_PRED_SUBJ_NAMED in predSubjRef:
@@ -635,15 +643,14 @@ class questionSwitcher(object):
                     # If only one item with that name, then we've found our subject node
                     if len(itemNodes) == 1:
                         self.subjectNode = itemNodes[0]
-                    # Need to figure out a case if more than one item with the name
-            # If the subject reference is another variable, not a proper name
-            else:
-                self.handleActionQuestion(numberOfComponents, predVerb, predSubjRef, predDirObjRef)
-
             # Same as above for OBJECT reference
             if CONST_PRED_SUBJ_NAMED in predDirObjRef:
                 # Get item name out of "named(XYZ)"
-                itemName = predDirObjRef[predDirObjRef.find("(") + 1:predDirObjRef.find(")")]
+                # Goes all the way to the end because the closed paren has already been stripped if it's the last
+                # item
+                itemName = predDirObjRef[predDirObjRef.find("(") + 1:]
+                # Add quotes around item name to actually find them since they are added on naming
+                itemName = "\"" + itemName + "\""
                 nodesWithGivenName = self.ListOfNodesWithValue(itemName)
                 if len(nodesWithGivenName) > 0:
                     itemNodes = []
@@ -655,21 +662,6 @@ class questionSwitcher(object):
                     # If only one item with that name, then we've found our subject node
                     if len(itemNodes) == 1:
                         self.objectNode = itemNodes[0]
-                    # Need to figure out a case if more than one item with the name
-            # If the subject reference is another variable, not a proper name
-            else:
-                self.handleActionQuestion(numberOfComponents, predVerb, predSubjRef, predDirObjRef)
-
-        else:
-            self.handleActionQuestion(numberOfComponents, predVerb, predSubjRef, predDirObjRef)
-
-    def handleActionQuestion(self, numberOfComponents, predVerb, predSubjRef, predDirObjRef=None):
-        if numberOfComponents == 3:
-            pass
-        elif numberOfComponents == 4:
-            # Get action node by its name
-            actionNode = self.findActionNodeWithVerb(predVerb)
-            # actionNode = self.findActionNodeConnectedToVerbNode(verbNode)
             # Get the subject node
             if self.subjectNode is None:
                 subjectNode = self.DRSGraph.FindItemWithValue(predSubjRef)
@@ -796,7 +788,7 @@ class questionSwitcher(object):
                 # If the current Node's value = the value passed in
                 # Changed from valueToFind in values to valueToFind == values as "active" was
                 # triggering found in "inactive" due to being substr
-                if valueToFind == values[CONST_NODE_VALUE_KEY]:
+                if valueToFind in values[CONST_NODE_VALUE_KEY]:
                     nodeList.append(node)
         return nodeList
 
@@ -951,15 +943,23 @@ class questionSwitcher(object):
     def findOpNodeConnectedToItemNode(self, itemNode):
         outEdgesFromNode = self.DRSGraph.graph.out_edges(itemNode, data=True)
         for startNode, endNode, edgeValues in outEdgesFromNode:
-            # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
+            # If an edge has the value ItemHasOp, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_OP_EDGE:
+                # print("FOUND NODE WITH ROLE:", startNode)
+                return endNode
+
+    def findRoleNodeConnectedToItemNode(self, itemNode):
+        outEdgesFromNode = self.DRSGraph.graph.out_edges(itemNode, data=True)
+        for startNode, endNode, edgeValues in outEdgesFromNode:
+            # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
                 # print("FOUND NODE WITH ROLE:", startNode)
                 return endNode
 
     def findCountNodeConnectedToItemNode(self, itemNode):
         outEdgesFromNode = self.DRSGraph.graph.out_edges(itemNode, data=True)
         for startNode, endNode, edgeValues in outEdgesFromNode:
-            # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
+            # If an edge has the value ItemHasCount, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_COUNT_EDGE:
                 # print("FOUND NODE WITH ROLE:", startNode)
                 return endNode
