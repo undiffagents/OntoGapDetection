@@ -117,5 +117,5 @@ def categorizeDRSLines(DRSLines, symbolLines):
             # Get the type associated with this variable
             currentInstructionType = variablesAndTypes.get(predicateReferenceVariable)
             categorizedDRSLines.update({index: currentInstructionType})
-    print(categorizedDRSLines)
+    #print(categorizedDRSLines)
     return categorizedDRSLines

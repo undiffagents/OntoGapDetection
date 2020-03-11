@@ -404,26 +404,26 @@ class questionSwitcher(object):
             if DRSEquivalentNode == None:
                 print("Lexical gap encountered - an adjective was introduced which is not currently in the system's "
                       "vocabulary.")
-            if CONTROL_RESOLVE_LEXICAL is True:
-                # TODO: Allow user to manually choose yes/no to resolve?
-                # Should antonymNodes be counted here too?
-                while DRSEquivalentNode == None and newNymCount < 3:
-                    # No nodes "active"
-                    newRole = requestNewTermToNymCheck(objRole)
-                    newNymCount = newNymCount + 1
-                    # adjectiveNymList, newAntonymList = getNyms(newRole)
-                    DRSEquivalentNode = self.findMatchingItemNode(newRole, objOperator, objCount)
-                    if DRSEquivalentNode != None:
-                        print("Lexical gap resolved - a role given was found associated with an item in the "
-                              "knowledge base")
-                        DRSEquivalentNameNode = self.findRoleNodeConnectedToItemNode(DRSEquivalentNode)
-                        self.DRSGraph.AppendValueAtSpecificNode(DRSEquivalentNameNode, objRole)
+                if CONTROL_RESOLVE_LEXICAL is True:
+                    # TODO: Allow user to manually choose yes/no to resolve?
+                    # Should antonymNodes be counted here too?
+                    while DRSEquivalentNode == None and newNymCount < 3:
+                        # No nodes "active"
+                        newRole = requestNewTermToNymCheck(objRole)
+                        newNymCount = newNymCount + 1
+                        # adjectiveNymList, newAntonymList = getNyms(newRole)
+                        DRSEquivalentNode = self.findMatchingItemNode(newRole, objOperator, objCount)
+                        if DRSEquivalentNode != None:
+                            print("Lexical gap resolved - a role given was found associated with an item in the "
+                                  "knowledge base")
+                            DRSEquivalentNameNode = self.findRoleNodeConnectedToItemNode(DRSEquivalentNode)
+                            self.DRSGraph.AppendValueAtSpecificNode(DRSEquivalentNameNode, objRole)
         # Replace the reference ID (from APE Webclient) to the equivalent node's reference ID (from the graph)
         if self.DRSGraph.graph.has_node(DRSEquivalentNode):
             DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode][CONST_NODE_VALUE_KEY]
             self.newToOldRefIDMapping.update({objRefId: DRSNodeRefID})
             self.itemCount = self.itemCount + 1
-            print("NEW TO OLD OBJECT REF ID MAPPING", objRefId, DRSNodeRefID)
+            #print("NEW TO OLD OBJECT REF ID MAPPING", objRefId, DRSNodeRefID)
         else:
             self.newToOldRefIDMapping.update({objRefId: None})
             print("NEW TO OLD OBJECT REF ID NULL MAPPING", objRefId)
@@ -508,7 +508,7 @@ class questionSwitcher(object):
                     DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                     self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
                     self.propertyCount = self.propertyCount + 1
-                    print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
+                    #print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                 else:
                     self.newToOldRefIDMapping.update({propRefId: None})
                     print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
@@ -694,10 +694,10 @@ class questionSwitcher(object):
         # print("NAMED OBJECT NODE", self.objectNode)
 
         # Possibly not an actual error condition, just testing this
-        if self.objectNode is None or self.subjectNode is None:
-            print("Either the subject or object is missing, so something is wrong")
-            return None
-        elif self.predicateTrue == True:
+        #if self.objectNode is None or self.subjectNode is None:
+        #    print("Either the subject or object is missing, so something is wrong")
+        #    return None
+        if self.predicateTrue == True:
             if self.negationActive == True:
                 return False
             else:
@@ -733,7 +733,6 @@ class questionSwitcher(object):
                                 return False
                 # If could not find a positive or negative relationship, then return None (unknown)
                 return None
-
             # Assuming if there are two items, there are no properties in the predicate (again, may need corrections)
             #TODO: This should learn to deal with predicates
             if self.itemCount == 2:
@@ -751,10 +750,13 @@ class questionSwitcher(object):
                 # TODO: This is probably not right
                 if self.predicateTrue is True:
                     return True
-            # If neither of the above scenarios has occurred, then unknown
-            return None
+            # If we reach this, probably a question about "Is there a ..." which as been found true
+            if self.itemCount == 1:
+                return True
+                # If none of the above scenarios has occurred, then unknown
+        return None
 
-    # TODO: INEFFICIENT AS HELL
+    # TODO: OPTIMIZE, THIS IS HIGHLY INEFFICIENT
     def HasEdgeWithValue(self, node1, node2, value):
         for (n1, n2, datum) in self.DRSGraph.graph.edges([node1, node2], data=True):
             if n1 == node1 and n2 == node2 and datum[CONST_NODE_VALUE_KEY] == value:
@@ -983,7 +985,7 @@ def APEWebserviceCall(phraseToDRS):
     error = False
     for line in returnedDRS:
         line = line.strip()
-        print(line)
+        #print(line)
         # Exclude first, useless line
         # Also skip empty lines (if line.strip() returns true if line is non-empty.)
         if line != '[]' and line.strip():
