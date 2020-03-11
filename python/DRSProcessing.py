@@ -2,7 +2,6 @@ from nltk.corpus import wordnet
 import requests
 import json
 
-from GraphGeneration import *
 from ConditionalHandling import *
 from LineCategorization import *
 from Constants import *
@@ -111,15 +110,6 @@ class predicateSwitcher(object):
             elif numberOfComponents == 4 and consequence is False:
                 self.handle_general_predicate(predSubjRef, predVerb, predReferenceVariable,
                                               numberOfComponents, predDirObjRef)
-                # Get nodes for both subject and direct object
-                # subjRefNode = self.DRSGraph.FindItemWithValue(predSubjRef)
-                # dirObjRefNode = self.DRSGraph.FindItemWithValue(predDirObjRef)
-                # If both are ITEM nodes in the graph, then the "Be" is setting an equivalency
-                # if subjRefNode is not None and dirObjRefNode is not None and CONST_ITEM_NODE in dirObjRefNode:
-                    # self.DRSGraph.addNodeEquivalencyEdges(subjRefNode, dirObjRefNode)
-                # If the target node is a PROPERTY node, then the 'BE' is setting an "is" property relationship
-                # elif subjRefNode is not None and dirObjRefNode is not None and CONST_PROP_NODE in dirObjRefNode:
-                    # self.DRSGraph.addPropertyEdge(subjRefNode, dirObjRefNode)
             # HANDLE ANY OTHER CASES????
             # If only 3 components predicate(X,be,Y)
             elif numberOfComponents == 3:
@@ -377,7 +367,6 @@ class questionSwitcher(object):
         method = getattr(self, methodName, lambda: "Unknown predicate")
         # Call the method and return its output
         self.DRSGraph = DRSGraph
-        # print(predicateContents)
         method(predicateContents)
 
     def returnDRSGraph(self):
@@ -392,28 +381,23 @@ class questionSwitcher(object):
         # objUnit = predicateComponents[3]
         objOperator = predicateComponents[4]
         objCount = predicateComponents[5].split(')')[0]
-        # Get the item node in the original instruction which this SHOULD correspond to (via role)
-        # DRSEquivalentNode = self.findItemNodeWithRole(objRole)
         # Get item node in original instruction which this SHOULD correspond to (ignoring name for now)
         DRSEquivalentNode = self.findMatchingItemNode(objRole, objOperator, objCount)
-        # print(DRSEquivalentNode)
         # If we don't find a node for this item, then we have encountered a lexical gap.
 
         newNymCount = 0
         if CONTROL_IDENTIFY_LEXICAL is True:
-            if DRSEquivalentNode == None:
+            if DRSEquivalentNode is None:
                 print("Lexical gap encountered - an adjective was introduced which is not currently in the system's "
                       "vocabulary.")
                 if CONTROL_RESOLVE_LEXICAL is True:
                     # TODO: Allow user to manually choose yes/no to resolve?
-                    # Should antonymNodes be counted here too?
-                    while DRSEquivalentNode == None and newNymCount < 3:
+                    while DRSEquivalentNode is None and newNymCount < 3:
                         # No nodes "active"
                         newRole = requestNewTermToNymCheck(objRole)
                         newNymCount = newNymCount + 1
-                        # adjectiveNymList, newAntonymList = getNyms(newRole)
                         DRSEquivalentNode = self.findMatchingItemNode(newRole, objOperator, objCount)
-                        if DRSEquivalentNode != None:
+                        if DRSEquivalentNode is not None:
                             print("Lexical gap resolved - a role given was found associated with an item in the "
                                   "knowledge base")
                             DRSEquivalentNameNode = self.findRoleNodeConnectedToItemNode(DRSEquivalentNode)
@@ -423,10 +407,8 @@ class questionSwitcher(object):
             DRSNodeRefID = self.DRSGraph.graph.node[DRSEquivalentNode][CONST_NODE_VALUE_KEY]
             self.newToOldRefIDMapping.update({objRefId: DRSNodeRefID})
             self.itemCount = self.itemCount + 1
-            #print("NEW TO OLD OBJECT REF ID MAPPING", objRefId, DRSNodeRefID)
         else:
             self.newToOldRefIDMapping.update({objRefId: None})
-            print("NEW TO OLD OBJECT REF ID NULL MAPPING", objRefId)
         # WILL NEED TO FIND A WAY TO HANDLE NAME AND ROLE TO GET MORE ACCURATE PICTURE?
 
     # HANDLE PROPERTIES
@@ -468,14 +450,12 @@ class questionSwitcher(object):
             adjectiveNodes = self.ListOfNodesWithValueFromList(adjectiveNymList)
         else:
             adjectiveNodes = self.ListOfNodesWithValue(propAdjective)
-        # We
         if CONTROL_IDENTIFY_NEGATION is True:
             if CONTROL_RESOLVE_LEXICAL is True:
                 antonymNodes = self.ListOfNodesWithValueFromList(antonymList)
             else:
                 antonymNodes = self.ListOfNodesWithValue(propAdjective)
 
-        # print("ADJECTIVE NODES", adjectiveNodes)
         newNymCount = 0
         if CONTROL_IDENTIFY_LEXICAL is True:
             if len(adjectiveNodes) < 1:
@@ -496,7 +476,6 @@ class questionSwitcher(object):
 
         if len(adjectiveNodes) > 0:
             for node in adjectiveNodes:
-                # print("AdjectiveNode", node)
                 # Add new term into adjective node in order to grow our vocabulary
                 if propAdjective not in self.DRSGraph.graph.node[node][CONST_NODE_VALUE_KEY]:
                     # TODO: SEE IF I CAN CHANGE THIS  TO NOT USE THIS FUNCTION
@@ -508,10 +487,8 @@ class questionSwitcher(object):
                     DRSNodeRefID = self.DRSGraph.graph.node[propertyNode][CONST_NODE_VALUE_KEY]
                     self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
                     self.propertyCount = self.propertyCount + 1
-                    #print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                 else:
                     self.newToOldRefIDMapping.update({propRefId: None})
-                    print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
 
         if len(antonymNodes) > 0:
             if CONTROL_IDENTIFY_NEGATION == True:
@@ -530,10 +507,8 @@ class questionSwitcher(object):
                             self.newToOldRefIDMapping.update({propRefId: DRSNodeRefID})
                             self.propertyCount = self.propertyCount + 1
                             self.negationActive = True
-                            # print("NEW TO OLD PROPERTY REF ID MAPPING", propRefId, DRSNodeRefID)
                         else:
                             self.newToOldRefIDMapping.update({propRefId: None})
-                            # print("NEW TO OLD PROPERTY REF ID NULL MAPPING", propRefId)
 
         # ***********************************************************************************************************************************
         # If no adjective nodes are found, then we look for antonyms
@@ -639,7 +614,6 @@ class questionSwitcher(object):
                         # Need to get the actual item node, not the name node.
                         itemNode = self.findItemNodeConnectedToNameNode(nameNode)
                         itemNodes.append(itemNode)
-                        # print("ITEM WITH NAME", itemName, ": ", itemNode)
                     # If only one item with that name, then we've found our subject node
                     if len(itemNodes) == 1:
                         self.subjectNode = itemNodes[0]
@@ -658,7 +632,6 @@ class questionSwitcher(object):
                         # Need to get the actual item node, not the name node.
                         itemNode = self.findItemNodeConnectedToNameNode(nameNode)
                         itemNodes.append(itemNode)
-                        # print("ITEM WITH NAME", itemName, ": ", itemNode)
                     # If only one item with that name, then we've found our subject node
                     if len(itemNodes) == 1:
                         self.objectNode = itemNodes[0]
@@ -690,9 +663,6 @@ class questionSwitcher(object):
             # Else, unknown/no?
 
     def resolveQuestion(self):
-        # print("NAMED SUBJECT NODE", self.subjectNode)
-        # print("NAMED OBJECT NODE", self.objectNode)
-
         # Possibly not an actual error condition, just testing this
         #if self.objectNode is None or self.subjectNode is None:
         #    print("Either the subject or object is missing, so something is wrong")
@@ -704,8 +674,6 @@ class questionSwitcher(object):
                 return True
         else:
             # Assuming that if there is one item and one property, the item is the subject node,
-            # print("ITEM COUNT", self.itemCount)
-            # print("PROP  COUNT", self.propertyCount)
             if self.itemCount == 1 and self.propertyCount == 1:
                 # Try to find positive relationships
                 for node in self.nodesWithGivenProperty:
@@ -758,26 +726,23 @@ class questionSwitcher(object):
 
     # TODO: OPTIMIZE, THIS IS HIGHLY INEFFICIENT
     def HasEdgeWithValue(self, node1, node2, value):
+        # Iterate through edges connected to either of the input nodes and look if they are connected
+        # By an edge with the requested value
         for (n1, n2, datum) in self.DRSGraph.graph.edges([node1, node2], data=True):
+            # Check both variations of this just in case
             if n1 == node1 and n2 == node2 and datum[CONST_NODE_VALUE_KEY] == value:
-                # print("FOUND")
                 return True
             if n1 == node2 and n2 == node1 and datum[CONST_NODE_VALUE_KEY] == value:
-                # print("FOUND2")
                 return True
-        # print("done")
         return False
-
 
     def ListOfNodesWithValueFromList(self, listOfNyms):
         nodeList = []
         for valueToFind in listOfNyms:
-            # print(valueToFind)
             if self.DRSGraph is not None:
                 # iterate through all graph nodes
                 for node, values in self.DRSGraph.graph.nodes.data():
                     listOfValuesToCheck = values[CONST_NODE_VALUE_KEY].split('|')
-
                     if valueToFind in listOfValuesToCheck:
                         nodeList.append(node)
         return nodeList
@@ -813,7 +778,6 @@ class questionSwitcher(object):
         # Handle role nodes
         # Get list of item nodes associated with the role nodes
         for roleNode in roleNodes:
-            # print("ROLE NODE", roleNode)
             itemNodes.append(self.findItemNodeConnectedToRoleNode(roleNode))
         # Handle remaining matching nodes - check their operator and count nodes
         for itemNode in itemNodes:
@@ -851,9 +815,7 @@ class questionSwitcher(object):
         # Handle role nodes
         # Get list of item nodes associated with the role nodes
         for roleNode in roleNodes:
-            # print("ROLE NODE", roleNode)
             roleItemNode = self.findItemNodeConnectedToRoleNode(roleNode)
-            # print("ROLE ITEM NODE", roleItemNode)
             return roleItemNode
 
     # TODO: NEED TO HANDLE CASE WHERE MULTIPLE POSSIBLE ACTIONS
@@ -865,7 +827,6 @@ class questionSwitcher(object):
         # Handle role nodes
         # Get list of item nodes associated with the role nodes
         for verbNode in verbNodes:
-            # print("ROLE NODE", roleNode)
             verbActionNode = self.findActionNodeConnectedToVerbNode(verbNode)
             if verbActionNode is not None:
                 # If an action node is found which has this verb, add it to the list.
@@ -921,7 +882,6 @@ class questionSwitcher(object):
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasName, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_NAME_EDGE:
-                # print("FOUND NODE WITH NAME:", startNode)
                 return startNode
 
     def findActionNodeConnectedToVerbNode(self, verbNode):
@@ -931,7 +891,6 @@ class questionSwitcher(object):
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasName, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ACTION_HAS_VERB_EDGE:
-                # print("FOUND NODE WITH NAME:", startNode)
                 return startNode
 
     def findItemNodeConnectedToRoleNode(self, roleNode):
@@ -939,7 +898,6 @@ class questionSwitcher(object):
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
-                # print("FOUND NODE WITH ROLE:", startNode)
                 return startNode
 
     def findOpNodeConnectedToItemNode(self, itemNode):
@@ -947,7 +905,6 @@ class questionSwitcher(object):
         for startNode, endNode, edgeValues in outEdgesFromNode:
             # If an edge has the value ItemHasOp, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_OP_EDGE:
-                # print("FOUND NODE WITH ROLE:", startNode)
                 return endNode
 
     def findRoleNodeConnectedToItemNode(self, itemNode):
@@ -955,7 +912,6 @@ class questionSwitcher(object):
         for startNode, endNode, edgeValues in outEdgesFromNode:
             # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
-                # print("FOUND NODE WITH ROLE:", startNode)
                 return endNode
 
     def findCountNodeConnectedToItemNode(self, itemNode):
@@ -963,7 +919,6 @@ class questionSwitcher(object):
         for startNode, endNode, edgeValues in outEdgesFromNode:
             # If an edge has the value ItemHasCount, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_COUNT_EDGE:
-                # print("FOUND NODE WITH ROLE:", startNode)
                 return endNode
 
 
@@ -985,13 +940,11 @@ def APEWebserviceCall(phraseToDRS):
     error = False
     for line in returnedDRS:
         line = line.strip()
-        #print(line)
         # Exclude first, useless line
         # Also skip empty lines (if line.strip() returns true if line is non-empty.)
         if line != '[]' and line.strip():
             if line == "importance=\"error\"":
                 error = True
-            # print(line)
             DRSLines.append(line)
     # Technically it's a little silly to categorize the DRS for a question since it's obviously all
     # a question, but this gets around having to do questionable and inconsistent parsing to deal with
@@ -1001,16 +954,13 @@ def APEWebserviceCall(phraseToDRS):
         return None
     else:
         symbolLines = getSymbolLines(DRSLines)
-        # print("SYMBOLS - ", symbolLines)
         categorizedQuestionDRS = categorizeDRSLines(DRSLines, symbolLines)
-        # print(categorizedQuestionDRS)
 
         questionLines = []
         # Iterate through DRS lines and get only the actual question lines, none of the headers
         for index, line in enumerate(DRSLines):
             if categorizedQuestionDRS.get(index) == CONST_QUESTION_TAG:
                 questionLines.append(line)
-        # print(questionLines)
         # Return just the lines that are the actual DRS for the question, no headers
         return questionLines
 
@@ -1022,8 +972,6 @@ def getNyms(wordToCheck):
     deriv = []
     uniqueNymList = []
     uniqueAntonymList = []
-    # if CONTROL_IDENTIFY_LEXICAL == True:
-    # print(wordToCheck)
     # Get synsets of current word to check
     testWord = wordnet.synsets(wordToCheck)
     # for each synset (meaning)
@@ -1033,18 +981,15 @@ def getNyms(wordToCheck):
             currentHypernyms = syn.hypernyms()
             for hyperSyn in currentHypernyms:
                 for lemma in hyperSyn.lemmas():
-                    # if(lemma.name() != currentWord):
                     hypernyms.append(lemma.name())
         # Get Hyponyms
         if len(syn.hyponyms()) > 0:
             currentHyponyms = syn.hyponyms()
             for hypoSyn in currentHyponyms:
                 for lemma in hypoSyn.lemmas():
-                    # if(lemma.name() != currentWord):
                     hyponyms.append(lemma.name())
         # Get direct synonyms
         for lemma in syn.lemmas():
-            # if(lemma.name() != currentWord):
             synonyms.append(lemma.name())
             # Get derivationally related forms
             for derivForm in lemma.derivationally_related_forms():
@@ -1054,19 +999,9 @@ def getNyms(wordToCheck):
             if lemma.antonyms():
                 if lemma.antonyms()[0].name() not in uniqueAntonymList:
                     uniqueAntonymList.append(lemma.antonyms()[0].name())
-        # print("SYNONYMS: ")
-        # print(set(synonyms))
-        # print('\n HYPERNYMS:')
-        # print(set(hypernyms))
-        # print('\n HYPONYMS:')
-        # print(set(hyponyms))
-        # print('\n DERIVATIONALLY RELATED FORMS:')
-        # print(set(deriv))
         nymLists = synonyms + hypernyms + hyponyms + deriv
         uniqueNyms = set(nymLists)
         uniqueNymList = list(uniqueNyms)
-        # print(uniqueNymList)
-        # print("ANTONYMS", uniqueAntonymList)
     return uniqueNymList, uniqueAntonymList
 
 
@@ -1137,57 +1072,14 @@ def checkForContextGap(DRSGraph):
 
     # If no, context gap found.
 
+
 # TODO: handle 5-item predicate() tags
-# TODO: handle conditionals - SPECIFICALLY X -> Y; Y -> Z, how to avoid Y just being stored twice (target appears)
-# TODO: make overarching situationGraph which contains Item/Prop graphs and has graph-wide functions (move some to it)
-
-# FORMAT OF A QUESTION:
-# QUESTION
-# [R,S]
-# property(R,active,pos)-7/3
-# predicate(S,be,A,R)-7/1
-
-# Concept: See if there is a property "active" (Don't create it) (make a list of all nodes that are property "active")
-# Then see if the predicate A has an edge to such a node?
-# CURRENTLY QUESTION TEST INVOLVES QUESTION AT END.  WILL NEED TO TEST QUESTION IN MIDDLE
-# Alternatively, create the network of the question and then try to map it onto the graph and see if that works?
-
-# TODO: Extend wordnet checking, then add on verbnet and framenet
-
-# CONCEPT: Have a flag on properties that mark them as true or not (isActive, isPresent, etc.)
-# CONCEPT: For conditionals, set up a disconnected graph that details what happens if the IF section is true.
-# Then, when that statement arrives, trigger the THEN.
-# CONCEPT: When a term comes in that is not existing ("ongoing" vis-a-vis "active"), request explanation and
-# store explanation alongside the term.
-# NOTE: Conditionals are treated as an "and" by default - if you have X, Y => Z, both X and Y must be true.
-# In the PVT case, since THE target appears in THE box, the trigger case will be identical,
-# save for predicate reference ID, to the conditional case.
-# If it were A target appears in A box, then the conditional case would create its own target and box -
-# case that would need handling.\
-# Because of this, may not need to create disconnected graph for conditionals, instead just store the
-# lines that make up the conditional and test each incoming line to see if it triggers?
-# Need to be able to check multiple lines if the trigger is multi-line (maybe do a look-ahead if first line is found?)
-
-# Should find some way to encode non-triggered conditionals in case the knowledge is relevant
-# (maybe do a look through the conditionals and see if it's found?)
-# If it is found in conditional but not in graph, should return that it knows of its existence but that it's not true???
-
-# Alternatively, implement the Transition part of the ontology.
-
-# Potential concern: more synonyms being added to a label may lead to drift and inaccuracy
-# Potential risk of recursive conditional triggering: A conditional runs itself
-# (or something similar enough to re-trigger)
-
-
 def DRSToItem():
-    import matplotlib.pyplot as plt
     # Declare relevant variables
     DRSGraph = None
     DRSLines = []
     outputFiles = 0
     conditionalCount = 0
-    currentACELine = 0
-    currentAnnotationLine = 0
     # Read in DRS instructions from file
     DRSFile = open(CONST_INPUT_FILE_NAME + ".txt", "r")
     for line in DRSFile:
@@ -1216,14 +1108,11 @@ def DRSToItem():
         # As long as no "exit" given
         if nextStep != 'exit':
             print(currentInstruction)
-            currentAnnotation = Annotations[currentAnnotationLine]
-            currentACE = ACELines[currentACELine]
             # If the current line is an instruction
             if categorizedDRSLines.get(index) == CONST_INSTRUCTION_TAG:
                 # Get the predicate type and contents
                 instructionCountInMatchingIfBlock, conditionalWithMatchingIfBlock = \
                     checkCurrentInstructionIf(DRSLines, index, currentInstruction, conditionalSets)
-                # if instructionCountInMatchingIfBlock == 0:
                 DRSGraph = splitAndRun(currentInstruction, predSwitcher, False)
                 # If we want to export a graph for each step of the way, we do that here
                 if CONTROL_EXPORT_EACH_STEP_GRAPH is True:
@@ -1247,9 +1136,6 @@ def DRSToItem():
     # process conditionals first:
     for conditional in conditionalSets:
         if not conditional.processed:
-            currentAnnotation = Annotations[currentAnnotationLine]
-            currentACE = ACELines[currentACELine]
-            # print("Processing conditional")
             DRSGraph = runFullConditional(conditional, predSwitcher, DRSGraph, conditionalSets, conditionalCount)
             conditionalCount = conditionalCount + 1
             # If we want to export a graph for each step of the way, we do that here
@@ -1265,7 +1151,7 @@ def DRSToItem():
 
     # Post-instruction pre-query gap identification goes here
     # In this case, Context Gap
-    if CONTROL_IDENTIFY_CONTEXT == True:
+    if CONTROL_IDENTIFY_CONTEXT is True:
         checkForContextGap(DRSGraph)
 
     # Set up questionSwitcher
@@ -1282,9 +1168,7 @@ def DRSToItem():
             predicateSplit = currentLine.split('(', 1)
             predicateType = predicateSplit[0]
             predicateContents = predicateSplit[1]
-            # print(categorizedDRSLines.get(index))
             qSwitcher.callFunction(predicateType, predicateContents, DRSGraph)
-            # print(currentInstruction)
 
         result = qSwitcher.resolveQuestion()
         if result:
@@ -1304,8 +1188,6 @@ def DRSToItem():
     # Once "exit" has been entered
     # At end of program, if an ontology was built at all, print it out and export it in GraphML
     if DRSGraph is not None:
-        # networkx.draw(DRSGraph.graph, labels=networkx.get_node_attributes(DRSGraph.graph, CONST_NODE_VALUE_KEY))
-        # plt.show()
         jsonFile = open("jsonFile.txt", "w")
         jsonSerializable = networkx.readwrite.json_graph.node_link_data(DRSGraph.graph)
         jsonOutput = json.dumps(jsonSerializable)

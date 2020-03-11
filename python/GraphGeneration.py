@@ -164,7 +164,6 @@ class ItemGraph(object):
         if self.graph is not None:
             # iterate through all graph nodes
             for node, values in self.graph.nodes.data():
-                # print(node, values)
                 # If the current Node's value = the value passed in
                 if values[CONST_NODE_VALUE_KEY] == valueToFind:
                     return node
@@ -235,7 +234,7 @@ class ItemGraph(object):
     def addConditionalConditionEdges(self, ifNodeValue, conditionalNodeValue):
         ifNode = self.FindItemWithValue(ifNodeValue)
         conditionalNode = self.FindItemWithValue(conditionalNodeValue)
-        # We only want to trigger actions, not statement
+        # We only want to trigger conditionals, not statement
         if ifNode is not None and conditionalNode is not None:
             if CONST_CONDITIONAL_NODE in conditionalNode:
                 self.graph.add_edge(ifNode, conditionalNode, value=CONST_TRUE_CONDITION_OF_EDGE)
@@ -245,7 +244,7 @@ class ItemGraph(object):
     def addConditionalNegationConditionEdges(self, ifNodeValue, conditionalNodeValue):
         ifNode = self.FindItemWithValue(ifNodeValue)
         conditionalNode = self.FindItemWithValue(conditionalNodeValue)
-        # We only want to trigger actions, not statement
+        # We only want to trigger conditionals, not statement
         if ifNode is not None and conditionalNode is not None:
             if CONST_CONDITIONAL_NODE in conditionalNode:
                 self.graph.add_edge(ifNode, conditionalNode, value=CONST_FALSE_CONDITION_OF_EDGE)
@@ -255,7 +254,7 @@ class ItemGraph(object):
     def addConditionalConsequenceEdges(self, thenNodeValue, conditionalNodeValue):
         thenNode = self.FindItemWithValue(thenNodeValue)
         conditionalNode = self.FindItemWithValue(conditionalNodeValue)
-        # We only want to trigger actions, not statement
+        # We only want to trigger conditionals, not statement
         if thenNode is not None and conditionalNode is not None:
             if CONST_CONDITIONAL_NODE in conditionalNode:
                 self.graph.add_edge(thenNode, conditionalNode, value=CONST_CONSEQUENCE_OF_EDGE)
