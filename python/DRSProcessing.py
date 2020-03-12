@@ -743,8 +743,9 @@ class questionSwitcher(object):
                 # iterate through all graph nodes
                 for node, values in self.DRSGraph.graph.nodes.data():
                     listOfValuesToCheck = values[CONST_NODE_VALUE_KEY].split('|')
-                    if valueToFind in listOfValuesToCheck:
-                        nodeList.append(node)
+                    for value in listOfValuesToCheck:
+                        if valueToFind == value:
+                            nodeList.append(node)
         return nodeList
 
     def ListOfNodesWithValue(self, valueToFind):
@@ -755,8 +756,10 @@ class questionSwitcher(object):
                 # If the current Node's value = the value passed in
                 # Changed from valueToFind in values to valueToFind == values as "active" was
                 # triggering found in "inactive" due to being substr
-                if valueToFind in values[CONST_NODE_VALUE_KEY]:
-                    nodeList.append(node)
+                listOfValuesToCheck = values[CONST_NODE_VALUE_KEY].split('|')
+                for value in listOfValuesToCheck:
+                    if valueToFind == value:
+                        nodeList.append(node)
         return nodeList
 
     def getPropertyNodeFromAdjective(self, adjectiveNode):
@@ -1025,8 +1028,6 @@ def checkForContextGap(DRSGraph):
             itemNodes.append(node)
         elif re.match(propertyNodePattern, node):
             propertyNodes.append(node)
-    print("DEBUG", itemNodes)
-    print("DEBUG", propertyNodes)
 
     # Iterate through all the main ItemX nodes
     for itemNode in itemNodes:
@@ -1107,7 +1108,6 @@ def DRSToItem():
 
         # As long as no "exit" given
         if nextStep != 'exit':
-            print(currentInstruction)
             # If the current line is an instruction
             if categorizedDRSLines.get(index) == CONST_INSTRUCTION_TAG:
                 # Get the predicate type and contents
