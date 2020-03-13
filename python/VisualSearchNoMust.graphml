@@ -92,7 +92,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemAffordance4">
-  <data key="d0">be|be|be</data>
+  <data key="d0">be</data>
 </node>
 <node id="ItemDescription4">
   <data key="d0"></data>
@@ -814,31 +814,31 @@
 <edge id="0" source="Action17" target="Conditional1">
   <data key="d1">ConsequenceOf</data>
 </edge>
-<edge id="0" source="Conditional2" target="Item28">
-  <data key="d1">HasTrueCondition</data>
-</edge>
 <edge id="0" source="Conditional2" target="Item23">
-  <data key="d1">HasTrueCondition</data>
-</edge>
-<edge id="0" source="Conditional2" target="Action31">
   <data key="d1">HasTrueCondition</data>
 </edge>
 <edge id="0" source="Conditional2" target="Property30">
   <data key="d1">HasTrueCondition</data>
 </edge>
-<edge id="0" source="Conditional2" target="Action26">
+<edge id="0" source="Conditional2" target="Property25">
   <data key="d1">HasTrueCondition</data>
 </edge>
-<edge id="0" source="Conditional2" target="Property25">
+<edge id="0" source="Conditional2" target="Item19">
+  <data key="d1">HasTrueCondition</data>
+</edge>
+<edge id="0" source="Conditional2" target="Action31">
+  <data key="d1">HasTrueCondition</data>
+</edge>
+<edge id="0" source="Conditional2" target="Item28">
   <data key="d1">HasTrueCondition</data>
 </edge>
 <edge id="0" source="Conditional2" target="Item18">
   <data key="d1">HasTrueCondition</data>
 </edge>
-<edge id="0" source="Conditional2" target="Item21">
+<edge id="0" source="Conditional2" target="Action26">
   <data key="d1">HasTrueCondition</data>
 </edge>
-<edge id="0" source="Conditional2" target="Item19">
+<edge id="0" source="Conditional2" target="Item21">
   <data key="d1">HasTrueCondition</data>
 </edge>
 <edge id="0" source="Conditional2" target="Action33">
