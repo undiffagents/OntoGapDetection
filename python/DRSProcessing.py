@@ -359,6 +359,9 @@ class questionSwitcher(object):
         self.negationActive = None
         self.verbTargetGap = False
 
+        self.questionItems = []
+        self.questionAffordances = []
+
     # Method to call the appropriate function based on the argument passed in
     def callFunction(self, predicateType, predicateContents, DRSGraph):
         # Get the name of the method
@@ -604,7 +607,7 @@ class questionSwitcher(object):
             pass
         elif numberOfComponents == 4:
             # Get action node by its name
-            actionNode = self.findActionNodeWithVerb(predVerb)
+            actionNode = self.findActionNodeWithVerb(predVerb, predSubjRef, predDirObjRef)
             if CONTROL_IDENTIFY_LEXICAL is True:
                 if actionNode is None and self.verbTargetGap == False:
                     print("Lexical gap encountered - a verb (" + predVerb + ") was introduced which is not currently "
@@ -616,7 +619,7 @@ class questionSwitcher(object):
                             # No nodes "active"
                             newVerb = requestNewTermToNymCheck(predVerb)
                             newNymCount = newNymCount + 1
-                            actionNode = self.findActionNodeWithVerb(newVerb)
+                            actionNode = self.findActionNodeWithVerb(newVerb, predSubjRef, predDirObjRef)
                             if actionNode is not None:
                                 print("Lexical gap resolved - a role given (" + newVerb + ") was found associated with "
                                                                                       "an item in the knowledge base")
@@ -819,13 +822,27 @@ class questionSwitcher(object):
                 print("TARGET GAP: More than one node found that describes an item with the role of " + role +
                       ", the operator of " + operator + ", and the count of " + count + ".")
                 if CONTROL_RESOLVE_TARGET is True:
-                    print("DEBUG OPTION: Please select which node you would like to use.")
-                    print(matchingNodes)
-                    nodeSelected = input("Enter a node value")
-                    while nodeSelected not in matchingNodes:
+                    if CONTROL_RESOLVE_TARGET_AUTO is True:
+                        # Iterate through the matches found and check if they have an affordance associated to the
+                        # verbs used in the question. ****** THIS MAY NOT WORK FOR MORE COMPLEX QUESTIONS?
+                        affordanceMatchingNodes = []
+                        for match in matchingNodes:
+                            affordanceNode = self.findAffordanceNodeConnectedToItemNode(match)
+                            if self.DRSGraph.graph.nodes[affordanceNode][CONST_NODE_VALUE_KEY] \
+                                    in self.questionAffordances:
+                                affordanceMatchingNodes.append(match)
+                        if len(affordanceMatchingNodes) == 1:
+                            print("TARGET GAP RESOLVED: Single node matching the requested description with an " +
+                                  "affordance matching a verb used in the question.")
+                            matchingNodes = affordanceMatchingNodes
+                    if len(matchingNodes) > 1:
+                        print("UNABLE TO AUTOMATICALLY RESOLVE: Please select which node you would like to use.")
+                        print(matchingNodes)
                         nodeSelected = input("Enter a node value")
-                    return nodeSelected
-        if len(matchingNodes) > 0:
+                        while nodeSelected not in matchingNodes:
+                            nodeSelected = input("Enter a node value")
+                        return nodeSelected
+        if len(matchingNodes) == 1:
             return matchingNodes.pop()
         else:
             return None
@@ -842,7 +859,7 @@ class questionSwitcher(object):
             return roleItemNode
 
     # TODO: NEED TO HANDLE CASE WHERE MULTIPLE POSSIBLE ACTIONS
-    def findActionNodeWithVerb(self, verb):
+    def findActionNodeWithVerb(self, verb, subjRef, dirObjRef):
         # Declare list of found nodes
         actionNodes = []
         # Get list of nodes with the given role
@@ -854,6 +871,43 @@ class questionSwitcher(object):
             if verbActionNode is not None:
                 # If an action node is found which has this verb, add it to the list.
                 actionNodes.append(verbActionNode)
+        # If the SUBJECT reference is a proper name
+        # Check if we find a node containing said name
+        if subjRef is not None:
+            if CONST_PRED_SUBJ_NAMED in subjRef:
+                # Get item name out of "named(XYZ)"
+                itemName = subjRef[subjRef.find("(") + 1:subjRef.find(")")]
+                # Add quotes around item name to actually find them since they are added on naming
+                itemName = "\"" + itemName + "\""
+                nodesWithGivenName = self.ListOfNodesWithValue(itemName)
+                if len(nodesWithGivenName) > 0:
+                    itemNodes = []
+                    for nameNode in nodesWithGivenName:
+                        # Need to get the actual item node, not the name node.
+                        itemNode = self.findItemNodeConnectedToNameNode(nameNode)
+                        itemNodes.append(itemNode)
+                    # If only one item with that name, then we've found our subject node
+                    if len(itemNodes) == 1:
+                        self.subjectNode = itemNodes[0]
+        # Same as above for OBJECT reference
+        if dirObjRef is not None:
+            if CONST_PRED_SUBJ_NAMED in dirObjRef:
+                # Get item name out of "named(XYZ)"
+                # Goes all the way to the end because the closed paren has already been stripped if it's the last
+                # item
+                itemName = dirObjRef[dirObjRef.find("(") + 1:]
+                # Add quotes around item name to actually find them since they are added on naming
+                itemName = "\"" + itemName + "\""
+                nodesWithGivenName = self.ListOfNodesWithValue(itemName)
+                if len(nodesWithGivenName) > 0:
+                    itemNodes = []
+                    for nameNode in nodesWithGivenName:
+                        # Need to get the actual item node, not the name node.
+                        itemNode = self.findItemNodeConnectedToNameNode(nameNode)
+                        itemNodes.append(itemNode)
+                    # If only one item with that name, then we've found our subject node
+                    if len(itemNodes) == 1:
+                        self.objectNode = itemNodes[0]
         # If there are multiple action nodes with the same verb, identify a target gap and ask the user to pick
         # which verb should be used.
         # THIS COULD HAVE AUTOMATED RESOLUTION BY LOOKING AT CONNECTED OBJECT NODES
@@ -864,7 +918,35 @@ class questionSwitcher(object):
                       + ".")
                 self.verbTargetGap = True
                 if CONTROL_RESOLVE_TARGET is True:
-                    print("DEBUG OPTION: Please select which action node you would like to use.")
+                    if CONTROL_RESOLVE_TARGET_AUTO is True:
+                        for actionNode in actionNodes:
+                            # Get the subject node
+                            if self.subjectNode is None:
+                                subjectNode = self.DRSGraph.FindItemWithValue(subjRef)
+                            else:
+                                subjectNode = self.subjectNode
+                            # Get the object nodes
+                            if self.objectNode is None:
+                                objectNode = self.DRSGraph.FindItemWithValue(dirObjRef)
+                            else:
+                                objectNode = self.objectNode
+                            # If both are connected to the action node, then the action links them
+                            subjectNodeConnected = False
+                            objectNodeConnected = False
+                            # Check if the subject node has "IsTargetOf"/"IsSourceOf" relationship with the action node
+                            if self.HasEdgeWithValue(actionNode, subjectNode, CONST_HAS_TARGET_EDGE) or \
+                                    self.HasEdgeWithValue(actionNode, subjectNode, CONST_HAS_SOURCE_EDGE):
+                                subjectNodeConnected = True
+                            # Check if the object node has "IsTargetOf"/"IsSourceOf" relationship with the action node
+                            if self.HasEdgeWithValue(actionNode, objectNode, CONST_HAS_TARGET_EDGE) or \
+                                    self.HasEdgeWithValue(actionNode, objectNode, CONST_HAS_SOURCE_EDGE):
+                                objectNodeConnected = True
+                            if subjectNodeConnected is True and objectNodeConnected is True:
+                                print("TARGET GAP RESOLVED: Single node matching the requested verb with  " +
+                                                "connections to the correct subject and object nodes.")
+                                return actionNode
+                    # Don't need an else here, as if the previous part worked, it'll have returned.
+                    print("UNABLE TO AUTOMATICALLY RESOLVE: Please select which node you would like to use.")
                     print(actionNodes)
                     nodeSelected = input("Enter a node value")
                     while nodeSelected not in actionNodes:
@@ -946,6 +1028,13 @@ class questionSwitcher(object):
         for startNode, endNode, edgeValues in outEdgesFromNode:
             # If an edge has the value ItemHasCount, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_COUNT_EDGE:
+                return endNode
+
+    def findAffordanceNodeConnectedToItemNode(self, itemNode):
+        outEdgesFromNode = self.DRSGraph.graph.out_edges(itemNode, data=True)
+        for startNode, endNode, edgeValues in outEdgesFromNode:
+            # If an edge has the value ItemHasCount, then we want to return the start node (the item node itself)
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_AFFORDANCE_EDGE:
                 return endNode
 
 
@@ -1189,6 +1278,25 @@ def DRSToItem():
             questionInput = input('There was an error with the ACE entered - please try again.')
             questionLines = APEWebserviceCall(questionInput)
 
+        # Iterate through the question lines and get any verbs/items used in the question
+        # Store them in the question switcher for target gap resolution
+        for line in questionLines:
+            # Break up each predicate
+            predicateSplit = line.split('(', 1)
+            predicateType = predicateSplit[0]
+            predicateContents = predicateSplit[1]
+            # If it's an object then get the object value and add it to the question switcher's list of items
+            if predicateType == "object":
+                predicateComponents = predicateContents.split(',')
+                predItem = predicateComponents[1]
+                qSwitcher.questionItems.append(predItem)
+            # If it's a verb then get the verb value and add it to the question switcher's list of affordances
+            if predicateType == "predicate":
+                predicateComponents = predicateContents.split(',')
+                predVerb = predicateComponents[1]
+                qSwitcher.questionAffordances.append(predVerb)
+
+        # Actually iterate through the question lines this time and call the question switcher on each
         for currentLine in questionLines:
             predicateSplit = currentLine.split('(', 1)
             predicateType = predicateSplit[0]

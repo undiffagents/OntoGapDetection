@@ -1,0 +1,7 @@
+[A,B,C,D,E,F]
+object(A,task,countable,na,eq,1)-1/4				
+predicate(B,be,named(Psychomotor-Vigilance),A)-1/2		
+property(C,active,pos)-6/4
+predicate(D,be,A,C)-6/3	
+object(E,button,countable,na,eq,1)-2/4				
+predicate(F,be,named(Acknowledge),E)-2/2

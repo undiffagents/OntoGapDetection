@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key attr.name="value" attr.type="string" for="edge" id="d1"/>
+<key attr.name="value" attr.type="string" for="node" id="d0"/>
+<graph edgedefault="directed"><node id="Item0">
+  <data key="d0">A</data>
+</node>
+<node id="ItemName0">
+  <data key="d0">"Psychomotor-Vigilance"</data>
+</node>
+<node id="ItemAffordance0">
+  <data key="d0">be</data>
+</node>
+<node id="ItemDescription0">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole0">
+  <data key="d0">task</data>
+</node>
+<node id="ItemOp0">
+  <data key="d0">eq</data>
+</node>
+<node id="ItemCount0">
+  <data key="d0">1</data>
+</node>
+<node id="Property1">
+  <data key="d0">C</data>
+</node>
+<node id="PropertyAdjective1">
+  <data key="d0">active</data>
+</node>
+<node id="PropertySecondaryObject1">
+  <data key="d0"></data>
+</node>
+<node id="PropertyTertiaryObject1">
+  <data key="d0"></data>
+</node>
+<node id="PropertyDegree1">
+  <data key="d0">pos</data>
+</node>
+<node id="PropertyCompTarget1">
+  <data key="d0"></data>
+</node>
+<node id="Action2">
+  <data key="d0">D</data>
+</node>
+<node id="ActionVerb2">
+  <data key="d0">be</data>
+</node>
+<node id="Item3">
+  <data key="d0">E</data>
+</node>
+<node id="ItemName3">
+  <data key="d0">"Acknowledge"</data>
+</node>
+<node id="ItemAffordance3">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription3">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole3">
+  <data key="d0">button</data>
+</node>
+<node id="ItemOp3">
+  <data key="d0">eq</data>
+</node>
+<node id="ItemCount3">
+  <data key="d0">1</data>
+</node>
+<edge id="0" source="Item0" target="ItemName0">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item0" target="ItemAffordance0">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item0" target="ItemDescription0">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item0" target="ItemRole0">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item0" target="ItemOp0">
+  <data key="d1">ItemHasOp</data>
+</edge>
+<edge id="0" source="Item0" target="ItemCount0">
+  <data key="d1">ItemHasCount</data>
+</edge>
+<edge id="0" source="Item0" target="Action2">
+  <data key="d1">IsSourceOf</data>
+</edge>
+<edge id="0" source="Property1" target="PropertyAdjective1">
+  <data key="d1">PropertyHasAdjective</data>
+</edge>
+<edge id="0" source="Property1" target="PropertySecondaryObject1">
+  <data key="d1">PropertyHasSecondaryObject</data>
+</edge>
+<edge id="0" source="Property1" target="PropertyTertiaryObject1">
+  <data key="d1">PropertyHasTertiaryObject</data>
+</edge>
+<edge id="0" source="Property1" target="PropertyDegree1">
+  <data key="d1">PropertyHasDegree</data>
+</edge>
+<edge id="0" source="Property1" target="PropertyCompTarget1">
+  <data key="d1">PropertyHasCompTarget</data>
+</edge>
+<edge id="0" source="Property1" target="Action2">
+  <data key="d1">IsTargetOf</data>
+</edge>
+<edge id="0" source="Action2" target="ActionVerb2">
+  <data key="d1">ActionHasVerb</data>
+</edge>
+<edge id="0" source="Action2" target="Item0">
+  <data key="d1">HasSource</data>
+</edge>
+<edge id="0" source="Action2" target="Property1">
+  <data key="d1">HasTarget</data>
+</edge>
+<edge id="0" source="Item3" target="ItemName3">
+  <data key="d1">ItemHasName</data>
+</edge>
+<edge id="0" source="Item3" target="ItemAffordance3">
+  <data key="d1">ItemHasAffordance</data>
+</edge>
+<edge id="0" source="Item3" target="ItemDescription3">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item3" target="ItemRole3">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item3" target="ItemOp3">
+  <data key="d1">ItemHasOp</data>
+</edge>
+<edge id="0" source="Item3" target="ItemCount3">
+  <data key="d1">ItemHasCount</data>
+</edge>
+</graph></graphml>

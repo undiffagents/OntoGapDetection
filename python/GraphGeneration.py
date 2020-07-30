@@ -169,6 +169,21 @@ class ItemGraph(object):
                     return node
         return None
 
+    # Method to find a node containing a value from a given list
+    def FindItemsWithValuesFromList(self, valueList):
+        returnList = []
+        for valueToFind in valueList:
+            if self.graph is not None:
+                # iterate through all graph nodes
+                for node, values in self.graph.nodes.data():
+                    # If the current Node's value = the value passed in
+                    if values[CONST_NODE_VALUE_KEY] == valueToFind:
+                        returnList.append(node)
+        if returnList > 0:
+            return returnList
+        else:
+            return None
+
     # Methods to add different types of edges between nodes
     def addGroupMembershipEdges(self, groupNode, memberNode):
         self.graph.add_edge(memberNode, groupNode, value=CONST_IS_MEMBER_EDGE)

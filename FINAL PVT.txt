@@ -1,0 +1,46 @@
+MODIFIED ACE:
+Psychomotor-Vigilance is a task X1.
+Acknowledge is a button X2.
+X1 has a box X3 and a target X4.
+X4 is a letter X5.
+If X4 appears in X3 then a subject X6 clicks X2 and X6 remembers X5.
+If X1 is active then X4 appears in X3.
+
+APE PARAPHRASE:
+There is a task X1.
+Psychomotor-Vigilance is the task X1.
+Acknowledge is a button X2.
+The task X1 has a target X3 and a box X4.
+The target X3 is a letter X5.
+If the target X3 appears in the box X4 then a subject X6 remembers the letter X5 and the subject X6 clicks the button X2.
+If the task X1 is active then the target X3 appears in the box X4.
+
+DRS:
+[A,B,C,D,E,F,G,H,I,J]
+object(A,task,countable,na,eq,1)-1/4				- There is exactly one task represented by A
+predicate(B,be,named(Psychomotor-Vigilance),A)-1/2		- Predicate B: The task (A) has a name "Psychomotor-Vigilance"
+object(C,button,countable,na,eq,1)-2/4				- There is exactly one button represented by C
+predicate(D,be,named(Acknowledge),C)-2/2			- Predicate D: The button (C) has a name "Acknowledge"
+object(E,box,countable,na,eq,1)-3/4				- There is exactly one box represented by E
+has_part(H,E)-3/						- The box (E) is a member of the group of objects represented by H
+predicate(F,have,A,H)-3/2					- Predicate F: The task (A) has a group of objects H
+object(G,target,countable,na,eq,1)-3/8				- There is exactly one target represented by G
+has_part(H,G)-3/						- The target (G) is a member of the group of objects represented by H
+object(H,na,countable,na,eq,2)-3/				- There are exactly 2 objects in the group represented by H (??)
+object(I,letter,countable,na,eq,1)-4/4				- There is exactly one letter represented by I
+predicate(J,be,G,I)-4/2						- Predicate J: The target (G) is the letter (I)
+   [K]
+   predicate(K,appear,G)-5/3					- Predicate K: The target (G) appears
+   modifier_pp(K,in,E)-5/4					- Modifier: The predicate K (the target appears) occurs in the box (E)
+   =>								- IF THE ABOVE HAPPENS (the target appears in the box) THEN DO THE FOLLOWING [L, M, N]
+   [L,M,N]				
+   object(L,subject,countable,na,eq,1)-5/8			- There is exactly one subject represented by L
+   predicate(M,click,L,C)-5/10					- Predicate M: The subject (L) clicks on the button (C)
+   predicate(N,remember,L,I)-5/14				- Predicate N (The subject (L) remembers the letter (I)
+   [O,P]
+   property(O,active,pos)-6/4					- Property O: The object this property is applied to is active
+   predicate(P,be,A,O)-6/3					- Predicate P: The task (A) has the property O applied to it (The task is active)
+   =>								- IF THE ABOVE IS TRUE (the task is active), THEN DO THE FOLLOWING [Q]
+   [Q]
+   predicate(Q,appear,G)-6/7					- Predicate Q: The target (G) appears
+   modifier_pp(Q,in,E)-6/8					- Modifier: The predicate Q (the target appears) occurs in the box (E)
