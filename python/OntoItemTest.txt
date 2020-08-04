@@ -1,0 +1,7 @@
+[A,B,C,D,E,F]
+object(A,task,countable,na,eq,1)-1/4				
+predicate(B,be,named(Psychomotor-Vigilance),A)-1/2		
+object(C,button,countable,na,eq,1)-2/4				
+predicate(D,be,named(Acknowledge),C)-2/2			
+object(E,subject,countable,na,eq,1)-5/8		
+predicate(F,click,E,C)-5/10	

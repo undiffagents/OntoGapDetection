@@ -18,14 +18,33 @@ def generateItemGraph(graphNumber):
                        value=CONST_ITEM_HAS_NAME_EDGE)
     itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_AFFORDANCE_NODE + str(graphNumber),
                        value=CONST_ITEM_HAS_AFFORDANCE_EDGE)
+    itemGraph.add_edge(CONST_ITEM_AFFORDANCE_NODE + str(graphNumber), CONST_ITEM_NODE + str(graphNumber),
+                       value=CONST_AFFORDANCE_ASSUMED_BY)
     itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_DESCRIPTION_NODE + str(graphNumber),
                        value=CONST_ITEM_HAS_DESCRIPTION_EDGE)
+    itemGraph.add_edge(CONST_ITEM_DESCRIPTION_NODE + str(graphNumber), CONST_ITEM_NODE + str(graphNumber),
+                       value=CONST_DESCRIPTION_OF_ITEM)
     itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_ROLE_NODE + str(graphNumber),
                        value=CONST_ITEM_HAS_ROLE_EDGE)
     itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_OP_NODE + str(graphNumber),
                        value=CONST_ITEM_HAS_OP_EDGE)
     itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_COUNT_NODE + str(graphNumber),
                        value=CONST_ITEM_HAS_COUNT_EDGE)
+
+    # Should the following be spun out into "addXYZ" functions in the ItemGraph class?
+    itemGraph.add_node(CONST_ITEM_LOCATION_NODE + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_COLOR_NODE + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_SHAPE_NODE + str(graphNumber), value='')
+    itemGraph.add_node(CONST_ITEM_TYPE_NODE + str(graphNumber), value='')
+
+    itemGraph.add_edge(CONST_ITEM_DESCRIPTION_NODE + str(graphNumber), CONST_ITEM_LOCATION_NODE + str(graphNumber),
+                       value=CONST_REFERS_TO_ITEM_LOCATION_EDGE)
+    itemGraph.add_edge(CONST_ITEM_DESCRIPTION_NODE + str(graphNumber), CONST_ITEM_COLOR_NODE + str(graphNumber),
+                       value=CONST_REFERS_TO_ITEM_COLOR_EDGE)
+    itemGraph.add_edge(CONST_ITEM_DESCRIPTION_NODE + str(graphNumber), CONST_ITEM_SHAPE_NODE + str(graphNumber),
+                       value=CONST_REFERS_TO_ITEM_SHAPE_EDGE)
+    itemGraph.add_edge(CONST_ITEM_DESCRIPTION_NODE + str(graphNumber), CONST_ITEM_TYPE_NODE + str(graphNumber),
+                       value=CONST_REFERS_TO_ITEM_TYPE_EDGE)
 
     return itemGraph
 
