@@ -18,8 +18,8 @@ def generateItemGraph(graphNumber):
                        value=CONST_ITEM_HAS_NAME_EDGE)
     itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_AFFORDANCE_NODE + str(graphNumber),
                        value=CONST_ITEM_HAS_AFFORDANCE_EDGE)
-    itemGraph.add_edge(CONST_ITEM_AFFORDANCE_NODE + str(graphNumber), CONST_ITEM_NODE + str(graphNumber),
-                       value=CONST_AFFORDANCE_ASSUMED_BY)
+    itemGraph.add_edge(CONST_ITEM_ROLE_NODE + str(graphNumber), CONST_ITEM_NODE + str(graphNumber),
+                       value=CONST_ROLE_ASSUMED_BY)
     itemGraph.add_edge(CONST_ITEM_NODE + str(graphNumber), CONST_ITEM_DESCRIPTION_NODE + str(graphNumber),
                        value=CONST_ITEM_HAS_DESCRIPTION_EDGE)
     itemGraph.add_edge(CONST_ITEM_DESCRIPTION_NODE + str(graphNumber), CONST_ITEM_NODE + str(graphNumber),

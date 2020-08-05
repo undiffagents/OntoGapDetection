@@ -1,0 +1,11 @@
+[A,B,C,D,E,F,G,H,I,J]
+object(A,button,countable,na,eq,1)-2/4				
+predicate(B,be,named(Acknowledge),A)-2/2			
+object(C,subject,countable,na,eq,1)-5/8		
+predicate(D,be,named(Mr. Agent),C)-2/2	
+object(E,distractor,countable,na,eq,1)-2/2
+predicate(F,be,named(Green X),E)-2/2	
+object(G,distractor,countable,na,eq,1)-2/2
+predicate(H,be,named(Red O),G)-2/2	
+object(I,target,countable,na,eq,1)-2/2
+predicate(J,be,named(Red X),I)-2/2	

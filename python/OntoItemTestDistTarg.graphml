@@ -5,7 +5,7 @@
   <data key="d0">A</data>
 </node>
 <node id="ItemName0">
-  <data key="d0">"Psychomotor-Vigilance"</data>
+  <data key="d0">"Acknowledge"</data>
 </node>
 <node id="Affordance0">
   <data key="d0"></data>
@@ -14,7 +14,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole0">
-  <data key="d0">task</data>
+  <data key="d0">button</data>
 </node>
 <node id="ItemOp0">
   <data key="d0">eq</data>
@@ -38,7 +38,7 @@
   <data key="d0">C</data>
 </node>
 <node id="ItemName1">
-  <data key="d0">"Acknowledge"</data>
+  <data key="d0">"Mr. Agent"</data>
 </node>
 <node id="Affordance1">
   <data key="d0"></data>
@@ -47,7 +47,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole1">
-  <data key="d0">button</data>
+  <data key="d0">subject</data>
 </node>
 <node id="ItemOp1">
   <data key="d0">eq</data>
@@ -71,16 +71,16 @@
   <data key="d0">E</data>
 </node>
 <node id="ItemName2">
-  <data key="d0"></data>
+  <data key="d0">"Green X"</data>
 </node>
 <node id="Affordance2">
-  <data key="d0">click</data>
+  <data key="d0"></data>
 </node>
 <node id="ItemDescription2">
   <data key="d0"></data>
 </node>
 <node id="ItemRole2">
-  <data key="d0">subject</data>
+  <data key="d0">distractor</data>
 </node>
 <node id="ItemOp2">
   <data key="d0">eq</data>
@@ -100,11 +100,71 @@
 <node id="Type2">
   <data key="d0"></data>
 </node>
-<node id="Action3">
-  <data key="d0">F</data>
+<node id="Item3">
+  <data key="d0">G</data>
 </node>
-<node id="ActionVerb3">
-  <data key="d0">click</data>
+<node id="ItemName3">
+  <data key="d0">"Red O"</data>
+</node>
+<node id="Affordance3">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription3">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole3">
+  <data key="d0">distractor</data>
+</node>
+<node id="ItemOp3">
+  <data key="d0">eq</data>
+</node>
+<node id="ItemCount3">
+  <data key="d0">1</data>
+</node>
+<node id="Location3">
+  <data key="d0"></data>
+</node>
+<node id="Color3">
+  <data key="d0"></data>
+</node>
+<node id="Shape3">
+  <data key="d0"></data>
+</node>
+<node id="Type3">
+  <data key="d0"></data>
+</node>
+<node id="Item4">
+  <data key="d0">I</data>
+</node>
+<node id="ItemName4">
+  <data key="d0">"Red X"</data>
+</node>
+<node id="Affordance4">
+  <data key="d0"></data>
+</node>
+<node id="ItemDescription4">
+  <data key="d0"></data>
+</node>
+<node id="ItemRole4">
+  <data key="d0">target</data>
+</node>
+<node id="ItemOp4">
+  <data key="d0">eq</data>
+</node>
+<node id="ItemCount4">
+  <data key="d0">1</data>
+</node>
+<node id="Location4">
+  <data key="d0"></data>
+</node>
+<node id="Color4">
+  <data key="d0"></data>
+</node>
+<node id="Shape4">
+  <data key="d0"></data>
+</node>
+<node id="Type4">
+  <data key="d0"></data>
 </node>
 <edge id="0" source="Item0" target="ItemName0">
   <data key="d1">hasItemName</data>
@@ -160,9 +220,6 @@
 <edge id="0" source="Item1" target="ItemCount1">
   <data key="d1">ItemHasCount</data>
 </edge>
-<edge id="0" source="Item1" target="Action3">
-  <data key="d1">IsTargetOf</data>
-</edge>
 <edge id="0" source="ItemDescription1" target="Item1">
   <data key="d1">ofItem</data>
 </edge>
@@ -199,9 +256,6 @@
 <edge id="0" source="Item2" target="ItemCount2">
   <data key="d1">ItemHasCount</data>
 </edge>
-<edge id="0" source="Item2" target="Action3">
-  <data key="d1">IsSourceOf</data>
-</edge>
 <edge id="0" source="ItemDescription2" target="Item2">
   <data key="d1">ofItem</data>
 </edge>
@@ -220,13 +274,76 @@
 <edge id="0" source="ItemRole2" target="Item2">
   <data key="d1">assumedBy</data>
 </edge>
-<edge id="0" source="Action3" target="ActionVerb3">
-  <data key="d1">ActionHasVerb</data>
+<edge id="0" source="Item3" target="ItemName3">
+  <data key="d1">hasItemName</data>
 </edge>
-<edge id="0" source="Action3" target="Item2">
-  <data key="d1">HasSource</data>
+<edge id="0" source="Item3" target="Affordance3">
+  <data key="d1">affords</data>
 </edge>
-<edge id="0" source="Action3" target="Item1">
-  <data key="d1">HasTarget</data>
+<edge id="0" source="Item3" target="ItemDescription3">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item3" target="ItemRole3">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item3" target="ItemOp3">
+  <data key="d1">ItemHasOp</data>
+</edge>
+<edge id="0" source="Item3" target="ItemCount3">
+  <data key="d1">ItemHasCount</data>
+</edge>
+<edge id="0" source="ItemDescription3" target="Item3">
+  <data key="d1">ofItem</data>
+</edge>
+<edge id="0" source="ItemDescription3" target="Location3">
+  <data key="d1">refersToItemLocation</data>
+</edge>
+<edge id="0" source="ItemDescription3" target="Color3">
+  <data key="d1">refersToItemColor</data>
+</edge>
+<edge id="0" source="ItemDescription3" target="Shape3">
+  <data key="d1">refersToItemShape</data>
+</edge>
+<edge id="0" source="ItemDescription3" target="Type3">
+  <data key="d1">refersToItemType</data>
+</edge>
+<edge id="0" source="ItemRole3" target="Item3">
+  <data key="d1">assumedBy</data>
+</edge>
+<edge id="0" source="Item4" target="ItemName4">
+  <data key="d1">hasItemName</data>
+</edge>
+<edge id="0" source="Item4" target="Affordance4">
+  <data key="d1">affords</data>
+</edge>
+<edge id="0" source="Item4" target="ItemDescription4">
+  <data key="d1">ItemHasDescription</data>
+</edge>
+<edge id="0" source="Item4" target="ItemRole4">
+  <data key="d1">ItemHasRole</data>
+</edge>
+<edge id="0" source="Item4" target="ItemOp4">
+  <data key="d1">ItemHasOp</data>
+</edge>
+<edge id="0" source="Item4" target="ItemCount4">
+  <data key="d1">ItemHasCount</data>
+</edge>
+<edge id="0" source="ItemDescription4" target="Item4">
+  <data key="d1">ofItem</data>
+</edge>
+<edge id="0" source="ItemDescription4" target="Location4">
+  <data key="d1">refersToItemLocation</data>
+</edge>
+<edge id="0" source="ItemDescription4" target="Color4">
+  <data key="d1">refersToItemColor</data>
+</edge>
+<edge id="0" source="ItemDescription4" target="Shape4">
+  <data key="d1">refersToItemShape</data>
+</edge>
+<edge id="0" source="ItemDescription4" target="Type4">
+  <data key="d1">refersToItemType</data>
+</edge>
+<edge id="0" source="ItemRole4" target="Item4">
+  <data key="d1">assumedBy</data>
 </edge>
 </graph></graphml>
