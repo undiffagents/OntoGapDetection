@@ -43,7 +43,10 @@ class predicateSwitcher(object):
             # Apply appropriate variables to ItemGraph
             objectGraph = ItemGraph(self.graphNumber)
             objectGraph.appendItemValue(objReferenceVariable)
-            objectGraph.appendItemRole(objName)
+            #objectGraph.appendItemRole(objName)
+
+            objectGraph.createItemRoleWithType(objName)
+
             objectGraph.appendItemOp(objOperator)
             objectGraph.appendItemCount(objCount)
 
@@ -403,7 +406,7 @@ class questionSwitcher(object):
                         if DRSEquivalentNode is not None:
                             print("Lexical gap resolved - a role given (" + newRole + ") was found associated with an"
                                                                                       " item in the knowledge base")
-                            DRSEquivalentNameNode = self.findRoleNodeConnectedToItemNode(DRSEquivalentNode)
+                            DRSEquivalentNameNode = self.findRoleTypeNameNodeConnectedToItemNode(DRSEquivalentNode)
                             self.DRSGraph.AppendValueAtSpecificNode(DRSEquivalentNameNode, objRole)
         # Replace the reference ID (from APE Webclient) to the equivalent node's reference ID (from the graph)
         if self.DRSGraph.graph.has_node(DRSEquivalentNode):
@@ -620,10 +623,11 @@ class questionSwitcher(object):
                             newVerb = requestNewTermToNymCheck(predVerb)
                             newNymCount = newNymCount + 1
                             actionNode = self.findActionNodeWithVerb(newVerb, predSubjRef, predDirObjRef)
+                            verbNode = self.findVerbNodeConnectedToActionNode(actionNode)
                             if actionNode is not None:
                                 print("Lexical gap resolved - a role given (" + newVerb + ") was found associated with "
                                                                                       "an item in the knowledge base")
-                                self.DRSGraph.AppendValueAtSpecificNode(actionNode, newVerb)
+                                self.DRSGraph.AppendValueAtSpecificNode(verbNode, newVerb)
             # actionNode = self.findActionNodeConnectedToVerbNode(verbNode)
             # If the SUBJECT reference is a proper name
             # Check if we find a node containing said name
@@ -808,7 +812,7 @@ class questionSwitcher(object):
         # Handle role nodes
         # Get list of item nodes associated with the role nodes
         for roleNode in roleNodes:
-            itemNodes.append(self.findItemNodeConnectedToRoleNode(roleNode))
+            itemNodes.append(self.findItemNodeConnectedToRoleTypeNameNode(roleNode))
         # Handle remaining matching nodes - check their operator and count nodes
         for itemNode in itemNodes:
             opNode = self.findOpNodeConnectedToItemNode(itemNode)
@@ -855,7 +859,7 @@ class questionSwitcher(object):
         # Handle role nodes
         # Get list of item nodes associated with the role nodes
         for roleNode in roleNodes:
-            roleItemNode = self.findItemNodeConnectedToRoleNode(roleNode)
+            roleItemNode = self.findItemNodeConnectedToRoleTypeNameNode(roleNode)
             return roleItemNode
 
     # TODO: NEED TO HANDLE CASE WHERE MULTIPLE POSSIBLE ACTIONS
@@ -977,7 +981,7 @@ class questionSwitcher(object):
         roleItemNodes = []
         # Get list of item nodes associated with the role nodes
         for roleNode in roleNodes:
-            roleItemNode = self.findItemNodeConnectedToRoleNode(roleNode)
+            roleItemNode = self.findItemNodeConnectedToRoleTypeNameNode(roleNode)
             roleItemNodes.append(roleItemNode)
         # Find item node which has both the name and role
         # Iterate through role nodes for arbitrary reason
@@ -1002,12 +1006,44 @@ class questionSwitcher(object):
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ACTION_HAS_VERB_EDGE:
                 return startNode
 
+    def findVerbNodeConnectedToActionNode(self, actionNode):
+        # Edges seem to be a little weird, so getting
+        outEdgesFromNode = self.DRSGraph.graph.out_edges(actionNode, data=True)
+        inEdgesFromNode = self.DRSGraph.graph.in_edges(actionNode, data=True)
+        for startNode, endNode, edgeValues in outEdgesFromNode:
+            # If an edge has the value ItemHasName, then we want to return the start node (the item node itself)
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ACTION_HAS_VERB_EDGE:
+                return endNode
+
     def findItemNodeConnectedToRoleNode(self, roleNode):
         inEdgesFromNode = self.DRSGraph.graph.in_edges(roleNode, data=True)
+        # outEdgesFromNode = self.DRSGraph.graph.edges(roleNode, data=True)
         for startNode, endNode, edgeValues in inEdgesFromNode:
             # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
                 return startNode
+
+    def findItemNodeConnectedToRoleTypeNameNode(self, roleNode):
+        inEdgesFromNode = self.DRSGraph.graph.in_edges(roleNode, data=True)
+        # outEdgesFromNode = self.DRSGraph.graph.edges(roleNode, data=True)
+        for startNode, endNode, edgeValues in inEdgesFromNode:
+            # If an edge has the value hasName, then we want to backtrack up to the RoleType node
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_HAS_NAME_EDGE:
+                roleTypeNode = startNode
+                inEdgesFromRoleTypeNode = self.DRSGraph.graph.in_edges(roleTypeNode, data=True)
+                for typeStartNode, typeEndNode, typeEdgeValues in inEdgesFromRoleTypeNode:
+                    # If an edge coming to the roleType node has the value ofItemRoleType, then we want to backtrack
+                    # up to the Role node itself
+                    if typeEdgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_ROLE_TYPE_EDGE:
+                        roleNode = typeStartNode
+                        inEdgesFromRoleNode = self.DRSGraph.graph.in_edges(roleNode, data=True)
+                        # outEdgesFromNode = self.DRSGraph.graph.edges(roleNode, data=True)
+                        for roleStartNode, roleEndNode, roleEdgeValues in inEdgesFromRoleNode:
+                            # If an edge has the value ItemHasRole, then we want to return the start node
+                            # (the item node itself)
+                            if roleEdgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
+                                # The depth of this traversal is kinda silly
+                                return roleStartNode
 
     def findOpNodeConnectedToItemNode(self, itemNode):
         outEdgesFromNode = self.DRSGraph.graph.out_edges(itemNode, data=True)
@@ -1022,6 +1058,23 @@ class questionSwitcher(object):
             # If an edge has the value ItemHasRole, then we want to return the start node (the item node itself)
             if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
                 return endNode
+
+    def findRoleTypeNameNodeConnectedToItemNode(self, itemNode):
+        outEdgesFromNode = self.DRSGraph.graph.out_edges(itemNode, data=True)
+        for startNode, endNode, edgeValues in outEdgesFromNode:
+            # If an edge has the value ItemHasRole, then the end node is the role node
+            if edgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_HAS_ROLE_EDGE:
+                roleNode = endNode
+                outEdgesFromNode = self.DRSGraph.graph.out_edges(roleNode, data=True)
+                for roleStartNode, roleEndNode, roleEdgeValues in outEdgesFromNode:
+                    # If an edge has the value ofItemRoleType, then the end node is the role type node
+                    if roleEdgeValues[CONST_NODE_VALUE_KEY] == CONST_ITEM_ROLE_TYPE_EDGE:
+                        roleTypeNode = roleEndNode
+                        outEdgesFromNode = self.DRSGraph.graph.out_edges(roleTypeNode, data=True)
+                        for roleTypeStartNode, roleTypeEndNode, roleTypeEdgeValues in outEdgesFromNode:
+                            # If an edge has the value hasName, then the end node is the role type name node
+                            if roleTypeEdgeValues[CONST_NODE_VALUE_KEY] == CONST_HAS_NAME_EDGE:
+                                return roleTypeEndNode
 
     def findCountNodeConnectedToItemNode(self, itemNode):
         outEdgesFromNode = self.DRSGraph.graph.out_edges(itemNode, data=True)

@@ -14,7 +14,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole0">
-  <data key="d0">button</data>
+  <data key="d0"></data>
 </node>
 <node id="ItemOp0">
   <data key="d0">eq</data>
@@ -34,6 +34,12 @@
 <node id="Type0">
   <data key="d0"></data>
 </node>
+<node id="ItemRoleTypebutton">
+  <data key="d0"></data>
+</node>
+<node id="ItemRoleTypeNamebutton">
+  <data key="d0">button</data>
+</node>
 <node id="Item1">
   <data key="d0">C</data>
 </node>
@@ -47,7 +53,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole1">
-  <data key="d0">subject</data>
+  <data key="d0"></data>
 </node>
 <node id="ItemOp1">
   <data key="d0">eq</data>
@@ -67,6 +73,12 @@
 <node id="Type1">
   <data key="d0"></data>
 </node>
+<node id="ItemRoleTypesubject">
+  <data key="d0"></data>
+</node>
+<node id="ItemRoleTypeNamesubject">
+  <data key="d0">subject</data>
+</node>
 <node id="Item2">
   <data key="d0">E</data>
 </node>
@@ -80,7 +92,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole2">
-  <data key="d0">distractor</data>
+  <data key="d0"></data>
 </node>
 <node id="ItemOp2">
   <data key="d0">eq</data>
@@ -100,6 +112,12 @@
 <node id="Type2">
   <data key="d0"></data>
 </node>
+<node id="ItemRoleTypedistractor">
+  <data key="d0"></data>
+</node>
+<node id="ItemRoleTypeNamedistractor">
+  <data key="d0">distractor</data>
+</node>
 <node id="Item3">
   <data key="d0">G</data>
 </node>
@@ -113,7 +131,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole3">
-  <data key="d0">distractor</data>
+  <data key="d0"></data>
 </node>
 <node id="ItemOp3">
   <data key="d0">eq</data>
@@ -146,7 +164,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRole4">
-  <data key="d0">target</data>
+  <data key="d0"></data>
 </node>
 <node id="ItemOp4">
   <data key="d0">eq</data>
@@ -165,6 +183,12 @@
 </node>
 <node id="Type4">
   <data key="d0"></data>
+</node>
+<node id="ItemRoleTypetarget">
+  <data key="d0"></data>
+</node>
+<node id="ItemRoleTypeNametarget">
+  <data key="d0">target</data>
 </node>
 <edge id="0" source="Item0" target="ItemName0">
   <data key="d1">hasItemName</data>
@@ -202,6 +226,12 @@
 <edge id="0" source="ItemRole0" target="Item0">
   <data key="d1">assumedBy</data>
 </edge>
+<edge id="0" source="ItemRole0" target="ItemRoleTypebutton">
+  <data key="d1">ofItemRoleType</data>
+</edge>
+<edge id="0" source="ItemRoleTypebutton" target="ItemRoleTypeNamebutton">
+  <data key="d1">hasName</data>
+</edge>
 <edge id="0" source="Item1" target="ItemName1">
   <data key="d1">hasItemName</data>
 </edge>
@@ -237,6 +267,12 @@
 </edge>
 <edge id="0" source="ItemRole1" target="Item1">
   <data key="d1">assumedBy</data>
+</edge>
+<edge id="0" source="ItemRole1" target="ItemRoleTypesubject">
+  <data key="d1">ofItemRoleType</data>
+</edge>
+<edge id="0" source="ItemRoleTypesubject" target="ItemRoleTypeNamesubject">
+  <data key="d1">hasName</data>
 </edge>
 <edge id="0" source="Item2" target="ItemName2">
   <data key="d1">hasItemName</data>
@@ -274,6 +310,12 @@
 <edge id="0" source="ItemRole2" target="Item2">
   <data key="d1">assumedBy</data>
 </edge>
+<edge id="0" source="ItemRole2" target="ItemRoleTypedistractor">
+  <data key="d1">ofItemRoleType</data>
+</edge>
+<edge id="0" source="ItemRoleTypedistractor" target="ItemRoleTypeNamedistractor">
+  <data key="d1">hasName</data>
+</edge>
 <edge id="0" source="Item3" target="ItemName3">
   <data key="d1">hasItemName</data>
 </edge>
@@ -310,6 +352,9 @@
 <edge id="0" source="ItemRole3" target="Item3">
   <data key="d1">assumedBy</data>
 </edge>
+<edge id="0" source="ItemRole3" target="ItemRoleTypedistractor">
+  <data key="d1">ofItemRoleType</data>
+</edge>
 <edge id="0" source="Item4" target="ItemName4">
   <data key="d1">hasItemName</data>
 </edge>
@@ -345,5 +390,11 @@
 </edge>
 <edge id="0" source="ItemRole4" target="Item4">
   <data key="d1">assumedBy</data>
+</edge>
+<edge id="0" source="ItemRole4" target="ItemRoleTypetarget">
+  <data key="d1">ofItemRoleType</data>
+</edge>
+<edge id="0" source="ItemRoleTypetarget" target="ItemRoleTypeNametarget">
+  <data key="d1">hasName</data>
 </edge>
 </graph></graphml>
