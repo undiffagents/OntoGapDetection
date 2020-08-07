@@ -1,0 +1,393 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key attr.name="id" attr.type="string" for="edge" id="d2"/>
+<key attr.name="value" attr.type="string" for="edge" id="d1"/>
+<key attr.name="value" attr.type="string" for="node" id="d0"/>
+<graph edgedefault="directed"><node id="Item5">
+  <data key="d0">Item5</data>
+</node>
+<node id="Red X">
+  <data key="d0">Red X</data>
+</node>
+<node id="Affordance4">
+  <data key="d0">Affordance4</data>
+</node>
+<node id="ItemRoleTypeDistractor">
+  <data key="d0">ItemRoleTypeDistractor</data>
+</node>
+<node id="distractor">
+  <data key="d0">distractor</data>
+</node>
+<node id="Location2">
+  <data key="d0">Location2</data>
+</node>
+<node id="Quadrant 2">
+  <data key="d0">Quadrant 2</data>
+</node>
+<node id="ItemRole7">
+  <data key="d0">ItemRole7</data>
+</node>
+<node id="ItemRoleTypeTarget">
+  <data key="d0">ItemRoleTypeTarget</data>
+</node>
+<node id="Item7">
+  <data key="d0">Item7</data>
+</node>
+<node id="Item4">
+  <data key="d0">Item4</data>
+</node>
+<node id="Red O">
+  <data key="d0">Red O</data>
+</node>
+<node id="Affordance3">
+  <data key="d0">Affordance3</data>
+</node>
+<node id="ItemRole5">
+  <data key="d0">ItemRole5</data>
+</node>
+<node id="ItemDescription2">
+  <data key="d0">ItemDescription2</data>
+</node>
+<node id="Type2">
+  <data key="d0">Type2</data>
+</node>
+<node id="Color2">
+  <data key="d0">Color2</data>
+</node>
+<node id="Shape2">
+  <data key="d0">Shape2</data>
+</node>
+<node id="ItemRoleTypeButton">
+  <data key="d0">ItemRoleTypeButton</data>
+</node>
+<node id="button">
+  <data key="d0">button</data>
+</node>
+<node id="TransitionDescription1">
+  <data key="d0">TransitionDescription1</data>
+</node>
+<node id="SituationDescription1">
+  <data key="d0">SituationDescription1</data>
+</node>
+<node id="SituationDescription2">
+  <data key="d0">SituationDescription2</data>
+</node>
+<node id="Affordance1">
+  <data key="d0">Affordance1</data>
+</node>
+<node id="clickable">
+  <data key="d0">clickable</data>
+</node>
+<node id="AffordanceTypeClickable">
+  <data key="d0">AffordanceTypeClickable</data>
+</node>
+<node id="Item3">
+  <data key="d0">Item3</data>
+</node>
+<node id="Green X">
+  <data key="d0">Green X</data>
+</node>
+<node id="Affordance2">
+  <data key="d0">Affordance2</data>
+</node>
+<node id="ItemDescription1">
+  <data key="d0">ItemDescription1</data>
+</node>
+<node id="visible">
+  <data key="d0">visible</data>
+</node>
+<node id="AffordanceTypeVisible">
+  <data key="d0">AffordanceTypeVisible</data>
+</node>
+<node id="ItemRole2">
+  <data key="d0">ItemRole2</data>
+</node>
+<node id="ItemRoleTypeSubject">
+  <data key="d0">ItemRoleTypeSubject</data>
+</node>
+<node id="Item2">
+  <data key="d0">Item2</data>
+</node>
+<node id="target">
+  <data key="d0">target</data>
+</node>
+<node id="Mr. Agent">
+  <data key="d0">Mr. Agent</data>
+</node>
+<node id="ItemRole4">
+  <data key="d0">ItemRole4</data>
+</node>
+<node id="Type1">
+  <data key="d0">Type1</data>
+</node>
+<node id="Location1">
+  <data key="d0">Location1</data>
+</node>
+<node id="Color1">
+  <data key="d0">Color1</data>
+</node>
+<node id="Shape1">
+  <data key="d0">Shape1</data>
+</node>
+<node id="subject">
+  <data key="d0">subject</data>
+</node>
+<node id="ActionTypeClicking">
+  <data key="d0">ActionTypeClicking</data>
+</node>
+<node id="clicking">
+  <data key="d0">clicking</data>
+</node>
+<node id="ItemRole3">
+  <data key="d0">ItemRole3</data>
+</node>
+<node id="Action1">
+  <data key="d0">Action1</data>
+</node>
+<node id="Item1">
+  <data key="d0">Item1</data>
+</node>
+<node id="Quadrant 1">
+  <data key="d0">Quadrant 1</data>
+</node>
+<node id="ItemRole1">
+  <data key="d0">ItemRole1</data>
+</node>
+<node id="Affordance5">
+  <data key="d0">Affordance5</data>
+</node>
+<node id="Acknowledge">
+  <data key="d0">Acknowledge</data>
+</node>
+<edge source="Item5" target="Red X">
+  <data key="d1">hasItemName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item5" target="Affordance4">
+  <data key="d1">affords</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance4" target="visible">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance4" target="AffordanceTypeVisible">
+  <data key="d1">hasAffordanceType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRoleTypeDistractor" target="distractor">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Location2" target="Quadrant 2">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole7" target="ItemRoleTypeTarget">
+  <data key="d1">ofItemRoleType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole7" target="Item7">
+  <data key="d1">assumedBy</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRoleTypeTarget" target="target">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item7" target="Red X">
+  <data key="d1">hasItemName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item7" target="Affordance5">
+  <data key="d1">affords</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item4" target="Red O">
+  <data key="d1">hasItemName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item4" target="Affordance3">
+  <data key="d1">affords</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance3" target="visible">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance3" target="AffordanceTypeVisible">
+  <data key="d1">hasAffordanceType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole5" target="ItemRoleTypeTarget">
+  <data key="d1">ofItemRoleType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole5" target="Item5">
+  <data key="d1">assumedBy</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription2" target="Type2">
+  <data key="d1">refersToItemType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription2" target="Location2">
+  <data key="d1">refersToItemLocation</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription2" target="Item7">
+  <data key="d1">ofItem</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription2" target="Color2">
+  <data key="d1">refersToItemColor</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription2" target="Shape2">
+  <data key="d1">refersToItemShape</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRoleTypeButton" target="button">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="TransitionDescription1" target="SituationDescription1">
+  <data key="d1">hasPreSituationDescription</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="TransitionDescription1" target="SituationDescription2">
+  <data key="d1">hasPostSituationDescription</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="SituationDescription1" target="ItemDescription1">
+  <data key="d1">hasCurrentCondition</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="SituationDescription2" target="ItemDescription2">
+  <data key="d1">hasCurrentCondition</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="SituationDescription2" target="ItemDescription1">
+  <data key="d1">hasEarlierCondition</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance1" target="clickable">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance1" target="AffordanceTypeClickable">
+  <data key="d1">hasAffordanceType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item3" target="Green X">
+  <data key="d1">hasItemName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item3" target="Affordance2">
+  <data key="d1">affords</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance2" target="visible">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance2" target="AffordanceTypeVisible">
+  <data key="d1">hasAffordanceType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription1" target="Type1">
+  <data key="d1">refersToItemType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription1" target="Location1">
+  <data key="d1">refersToItemLocation</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription1" target="Item5">
+  <data key="d1">ofItem</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription1" target="Color1">
+  <data key="d1">refersToItemColor</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemDescription1" target="Shape1">
+  <data key="d1">refersToItemShape</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole2" target="ItemRoleTypeSubject">
+  <data key="d1">ofItemRoleType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole2" target="Item2">
+  <data key="d1">assumedBy</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRoleTypeSubject" target="subject">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item2" target="Mr. Agent">
+  <data key="d1">hasItemName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole4" target="ItemRoleTypeDistractor">
+  <data key="d1">ofItemRoleType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole4" target="Item4">
+  <data key="d1">assumedBy</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Location1" target="Quadrant 1">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ActionTypeClicking" target="clicking">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole3" target="ItemRoleTypeDistractor">
+  <data key="d1">ofItemRoleType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole3" target="Item3">
+  <data key="d1">assumedBy</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Action1" target="TransitionDescription1">
+  <data key="d1">triggers</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Action1" target="Item1">
+  <data key="d1">refersTo</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Action1" target="ActionTypeClicking">
+  <data key="d1">ofActionType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item1" target="Acknowledge">
+  <data key="d1">hasItemName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Item1" target="Affordance1">
+  <data key="d1">affords</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole1" target="ItemRoleTypeButton">
+  <data key="d1">ofItemRoleType</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="ItemRole1" target="Item1">
+  <data key="d1">assumedBy</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance5" target="visible">
+  <data key="d1">hasName</data>
+  <data key="d2">0</data>
+</edge>
+<edge source="Affordance5" target="AffordanceTypeVisible">
+  <data key="d1">hasAffordanceType</data>
+  <data key="d2">0</data>
+</edge>
+</graph></graphml>

@@ -38,7 +38,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRoleTypeNametask">
-  <data key="d0">task</data>
+  <data key="d0">task|computer</data>
 </node>
 <node id="Item1">
   <data key="d0">C</data>
@@ -232,7 +232,10 @@
 <node id="Action6">
   <data key="d0">J</data>
 </node>
-<node id="ActionVerb6">
+<node id="ActionType6">
+  <data key="d0"></data>
+</node>
+<node id="ActionVerbName6">
   <data key="d0">be</data>
 </node>
 <node id="Conditional0">
@@ -241,7 +244,10 @@
 <node id="Action7">
   <data key="d0">K</data>
 </node>
-<node id="ActionVerb7">
+<node id="ActionType7">
+  <data key="d0"></data>
+</node>
+<node id="ActionVerbName7">
   <data key="d0">appear</data>
 </node>
 <node id="ModPP8">
@@ -292,13 +298,19 @@
 <node id="Action10">
   <data key="d0">M</data>
 </node>
-<node id="ActionVerb10">
+<node id="ActionType10">
+  <data key="d0"></data>
+</node>
+<node id="ActionVerbName10">
   <data key="d0">click</data>
 </node>
 <node id="Action11">
   <data key="d0">N</data>
 </node>
-<node id="ActionVerb11">
+<node id="ActionType11">
+  <data key="d0"></data>
+</node>
+<node id="ActionVerbName11">
   <data key="d0">remember</data>
 </node>
 <node id="Conditional1">
@@ -308,7 +320,7 @@
   <data key="d0">O</data>
 </node>
 <node id="PropertyAdjective12">
-  <data key="d0">active</data>
+  <data key="d0">active|ongoing</data>
 </node>
 <node id="PropertySecondaryObject12">
   <data key="d0"></data>
@@ -325,13 +337,19 @@
 <node id="Action13">
   <data key="d0">P</data>
 </node>
-<node id="ActionVerb13">
+<node id="ActionType13">
+  <data key="d0"></data>
+</node>
+<node id="ActionVerbName13">
   <data key="d0">be</data>
 </node>
 <node id="Action14">
   <data key="d0">Q</data>
 </node>
-<node id="ActionVerb14">
+<node id="ActionType14">
+  <data key="d0"></data>
+</node>
+<node id="ActionVerbName14">
   <data key="d0">appear</data>
 </node>
 <node id="ModPP15">
@@ -631,8 +649,8 @@
 <edge id="0" source="ItemRoleTypeletter" target="ItemRoleTypeNameletter">
   <data key="d1">hasName</data>
 </edge>
-<edge id="0" source="Action6" target="ActionVerb6">
-  <data key="d1">ActionHasVerb</data>
+<edge id="0" source="Action6" target="ActionType6">
+  <data key="d1">ofActionType</data>
 </edge>
 <edge id="0" source="Action6" target="Item4">
   <data key="d1">HasSource</data>
@@ -640,20 +658,23 @@
 <edge id="0" source="Action6" target="Item5">
   <data key="d1">HasTarget</data>
 </edge>
+<edge id="0" source="ActionType6" target="ActionVerbName6">
+  <data key="d1">hasName</data>
+</edge>
 <edge id="0" source="Conditional0" target="Action7">
   <data key="d1">HasTrueCondition</data>
 </edge>
-<edge id="0" source="Conditional0" target="Action10">
+<edge id="0" source="Conditional0" target="Item9">
   <data key="d1">HasConsequence</data>
 </edge>
-<edge id="0" source="Conditional0" target="Item9">
+<edge id="0" source="Conditional0" target="Action10">
   <data key="d1">HasConsequence</data>
 </edge>
 <edge id="0" source="Conditional0" target="Action11">
   <data key="d1">HasConsequence</data>
 </edge>
-<edge id="0" source="Action7" target="ActionVerb7">
-  <data key="d1">ActionHasVerb</data>
+<edge id="0" source="Action7" target="ActionType7">
+  <data key="d1">ofActionType</data>
 </edge>
 <edge id="0" source="Action7" target="Item4">
   <data key="d1">HasSource</data>
@@ -663,6 +684,9 @@
 </edge>
 <edge id="0" source="Action7" target="Conditional0">
   <data key="d1">TrueConditionOf</data>
+</edge>
+<edge id="0" source="ActionType7" target="ActionVerbName7">
+  <data key="d1">hasName</data>
 </edge>
 <edge id="0" source="ModPP8" target="ModPPPrep8">
   <data key="d1">ModPPHasPrep</data>
@@ -724,8 +748,8 @@
 <edge id="0" source="ItemRoleTypesubject" target="ItemRoleTypeNamesubject">
   <data key="d1">hasName</data>
 </edge>
-<edge id="0" source="Action10" target="ActionVerb10">
-  <data key="d1">ActionHasVerb</data>
+<edge id="0" source="Action10" target="ActionType10">
+  <data key="d1">ofActionType</data>
 </edge>
 <edge id="0" source="Action10" target="Item9">
   <data key="d1">HasSource</data>
@@ -736,8 +760,11 @@
 <edge id="0" source="Action10" target="Conditional0">
   <data key="d1">ConsequenceOf</data>
 </edge>
-<edge id="0" source="Action11" target="ActionVerb11">
-  <data key="d1">ActionHasVerb</data>
+<edge id="0" source="ActionType10" target="ActionVerbName10">
+  <data key="d1">hasName</data>
+</edge>
+<edge id="0" source="Action11" target="ActionType11">
+  <data key="d1">ofActionType</data>
 </edge>
 <edge id="0" source="Action11" target="Item9">
   <data key="d1">HasSource</data>
@@ -747,6 +774,9 @@
 </edge>
 <edge id="0" source="Action11" target="Conditional0">
   <data key="d1">ConsequenceOf</data>
+</edge>
+<edge id="0" source="ActionType11" target="ActionVerbName11">
+  <data key="d1">hasName</data>
 </edge>
 <edge id="0" source="Conditional1" target="Property12">
   <data key="d1">HasTrueCondition</data>
@@ -778,8 +808,8 @@
 <edge id="0" source="Property12" target="Conditional1">
   <data key="d1">TrueConditionOf</data>
 </edge>
-<edge id="0" source="Action13" target="ActionVerb13">
-  <data key="d1">ActionHasVerb</data>
+<edge id="0" source="Action13" target="ActionType13">
+  <data key="d1">ofActionType</data>
 </edge>
 <edge id="0" source="Action13" target="Item0">
   <data key="d1">HasSource</data>
@@ -790,8 +820,11 @@
 <edge id="0" source="Action13" target="Conditional1">
   <data key="d1">TrueConditionOf</data>
 </edge>
-<edge id="0" source="Action14" target="ActionVerb14">
-  <data key="d1">ActionHasVerb</data>
+<edge id="0" source="ActionType13" target="ActionVerbName13">
+  <data key="d1">hasName</data>
+</edge>
+<edge id="0" source="Action14" target="ActionType14">
+  <data key="d1">ofActionType</data>
 </edge>
 <edge id="0" source="Action14" target="Item4">
   <data key="d1">HasSource</data>
@@ -801,6 +834,9 @@
 </edge>
 <edge id="0" source="Action14" target="Conditional1">
   <data key="d1">ConsequenceOf</data>
+</edge>
+<edge id="0" source="ActionType14" target="ActionVerbName14">
+  <data key="d1">hasName</data>
 </edge>
 <edge id="0" source="ModPP15" target="ModPPPrep15">
   <data key="d1">ModPPHasPrep</data>
