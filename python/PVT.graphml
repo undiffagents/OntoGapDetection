@@ -38,7 +38,7 @@
   <data key="d0"></data>
 </node>
 <node id="ItemRoleTypeNametask">
-  <data key="d0">task|computer</data>
+  <data key="d0">task</data>
 </node>
 <node id="Item1">
   <data key="d0">C</data>
@@ -320,7 +320,7 @@
   <data key="d0">O</data>
 </node>
 <node id="PropertyAdjective12">
-  <data key="d0">active|ongoing</data>
+  <data key="d0">active</data>
 </node>
 <node id="PropertySecondaryObject12">
   <data key="d0"></data>
@@ -667,10 +667,10 @@
 <edge id="0" source="Conditional0" target="Item9">
   <data key="d1">HasConsequence</data>
 </edge>
-<edge id="0" source="Conditional0" target="Action10">
+<edge id="0" source="Conditional0" target="Action11">
   <data key="d1">HasConsequence</data>
 </edge>
-<edge id="0" source="Conditional0" target="Action11">
+<edge id="0" source="Conditional0" target="Action10">
   <data key="d1">HasConsequence</data>
 </edge>
 <edge id="0" source="Action7" target="ActionType7">
@@ -778,10 +778,10 @@
 <edge id="0" source="ActionType11" target="ActionVerbName11">
   <data key="d1">hasName</data>
 </edge>
-<edge id="0" source="Conditional1" target="Property12">
+<edge id="0" source="Conditional1" target="Action13">
   <data key="d1">HasTrueCondition</data>
 </edge>
-<edge id="0" source="Conditional1" target="Action13">
+<edge id="0" source="Conditional1" target="Property12">
   <data key="d1">HasTrueCondition</data>
 </edge>
 <edge id="0" source="Conditional1" target="Action14">
